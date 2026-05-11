@@ -1,0 +1,13 @@
+{
+  "name": "mel-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MEL Test Dashboard — Vercel deployment with KV-backed status",
+  "scripts": {
+    "build": "python scripts/build.py",
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "@vercel/kv": "^3.0.0"
+  }
+}

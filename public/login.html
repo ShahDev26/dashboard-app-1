@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MEL Test Dashboard — Sign in</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    background: #f6f7fb;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #0f172a;
+    display: grid; place-items: center;
+    padding: 16px;
+  }
+  .card {
+    width: 100%; max-width: 380px;
+    background: #ffffff;
+    border: 1px solid #e2e6ef;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 16px 48px rgba(15,23,42,0.06), 0 4px 12px rgba(15,23,42,0.04);
+  }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 20px;
+  }
+  .mark {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    display: grid; place-items: center;
+    color: #fff; font-size: 20px;
+    box-shadow: 0 4px 12px rgba(99,102,241,0.35);
+  }
+  .title { font-weight: 800; font-size: 18px; letter-spacing: -0.02em; }
+  h1 { margin: 0 0 6px; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+  p { margin: 0 0 20px; color: #64748b; font-size: 13.5px; }
+  label {
+    display: block; font-size: 12px; font-weight: 600;
+    color: #475569; margin-bottom: 6px;
+  }
+  input[type=password] {
+    width: 100%; padding: 11px 14px;
+    border: 1px solid #e2e6ef;
+    border-radius: 9px;
+    background: #f9fafc;
+    font-family: inherit; font-size: 14px;
+    color: #0f172a; outline: none;
+    transition: 100ms;
+  }
+  input[type=password]:focus {
+    border-color: #6366f1;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+  }
+  button {
+    width: 100%; margin-top: 16px;
+    padding: 11px 14px;
+    background: #4f46e5;
+    border: 0; border-radius: 9px;
+    color: #ffffff; font-family: inherit;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: 100ms;
+  }
+  button:hover { background: #4338ca; }
+  button:disabled { opacity: 0.6; cursor: not-allowed; }
+  .error {
+    display: none;
+    margin-top: 12px;
+    padding: 9px 12px;
+    background: #fee2e2;
+    color: #b91c1c;
+    border-radius: 8px;
+    font-size: 13px;
+  }
+  .error.on { display: block; }
+  .footer {
+    margin-top: 24px;
+    font-size: 12px;
+    color: #94a3b8;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">
+      <div class="mark">▲</div>
+      <div class="title">MEL Test Dashboard</div>
+    </div>
+    <h1>Sign in</h1>
+    <p>Enter the shared password to access the test catalogue.</p>
+    <form id="loginForm" autocomplete="off">
+      <label for="pwd">Password</label>
+      <input id="pwd" type="password" name="password" required autofocus />
+      <button type="submit" id="btn">Sign in →</button>
+      <div class="error" id="err">Invalid password — try again.</div>
+    </form>
+    <div class="footer">EnAble India · GarvSe MEL Platform</div>
+  </div>
+<script>
+  const form = document.getElementById('loginForm');
+  const btn = document.getElementById('btn');
+  const err = document.getElementById('err');
+  const pwd = document.getElementById('pwd');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    err.classList.remove('on');
+    btn.disabled = true; btn.textContent = 'Signing in…';
+    try {
+      const r = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ password: pwd.value }),
+      });
+      if (!r.ok) {
+        err.classList.add('on');
+        btn.disabled = false; btn.textContent = 'Sign in →';
+        pwd.select();
+        return;
+      }
+      // Redirect to dashboard
+      const next = new URLSearchParams(location.search).get('next') || '/';
+      location.replace(next);
+    } catch (ex) {
+      err.textContent = 'Network error — please retry.';
+      err.classList.add('on');
+      btn.disabled = false; btn.textContent = 'Sign in →';
+    }
+  });
+</script>
+</body>
+</html>
