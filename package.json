@@ -4,7 +4,7 @@
   "private": true,
   "description": "MEL Test Dashboard — Vercel deployment with KV-backed status",
   "scripts": {
-    "build": "python scripts/build.py",
+    "rebuild-html": "python scripts/build.py",
     "dev": "vercel dev"
   },
   "dependencies": {
