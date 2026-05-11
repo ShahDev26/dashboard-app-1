@@ -16,7 +16,18 @@ from pathlib import Path
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
-import openpyxl
+# On Vercel (or any environment without openpyxl), exit cleanly.
+# The dashboard is pre-built locally and public/index.html is committed.
+try:
+    import openpyxl
+except ImportError:
+    print('openpyxl not installed — skipping rebuild (public/index.html is pre-built).')
+    sys.exit(0)
+
+# Also exit cleanly if the source workbook is not bundled with the deploy.
+if not (Path(__file__).resolve().parent.parent.parent / 'testing' / 'Admin_MasterData_TestPlan.xlsx').exists():
+    print('Source workbook not found in this checkout — skipping rebuild (public/index.html is pre-built).')
+    sys.exit(0)
 
 HERE = Path(__file__).resolve().parent
 APP = HERE.parent
