@@ -108,3 +108,4 @@ Per the chosen design, there is **one shared password** that grants both view
 and edit. The developer is trusted not to change statuses; if you ever want
 strict separation, swap in two passwords (viewer / admin) — let the build
 author know and the API + UI can be split.
+
