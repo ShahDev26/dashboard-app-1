@@ -3,12 +3,16 @@
 //   POST { tcId, status } -> upsert or clear when status is empty/'Not run'
 //
 // Backed by Upstash Redis (a single hash keyed 'mel:status').
-// Env vars: UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN
-// (auto-set by the Upstash Redis integration in Vercel Marketplace).
+// Env vars KV_REST_API_URL + KV_REST_API_TOKEN are provisioned by the
+// "Upstash for Redis" marketplace integration on Vercel (it keeps the
+// KV_* names for backward compat with the deprecated @vercel/kv package).
 import { Redis } from '@upstash/redis';
 
 const KEY = 'mel:status';
-const redis = Redis.fromEnv();
+const redis = new Redis({
+  url: process.env.KV_REST_API_URL,
+  token: process.env.KV_REST_API_TOKEN,
+});
 
 export default async function handler(req, res) {
   try {
