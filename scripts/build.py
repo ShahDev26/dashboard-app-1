@@ -190,7 +190,7 @@ DATA = {
 
 DATA_JSON = json.dumps(DATA, ensure_ascii=False).replace('</', '<\\/')
 
-HTML = """<!DOCTYPE html>
+HTML = r"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
