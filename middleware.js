@@ -4,8 +4,10 @@
 // compares it to the env var on every request.
 
 export const config = {
-  // Anything except the login page, the login API, and Vercel internals.
-  matcher: '/((?!login\\.html$|api/login$|_next/|_vercel/|favicon\\.ico).*)',
+  // Anything except the login page (both the clean URL `/login` and the raw
+  // `/login.html`, since `cleanUrls: true` in vercel.json rewrites between
+  // them), the login API, and Vercel internals.
+  matcher: '/((?!login(\\.html)?$|api/login$|_next/|_vercel/|favicon\\.ico).*)',
 };
 
 export default function middleware(request) {
@@ -28,6 +30,9 @@ export default function middleware(request) {
       headers: { 'content-type': 'application/json' },
     });
   }
-  url.pathname = '/login.html';
+  // Redirect to the canonical clean URL (`cleanUrls: true` in vercel.json
+  // serves login.html at /login). Using /login here avoids a redirect loop:
+  // /login.html → cleanUrls → /login → middleware → /login.html → …
+  url.pathname = '/login';
   return Response.redirect(url.toString(), 302);
 }
