@@ -31,7 +31,9 @@ if not (Path(__file__).resolve().parent.parent.parent / 'testing' / 'Admin_Maste
 
 HERE = Path(__file__).resolve().parent
 APP = HERE.parent
-XLSX = APP.parent / 'testing' / 'Admin_MasterData_TestPlan.xlsx'
+import os
+# Allow MEL_XLSX env var to override (useful when Excel has the workbook locked).
+XLSX = Path(os.environ.get('MEL_XLSX', str(APP.parent / 'testing' / 'Admin_MasterData_TestPlan.xlsx')))
 OUT = APP / 'public' / 'index.html'
 
 MODULES = [
@@ -358,6 +360,40 @@ HTML = r"""<!DOCTYPE html>
   .status-edit .save-ind.err{color:var(--red)}
   @media (max-width:960px){.menu-btn{display:flex}.shell{grid-template-columns:1fr}.sidebar{position:fixed;top:var(--topbar-h);left:0;bottom:0;width:var(--sidebar-w);z-index:50;transform:translateX(-105%);transition:transform 220ms;box-shadow:var(--shadow-lg)}.sidebar.open{transform:translateX(0)}.topnav{display:none}.top-stats{display:none}main{padding:18px 14px 60px}}
   @media (max-width:520px){.tc-grid{grid-template-columns:1fr}.logo-sub{display:none}}
+
+  /* JIRA ticket pill on TC cards (when a ticket already exists) */
+  .pill.jira{background:rgba(99,102,241,0.15);color:#a5b4fc;border:1px solid rgba(165,180,252,0.35);font-family:'JetBrains Mono',monospace;font-size:10.5px}
+  .pill.jira a{color:inherit;text-decoration:none}
+  .pill.jira a:hover{text-decoration:underline}
+
+  /* JIRA ticket form inside the TC modal */
+  .jira-form{margin-top:18px;padding:18px;border-radius:12px;border:1px solid var(--border);background:rgba(99,102,241,0.04)}
+  .jira-form h3{margin:0 0 4px;font-size:15px;display:flex;align-items:center;gap:8px}
+  .jira-form .sub{color:var(--text-3);font-size:12.5px;margin-bottom:14px}
+  .jira-form label{display:block;font-size:11.5px;letter-spacing:0.04em;text-transform:uppercase;color:var(--text-3);margin-bottom:6px;margin-top:12px;font-weight:600}
+  .jira-form input[type=text],.jira-form textarea,.jira-form select{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 11px;color:var(--text);font:inherit;font-size:13.5px;box-sizing:border-box;transition:border-color 120ms}
+  .jira-form input[type=text]:focus,.jira-form textarea:focus,.jira-form select:focus{outline:none;border-color:var(--primary)}
+  .jira-form textarea{min-height:74px;resize:vertical;line-height:1.5;font-family:inherit}
+  .jira-form .typetoggle{display:inline-flex;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:3px;margin-bottom:4px}
+  .jira-form .typetoggle button{background:transparent;border:0;color:var(--text-3);padding:5px 14px;border-radius:6px;cursor:pointer;font-size:12.5px;font-weight:600;transition:120ms}
+  .jira-form .typetoggle button.on{background:var(--primary);color:white}
+  .jira-form .dropzone{border:2px dashed var(--border-hi);border-radius:10px;padding:18px;text-align:center;color:var(--text-3);font-size:13px;cursor:pointer;transition:120ms;background:var(--surface)}
+  .jira-form .dropzone.dragover{border-color:var(--primary);background:rgba(99,102,241,0.06);color:var(--primary-hi)}
+  .jira-form .dropzone.has{border-style:solid;border-color:var(--emerald);color:var(--emerald);text-align:left;padding:10px 14px}
+  .jira-form .dropzone img.thumb{max-width:100%;max-height:160px;border-radius:6px;display:block;margin-top:10px;border:1px solid var(--border)}
+  .jira-form .preview-meta{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .jira-form .dropzone .remove{background:transparent;border:0;color:var(--rose);cursor:pointer;font-size:12px}
+  .jira-form .actions{margin-top:18px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .jira-form .status{font-size:12.5px;color:var(--text-3);margin-left:auto}
+  .jira-form .status.ok{color:var(--emerald)}
+  .jira-form .status.err{color:var(--rose)}
+  .jira-form .result{margin-top:14px;padding:12px 14px;border-radius:8px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.3);font-size:13px;display:none}
+  .jira-form .result.on{display:block}
+  .jira-form .result a{color:var(--emerald);font-weight:600;text-decoration:none;font-family:'JetBrains Mono',monospace}
+  .jira-form .result a:hover{text-decoration:underline}
+  .jira-form .open-btn{background:transparent;border:1px solid var(--border);color:var(--text-2);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:12.5px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:120ms}
+  .jira-form .open-btn:hover{border-color:var(--primary);color:var(--primary-hi)}
+  .file-input-hidden{display:none}
 </style>
 </head>
 <body>
@@ -381,6 +417,7 @@ HTML = r"""<!DOCTYPE html>
 <script>
 const DATA = JSON.parse(document.getElementById('quest-data').textContent);
 const STATUS_OVERRIDES = {};   // tcId -> live status from /api/status (overrides embedded)
+const JIRA_KEYS = {};          // tcId -> JIRA issue key from /api/jira/list
 
 function effectiveStatus(tc) {
   if (Object.prototype.hasOwnProperty.call(STATUS_OVERRIDES, tc.id)) {
@@ -419,6 +456,15 @@ function el(tag, attrs={}, ...children) {
 function tcMatchesRole(tc) {
   if (state.role === 'All') return true;
   return tc.roles.includes(state.role);
+}
+
+async function loadJiraKeys() {
+  try {
+    const r = await fetch('/api/jira/list', { credentials: 'same-origin' });
+    if (!r.ok) return;
+    const data = await r.json();
+    for (const k in data) JIRA_KEYS[k] = data[k];
+  } catch (e) { /* offline fallback */ }
 }
 
 async function loadStatusOverrides() {
@@ -608,11 +654,13 @@ function renderGrid(m) {
 function tcCard(tc) {
   const c = el('div',{class:'tc-card type-'+(tc.type||'Functional'), on:{click:()=>openTc(tc)}});
   const s = effectiveStatus(tc);
+  const jiraKey = JIRA_KEYS[tc.id];
   c.appendChild(el('div',{class:'row1'},
     el('span',{class:'tcid'}, tc.id),
     el('span',{class:'pill type '+(tc.type||'')}, tc.type||'Functional'),
     el('span',{class:'pill sev '+(tc.severity||'')}, tc.severity||'—'),
-    (s && s!=='Not run') ? el('span',{class:'pill status '+s,'data-status':s}, s) : null
+    (s && s!=='Not run') ? el('span',{class:'pill status '+s,'data-status':s}, s) : null,
+    jiraKey ? el('span',{class:'pill jira', title:'JIRA ticket'}, '🎫 ', jiraKey) : null
   ));
   c.appendChild(el('h3',{}, tc.scenario || '(no name)'));
   if (tc.roles && tc.roles.length) {
@@ -631,11 +679,15 @@ function openTc(tc) {
   m.innerHTML = '';
   m.appendChild(el('button',{class:'x',on:{click:closeTc}},'×'));
   const s = effectiveStatus(tc);
+  const jiraKey = JIRA_KEYS[tc.id];
   m.appendChild(el('div',{class:'modal-row1'},
     el('span',{class:'tcid'}, tc.id),
     el('span',{class:'pill type '+(tc.type||'')}, tc.type||'Functional'),
     el('span',{class:'pill sev '+(tc.severity||'')}, tc.severity||'—'),
-    (s && s!=='Not run') ? el('span',{class:'pill status '+s,'data-status':s}, s) : null));
+    (s && s!=='Not run') ? el('span',{class:'pill status '+s,'data-status':s}, s) : null,
+    jiraKey ? el('span',{class:'pill jira'},
+      el('a',{href:`https://enableindiaorg.atlassian.net/browse/${jiraKey}`,target:'_blank',rel:'noopener'}, '🎫 ', jiraKey)) : null
+  ));
   m.appendChild(el('h2',{}, tc.scenario || '(no name)'));
   if (tc.roles && tc.roles.length) {
     const r = el('div',{class:'roles', style:'margin-bottom:16px;'});
@@ -688,10 +740,175 @@ function openTc(tc) {
   if (tc.notes)    m.appendChild(section('Notes', tc.notes));
   if (tc.br)       m.appendChild(section('References', tc.br));
   const actions = el('div',{class:'modal-actions'});
-  actions.appendChild(el('button',{class:'btn primary',on:{click:e=>copyTc(e.target,tc,'json')}},'Copy as JSON'));
+  actions.appendChild(el('button',{class:'btn primary',on:{click:()=>renderJiraForm(tc)}}, JIRA_KEYS[tc.id] ? '🎫 File another ticket' : '🎫 Create JIRA ticket'));
+  actions.appendChild(el('button',{class:'btn',on:{click:e=>copyTc(e.target,tc,'json')}},'Copy as JSON'));
   actions.appendChild(el('button',{class:'btn',on:{click:e=>copyTc(e.target,tc,'md')}},'Copy as Markdown'));
   m.appendChild(actions);
+  // Anchor where the JIRA ticket form will mount on demand
+  m.appendChild(el('div',{id:'jiraMount'}));
   document.getElementById('modalBg').classList.add('on');
+}
+function renderJiraForm(tc) {
+  const mount = document.getElementById('jiraMount');
+  if (!mount) return;
+  mount.innerHTML = '';
+  const form = el('div',{class:'jira-form'});
+  form.appendChild(el('h3',{}, '🎫 New JIRA ticket', el('span',{style:'font-weight:400;color:var(--text-3);font-size:13px;'},' · MPSW')));
+  form.appendChild(el('div',{class:'sub'}, `Filed as ${tc.id} · reporter: dev.csv@enableindia.org · default unassigned`));
+
+  // Issue type toggle
+  form.appendChild(el('label',{},'Issue type'));
+  const typeWrap = el('div',{class:'typetoggle'});
+  const tBug = el('button',{class:'on',type:'button'},'Bug');
+  const tTask = el('button',{type:'button'},'Task');
+  let selectedType = 'Bug';
+  tBug.addEventListener('click', () => { selectedType='Bug'; tBug.classList.add('on'); tTask.classList.remove('on'); });
+  tTask.addEventListener('click', () => { selectedType='Task'; tTask.classList.add('on'); tBug.classList.remove('on'); });
+  typeWrap.appendChild(tBug); typeWrap.appendChild(tTask);
+  form.appendChild(typeWrap);
+
+  // Title
+  form.appendChild(el('label',{},'Title'));
+  const titleInput = el('input',{type:'text', value: tc.scenario || ''});
+  form.appendChild(titleInput);
+
+  // Steps
+  form.appendChild(el('label',{},'Steps to reproduce'));
+  const stepsInput = el('textarea',{}, tc.steps || '');
+  form.appendChild(stepsInput);
+
+  // Expected
+  form.appendChild(el('label',{},'Expected result'));
+  const expInput = el('textarea',{}, tc.expected || '');
+  form.appendChild(expInput);
+
+  // Actual
+  form.appendChild(el('label',{},'Actual result'));
+  const actInput = el('textarea',{placeholder:'What actually happened? Include error messages, behaviour observed, etc.'},'');
+  form.appendChild(actInput);
+
+  // Screenshot
+  form.appendChild(el('label',{},'Screenshot (optional)'));
+  const drop = el('div',{class:'dropzone',tabIndex:0,role:'button','aria-label':'Upload screenshot'});
+  drop.innerHTML = '<div>📎 Drop an image here, paste from clipboard, or click to select</div>';
+  const fileIn = el('input',{type:'file',accept:'image/*',class:'file-input-hidden'});
+  drop.appendChild(fileIn);
+  let screenshotData = null;
+  let screenshotName = null;
+  function setFile(file) {
+    if (!file || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const b64 = String(reader.result || '').split(',')[1] || '';
+      screenshotData = b64;
+      screenshotName = file.name || 'screenshot.png';
+      drop.classList.add('has');
+      drop.innerHTML = '';
+      const meta = el('div',{class:'preview-meta'},
+        el('span',{}, '✓ ', screenshotName, ' (', Math.round(file.size/1024), ' KB)'),
+        el('button',{class:'remove',type:'button',on:{click:e=>{e.stopPropagation(); resetDrop();}}}, '× Remove'));
+      drop.appendChild(meta);
+      drop.appendChild(el('img',{class:'thumb',src:reader.result}));
+    };
+    reader.readAsDataURL(file);
+  }
+  function resetDrop() {
+    screenshotData = null; screenshotName = null;
+    drop.classList.remove('has','dragover');
+    drop.innerHTML = '<div>📎 Drop an image here, paste from clipboard, or click to select</div>';
+    drop.appendChild(fileIn);
+  }
+  drop.addEventListener('click', () => fileIn.click());
+  drop.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' '){e.preventDefault();fileIn.click();} });
+  fileIn.addEventListener('change', () => { if (fileIn.files && fileIn.files[0]) setFile(fileIn.files[0]); });
+  drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('dragover'); });
+  drop.addEventListener('dragleave', () => drop.classList.remove('dragover'));
+  drop.addEventListener('drop', e => {
+    e.preventDefault(); drop.classList.remove('dragover');
+    if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]);
+  });
+  // Paste from clipboard while form has focus
+  const pasteHandler = e => {
+    if (!form.contains(document.activeElement) && document.activeElement !== form) return;
+    const items = (e.clipboardData || {}).items || [];
+    for (const it of items) if (it.type && it.type.startsWith('image/')) { setFile(it.getAsFile()); e.preventDefault(); return; }
+  };
+  document.addEventListener('paste', pasteHandler);
+  form.appendChild(drop);
+
+  // Actions
+  const actions = el('div',{class:'actions'});
+  const createBtn = el('button',{class:'btn primary',type:'button'}, 'Create ticket');
+  const cancelBtn = el('button',{class:'btn',type:'button',on:{click:()=>{document.removeEventListener('paste',pasteHandler); mount.innerHTML='';}}}, 'Cancel');
+  const status = el('span',{class:'status'},'');
+  actions.appendChild(createBtn);
+  actions.appendChild(cancelBtn);
+  actions.appendChild(status);
+  form.appendChild(actions);
+
+  const result = el('div',{class:'result'});
+  form.appendChild(result);
+
+  createBtn.addEventListener('click', async () => {
+    const title = titleInput.value.trim();
+    if (!title) { status.className='status err'; status.textContent='Title required'; return; }
+    createBtn.disabled = true; cancelBtn.disabled = true;
+    status.className = 'status'; status.textContent = 'Filing in JIRA…';
+    try {
+      const payload = {
+        tcId: tc.id,
+        issueType: selectedType,
+        title,
+        steps: stepsInput.value,
+        expected: expInput.value,
+        actual: actInput.value,
+        severity: tc.severity || '',
+      };
+      if (screenshotData) {
+        payload.screenshotBase64 = screenshotData;
+        payload.screenshotName = screenshotName;
+      }
+      const r = await fetch('/api/jira/create', {
+        method: 'POST',
+        headers: { 'content-type':'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify(payload),
+      });
+      const data = await r.json();
+      if (!r.ok) {
+        status.className = 'status err';
+        status.textContent = 'Failed: ' + (data && (data.error || JSON.stringify(data)) || r.status);
+        createBtn.disabled = false; cancelBtn.disabled = false;
+        return;
+      }
+      JIRA_KEYS[tc.id] = data.key;
+      status.className = 'status ok'; status.textContent = '✓ Filed';
+      result.classList.add('on');
+      result.innerHTML = '';
+      result.appendChild(el('div',{},
+        '✓ Ticket created: ',
+        el('a',{href:data.url,target:'_blank',rel:'noopener'}, data.key),
+        data.attachment ? (data.attachment.ok ? ' · screenshot attached' : ' · ⚠ attachment failed') : ''));
+      // Re-render the grid / home to reflect the new badge
+      if (state.view==='module') {
+        const mod = DATA.modules.find(x=>x.id===state.moduleId);
+        if (mod) renderGrid(mod);
+      } else { renderHome(); }
+      // Keep form visible (user might want to file another); reset Actual + screenshot
+      actInput.value = '';
+      resetDrop();
+      createBtn.disabled = false; cancelBtn.disabled = false;
+    } catch (e) {
+      status.className = 'status err'; status.textContent = 'Error: ' + (e?.message || e);
+      createBtn.disabled = false; cancelBtn.disabled = false;
+    }
+  });
+
+  mount.appendChild(form);
+  // Cleanup paste handler when modal closes
+  const cleanup = () => { document.removeEventListener('paste', pasteHandler); document.getElementById('modalBg').removeEventListener('transitionend', cleanup); };
+  document.getElementById('modalBg').addEventListener('transitionend', cleanup, {once:true});
+  titleInput.focus();
 }
 function section(label,text){return el('section',{},el('h4',{},label),el('pre',{},text));}
 function closeTc(){document.getElementById('modalBg').classList.remove('on');}
@@ -753,7 +970,7 @@ function render() {
   renderTopNav(); renderTopStats(); renderSidebar();
   if (state.view==='home') renderHome(); else renderModule();
 }
-loadStatusOverrides().then(render).catch(render);
+Promise.allSettled([loadStatusOverrides(), loadJiraKeys()]).then(render).catch(render);
 </script>
 </body>
 </html>
