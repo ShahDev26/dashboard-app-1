@@ -7,6 +7,7 @@
 // Stores the resulting issue key in Upstash Redis hash `mel:jira` keyed by tcId.
 
 import { Redis } from '@upstash/redis';
+import { roleFromRequest } from '../whoami.js';
 
 const KEY = 'mel:jira';
 const redis = new Redis({
@@ -88,6 +89,9 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ error: 'method not allowed' });
+  }
+  if (roleFromRequest(req) !== 'editor') {
+    return res.status(403).json({ error: 'viewer role cannot create JIRA tickets' });
   }
   try {
     let body = req.body;

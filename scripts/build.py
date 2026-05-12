@@ -418,6 +418,8 @@ HTML = r"""<!DOCTYPE html>
 const DATA = JSON.parse(document.getElementById('quest-data').textContent);
 const STATUS_OVERRIDES = {};   // tcId -> live status from /api/status (overrides embedded)
 const JIRA_KEYS = {};          // tcId -> JIRA issue key from /api/jira/list
+let ROLE = 'editor';           // 'editor' | 'viewer' — set from /api/whoami on load
+const isViewer = () => ROLE === 'viewer';
 
 function effectiveStatus(tc) {
   if (Object.prototype.hasOwnProperty.call(STATUS_OVERRIDES, tc.id)) {
@@ -458,6 +460,15 @@ function tcMatchesRole(tc) {
   return tc.roles.includes(state.role);
 }
 
+async function loadRole() {
+  try {
+    const r = await fetch('/api/whoami', { credentials: 'same-origin' });
+    if (!r.ok) return;
+    const data = await r.json();
+    if (data && data.role) ROLE = data.role;
+  } catch (e) { /* default to editor */ }
+}
+
 async function loadJiraKeys() {
   try {
     const r = await fetch('/api/jira/list', { credentials: 'same-origin' });
@@ -494,6 +505,9 @@ async function setStatusOnServer(tcId, status) {
 function renderTopNav() {
   const top = document.getElementById('topnav');
   top.innerHTML = '';
+  if (isViewer()) {
+    top.appendChild(el('span',{class:'role-chip',style:'background:rgba(245,158,11,0.15);color:#fbbf24;border-color:rgba(251,191,36,0.35);cursor:default;'}, '👁 Read-only'));
+  }
   for (const r of ['All','Admin','State Head','GSCO']) {
     top.appendChild(el('span', {
       class:'role-chip' + (state.role===r?' on':''),
@@ -702,6 +716,7 @@ function openTc(tc) {
   const sEdit = el('div',{class:'status-edit'});
   sEdit.appendChild(el('label',{},'Status:'));
   const sel = el('select',{'data-status':s,'aria-label':'Status'});
+  if (isViewer()) sel.disabled = true;
   for (const opt of STATUS_CHOICES) {
     const o = document.createElement('option');
     o.value = opt; o.textContent = opt;
@@ -740,7 +755,9 @@ function openTc(tc) {
   if (tc.notes)    m.appendChild(section('Notes', tc.notes));
   if (tc.br)       m.appendChild(section('References', tc.br));
   const actions = el('div',{class:'modal-actions'});
-  actions.appendChild(el('button',{class:'btn primary',on:{click:()=>renderJiraForm(tc)}}, JIRA_KEYS[tc.id] ? '🎫 File another ticket' : '🎫 Create JIRA ticket'));
+  if (!isViewer()) {
+    actions.appendChild(el('button',{class:'btn primary',on:{click:()=>renderJiraForm(tc)}}, JIRA_KEYS[tc.id] ? '🎫 File another ticket' : '🎫 Create JIRA ticket'));
+  }
   actions.appendChild(el('button',{class:'btn',on:{click:e=>copyTc(e.target,tc,'json')}},'Copy as JSON'));
   actions.appendChild(el('button',{class:'btn',on:{click:e=>copyTc(e.target,tc,'md')}},'Copy as Markdown'));
   m.appendChild(actions);
@@ -970,7 +987,7 @@ function render() {
   renderTopNav(); renderTopStats(); renderSidebar();
   if (state.view==='home') renderHome(); else renderModule();
 }
-Promise.allSettled([loadStatusOverrides(), loadJiraKeys()]).then(render).catch(render);
+Promise.allSettled([loadRole(), loadStatusOverrides(), loadJiraKeys()]).then(render).catch(render);
 </script>
 </body>
 </html>

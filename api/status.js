@@ -7,6 +7,7 @@
 // "Upstash for Redis" marketplace integration on Vercel (it keeps the
 // KV_* names for backward compat with the deprecated @vercel/kv package).
 import { Redis } from '@upstash/redis';
+import { roleFromRequest } from './whoami.js';
 
 const KEY = 'mel:status';
 const redis = new Redis({
@@ -21,6 +22,9 @@ export default async function handler(req, res) {
       return res.status(200).json(all);
     }
     if (req.method === 'POST') {
+      if (roleFromRequest(req) !== 'editor') {
+        return res.status(403).json({ error: 'viewer role cannot edit status' });
+      }
       let body = req.body;
       if (typeof body === 'string') {
         try { body = JSON.parse(body); } catch { body = {}; }

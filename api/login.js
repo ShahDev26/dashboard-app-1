@@ -1,5 +1,7 @@
 // POST /api/login  body: { password }
-// Sets the mel_auth cookie if the password matches DASHBOARD_PASSWORD.
+// Sets the mel_auth cookie if the password matches either the editor
+// or the viewer password. The cookie value is the matching password,
+// which lets middleware / API routes infer the role on each request.
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -7,10 +9,11 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'method not allowed' });
   }
 
-  const expected = process.env.DASHBOARD_PASSWORD;
-  if (!expected) {
+  const editor = process.env.DASHBOARD_PASSWORD || '';
+  const viewer = process.env.DASHBOARD_VIEWER_PASSWORD || '';
+  if (!editor && !viewer) {
     return res.status(500).json({
-      error: 'DASHBOARD_PASSWORD is not configured on the server',
+      error: 'No dashboard passwords are configured on the server',
     });
   }
 
@@ -20,13 +23,18 @@ export default async function handler(req, res) {
   }
   const submitted = (body && body.password) || '';
 
-  if (submitted !== expected) {
+  let matched = null;
+  let role = null;
+  if (editor && submitted === editor) { matched = editor; role = 'editor'; }
+  else if (viewer && submitted === viewer) { matched = viewer; role = 'viewer'; }
+
+  if (!matched) {
     return res.status(401).json({ error: 'invalid password' });
   }
 
-  // 30-day cookie. HttpOnly so JS can't read it; Secure on Vercel by default.
+  // 30-day cookie. HttpOnly so JS can't read it; Secure on Vercel.
   const cookie = [
-    `mel_auth=${encodeURIComponent(expected)}`,
+    `mel_auth=${encodeURIComponent(matched)}`,
     'Path=/',
     'HttpOnly',
     'Secure',
@@ -34,5 +42,5 @@ export default async function handler(req, res) {
     'Max-Age=2592000',
   ].join('; ');
   res.setHeader('Set-Cookie', cookie);
-  return res.status(200).json({ ok: true });
+  return res.status(200).json({ ok: true, role });
 }

@@ -1,7 +1,11 @@
-// Edge Middleware — gates the entire site behind a single shared password.
-// The password is read from the DASHBOARD_PASSWORD env var (set in Vercel).
-// On successful login (/api/login), a long-lived cookie is set; middleware
-// compares it to the env var on every request.
+// Edge Middleware — gates the entire site behind a shared password.
+// Two passwords are supported, both stored as Vercel env vars:
+//   DASHBOARD_PASSWORD         → editor role  (status edits, JIRA tickets)
+//   DASHBOARD_VIEWER_PASSWORD  → viewer role  (read-only)
+// /api/login validates the submitted password against both and sets a
+// cookie whose value is the matched password. Middleware here just
+// checks the cookie matches one of the two env vars; per-endpoint code
+// distinguishes editor vs viewer when authorising mutations.
 
 export const config = {
   // Anything except the login page (both the clean URL `/login` and the raw
@@ -12,16 +16,15 @@ export const config = {
 
 export default function middleware(request) {
   const url = new URL(request.url);
-  const expected = process.env.DASHBOARD_PASSWORD || '';
+  const editor = process.env.DASHBOARD_PASSWORD || '';
+  const viewer = process.env.DASHBOARD_VIEWER_PASSWORD || '';
 
-  // Read mel_auth cookie
   const cookieHeader = request.headers.get('cookie') || '';
   const match = cookieHeader.match(/(?:^|;\s*)mel_auth=([^;]+)/);
   const value = match ? decodeURIComponent(match[1]) : '';
 
-  if (expected && value === expected) {
-    return; // authenticated — pass through
-  }
+  const authed = !!value && ((editor && value === editor) || (viewer && value === viewer));
+  if (authed) return; // pass through — role enforcement happens in API routes
 
   // Unauthenticated — API gets JSON 401, everything else redirects to /login
   if (url.pathname.startsWith('/api/')) {
