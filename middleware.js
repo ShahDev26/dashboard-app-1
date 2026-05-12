@@ -7,7 +7,7 @@ export const config = {
   // Anything except the login page (both the clean URL `/login` and the raw
   // `/login.html`, since `cleanUrls: true` in vercel.json rewrites between
   // them), the login API, and Vercel internals.
-  matcher: '/((?!login(\\.html)?$|api/login$|_next/|_vercel/|favicon\\.ico).*)',
+  matcher: '/((?!login(?:\\.html)?$|api/login$|_next/|_vercel/|favicon\\.ico).*)',
 };
 
 export default function middleware(request) {
