@@ -293,9 +293,9 @@ HTML = r"""<!DOCTYPE html>
   .btn:hover{background:var(--surface-hi);color:var(--text);border-color:var(--border-hi)}
   .btn.primary{background:var(--primary-hi);border-color:var(--primary-hi);color:#fff}
   .btn.primary:hover{background:var(--primary);border-color:var(--primary);color:#fff}
-  .tc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
-  .tc-card{position:relative;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;cursor:pointer;transition:120ms;overflow:hidden}
-  .tc-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent,var(--primary))}
+  .tc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
+  .tc-card{position:relative;padding:22px 22px 20px;background:var(--surface);border:1px solid var(--border);border-radius:14px;cursor:pointer;transition:200ms cubic-bezier(0.16,1,0.3,1);overflow:hidden;display:flex;flex-direction:column;gap:14px;min-height:138px}
+  .tc-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent,var(--primary));opacity:0.7;transition:200ms}
   .tc-card.type-Functional{--accent:var(--primary)}
   .tc-card.type-Negative{--accent:var(--rose)}
   .tc-card.type-Edge{--accent:var(--amber)}
@@ -303,9 +303,21 @@ HTML = r"""<!DOCTYPE html>
   .tc-card.type-Accessibility{--accent:var(--emerald)}
   .tc-card.type-Bug{--accent:var(--red)}
   .tc-card.type-Verification{--accent:var(--orange)}
-  .tc-card:hover{transform:translateY(-2px);border-color:var(--border-hi);box-shadow:var(--shadow)}
-  .tc-card .row1{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
-  .tc-card .tcid{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--primary-hi);font-weight:600}
+  .tc-card:hover{transform:translateY(-3px);border-color:var(--border-hi);box-shadow:var(--shadow)}
+  .tc-card:hover::before{opacity:1;width:4px}
+  .tc-card .row1{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .tc-card .tcid{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-3);font-weight:600;letter-spacing:0.05em}
+  .tc-card h3{margin:0;font-size:15px;font-weight:600;color:var(--text);line-height:1.45;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .tc-card .foot{display:flex;align-items:center;gap:8px;margin-top:auto;flex-wrap:wrap}
+  /* status dot + label (subtle replacement for full pill on card) */
+  .dot-status{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--text-2)}
+  .dot-status .dot{width:8px;height:8px;border-radius:50%;background:var(--text-3)}
+  .dot-status[data-status="Pass"]{color:#047857}
+  .dot-status[data-status="Pass"] .dot{background:var(--emerald);box-shadow:0 0 0 3px rgba(16,185,129,0.15)}
+  .dot-status[data-status="Fail"]{color:#b91c1c}
+  .dot-status[data-status="Fail"] .dot{background:var(--red);box-shadow:0 0 0 3px rgba(239,68,68,0.18)}
+  .dot-status[data-status="On Hold"]{color:#b45309}
+  .dot-status[data-status="On Hold"] .dot{background:var(--amber);box-shadow:0 0 0 3px rgba(245,158,11,0.18)}
   .pill{display:inline-flex;align-items:center;padding:2px 7px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;border-radius:4px}
   .pill.type.Functional{background:var(--primary-soft);color:var(--primary-hi)}
   .pill.type.Negative{background:var(--rose-soft);color:#be123c}
@@ -325,8 +337,7 @@ HTML = r"""<!DOCTYPE html>
   .pill.status.Fail{background:var(--red-soft);color:#b91c1c}
   .pill.status.Open{background:var(--orange-soft);color:#c2410c}
   .pill.status[data-status="On Hold"]{background:var(--amber-soft);color:#b45309}
-  .tc-card h3{margin:0 0 8px;font-size:14.5px;font-weight:600;color:var(--text);line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
-  .tc-card .roles{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+  .tc-card .roles{display:flex;gap:5px;flex-wrap:wrap}
   .role-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;font-size:10px;font-weight:600;background:var(--surface-2);color:var(--text-2);border:1px solid var(--border);border-radius:999px}
   .role-badge.role-Admin{color:var(--primary-hi);background:var(--primary-soft);border-color:var(--primary)}
   .role-badge.role-StateHead{color:var(--violet);background:var(--violet-soft);border-color:var(--violet)}
@@ -334,19 +345,25 @@ HTML = r"""<!DOCTYPE html>
   .role-badge.role-Any{color:var(--text-3)}
   .empty{grid-column:1/-1;padding:56px 20px;text-align:center;background:var(--surface);border:1px dashed var(--border);border-radius:12px;color:var(--text-3)}
   .empty b{display:block;color:var(--text);font-size:16px;font-weight:700;margin-bottom:4px}
-  .modal-bg{position:fixed;inset:0;background:rgba(15,23,42,0.5);z-index:200;display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:36px 16px}
-  .modal-bg.on{display:flex}
-  .modal{width:100%;max-width:820px;background:var(--surface);border-radius:16px;padding:28px 32px 26px;box-shadow:var(--shadow-lg)}
-  .modal .x{float:right;background:var(--surface);border:1px solid var(--border);width:30px;height:30px;border-radius:7px;cursor:pointer;color:var(--text-2);font-size:18px;line-height:1}
-  .modal .x:hover{background:var(--surface-hi);color:var(--text)}
-  .modal .modal-row1{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
-  .modal .modal-row1 .tcid{font-family:'JetBrains Mono',monospace;color:var(--primary-hi);font-weight:600;font-size:12.5px}
-  .modal h2{margin:4px 0 16px;font-size:22px;font-weight:700;letter-spacing:-0.01em;color:var(--text)}
-  .modal section{margin-top:18px;padding-top:16px;border-top:1px solid var(--border)}
-  .modal section:first-of-type{border-top:none;padding-top:0;margin-top:0}
-  .modal h4{font-size:11px;font-weight:700;color:var(--text-3);margin:0 0 8px;text-transform:uppercase;letter-spacing:0.10em}
-  .modal pre{margin:0;font-family:'Inter',sans-serif;font-size:13.5px;line-height:1.65;color:var(--text);white-space:pre-wrap;word-wrap:break-word}
-  .modal-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
+  /* Side drawer (slides in from right) — replaces the old centered modal */
+  .modal-bg{position:fixed;inset:0;background:rgba(15,23,42,0.45);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:200;display:none;opacity:0;transition:opacity 220ms cubic-bezier(0.16,1,0.3,1)}
+  .modal-bg.on{display:block;opacity:1}
+  .modal{position:fixed;top:0;right:0;bottom:0;width:560px;max-width:100vw;background:var(--surface);box-shadow:-24px 0 60px rgba(15,23,42,0.20),-4px 0 12px rgba(15,23,42,0.08);overflow-y:auto;transform:translateX(100%);transition:transform 320ms cubic-bezier(0.16,1,0.3,1);padding:0}
+  .modal-bg.on .modal{transform:translateX(0)}
+  /* Sticky header inside drawer */
+  .modal .drawer-head{position:sticky;top:0;background:var(--surface);padding:18px 28px 14px;border-bottom:1px solid var(--border);z-index:5;display:flex;align-items:center;gap:14px}
+  .modal .drawer-head .tcid{font-family:'JetBrains Mono',monospace;color:var(--text-3);font-weight:600;font-size:11.5px;letter-spacing:0.06em}
+  .modal .drawer-head .spacer{margin-left:auto}
+  .modal .x{background:var(--surface-2);border:1px solid var(--border);width:32px;height:32px;border-radius:8px;cursor:pointer;color:var(--text-2);font-size:16px;line-height:1;transition:120ms;display:grid;place-items:center}
+  .modal .x:hover{background:var(--surface-hi);color:var(--text);border-color:var(--border-hi)}
+  .modal .drawer-body{padding:22px 28px 28px}
+  .modal .modal-row1{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  .modal h2{margin:0 0 22px;font-size:22px;font-weight:700;letter-spacing:-0.012em;color:var(--text);line-height:1.3}
+  .modal section{margin-top:24px;padding-top:0;border-top:none}
+  .modal section:first-of-type{margin-top:0}
+  .modal h4{font-size:10.5px;font-weight:700;color:var(--text-3);margin:0 0 10px;text-transform:uppercase;letter-spacing:0.12em}
+  .modal pre{margin:0;font-family:'Inter',sans-serif;font-size:14px;line-height:1.65;color:var(--text-2);white-space:pre-wrap;word-wrap:break-word}
+  .modal-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:28px;padding-top:22px;border-top:1px solid var(--border)}
   .status-edit{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .status-edit label{font-size:12px;font-weight:600;color:var(--text-2)}
   .status-edit select{padding:7px 28px 7px 12px;border:1px solid var(--border);border-radius:8px;background-color:var(--surface);background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%2364748b'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.06l3.71-3.83a.75.75 0 111.08 1.04l-4.25 4.39a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:14px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;appearance:none;-webkit-appearance:none;-moz-appearance:none;min-width:140px;outline:none}
@@ -670,32 +687,34 @@ function tcCard(tc) {
   const s = effectiveStatus(tc);
   const jiraKey = JIRA_KEYS[tc.id];
   c.appendChild(el('div',{class:'row1'},
-    el('span',{class:'tcid'}, tc.id),
-    el('span',{class:'pill type '+(tc.type||'')}, tc.type||'Functional'),
-    el('span',{class:'pill sev '+(tc.severity||'')}, tc.severity||'—'),
-    (s && s!=='Not run') ? el('span',{class:'pill status '+s,'data-status':s}, s) : null,
-    jiraKey ? el('span',{class:'pill jira', title:'JIRA ticket'}, '🎫 ', jiraKey) : null
+    el('span',{class:'tcid'}, tc.id)
   ));
   c.appendChild(el('h3',{}, tc.scenario || '(no name)'));
-  if (tc.roles && tc.roles.length) {
-    const row = el('div',{class:'roles'});
-    for (const r of tc.roles) {
-      const cls = r==='State Head' ? 'role-StateHead' : 'role-'+r.replace(/\s/g,'');
-      row.appendChild(el('span',{class:'role-badge '+cls},
-        r==='Admin'?'👑 Admin':r==='State Head'?'🛡 State Head':r==='GSCO'?'🎯 GSCO':'◇ '+r));
-    }
-    c.appendChild(row);
+  const foot = el('div',{class:'foot'});
+  if (s && s!=='Not run') {
+    foot.appendChild(el('span',{class:'dot-status','data-status':s}, el('span',{class:'dot'}), s));
+  } else {
+    foot.appendChild(el('span',{class:'dot-status'}, el('span',{class:'dot'}), 'Not run'));
   }
+  if (jiraKey) foot.appendChild(el('span',{class:'pill jira',style:'margin-left:auto;', title:'JIRA ticket'}, '🎫 ', jiraKey));
+  c.appendChild(foot);
   return c;
 }
 function openTc(tc) {
-  const m = document.getElementById('modal');
-  m.innerHTML = '';
-  m.appendChild(el('button',{class:'x',on:{click:closeTc}},'×'));
+  const drawer = document.getElementById('modal');
+  drawer.innerHTML = '';
   const s = effectiveStatus(tc);
   const jiraKey = JIRA_KEYS[tc.id];
-  m.appendChild(el('div',{class:'modal-row1'},
+  // Sticky drawer header (TC ID + close button)
+  drawer.appendChild(el('div',{class:'drawer-head'},
     el('span',{class:'tcid'}, tc.id),
+    el('span',{class:'spacer'}),
+    el('button',{class:'x','aria-label':'Close',on:{click:closeTc}}, '×')
+  ));
+  // Scrollable body — alias `m` so existing appendChild calls below target the body
+  const m = el('div',{class:'drawer-body'});
+  drawer.appendChild(m);
+  m.appendChild(el('div',{class:'modal-row1'},
     el('span',{class:'pill type '+(tc.type||'')}, tc.type||'Functional'),
     el('span',{class:'pill sev '+(tc.severity||'')}, tc.severity||'—'),
     (s && s!=='Not run') ? el('span',{class:'pill status '+s,'data-status':s}, s) : null,
@@ -704,7 +723,7 @@ function openTc(tc) {
   ));
   m.appendChild(el('h2',{}, tc.scenario || '(no name)'));
   if (tc.roles && tc.roles.length) {
-    const r = el('div',{class:'roles', style:'margin-bottom:16px;'});
+    const r = el('div',{class:'roles', style:'margin-bottom:18px;'});
     for (const role of tc.roles) {
       const cls = role==='State Head' ? 'role-StateHead' : 'role-'+role.replace(/\s/g,'');
       r.appendChild(el('span',{class:'role-badge '+cls},
@@ -754,13 +773,11 @@ function openTc(tc) {
   if (tc.expected) m.appendChild(section('Expected Result', tc.expected));
   if (tc.notes)    m.appendChild(section('Notes', tc.notes));
   if (tc.br)       m.appendChild(section('References', tc.br));
-  const actions = el('div',{class:'modal-actions'});
   if (!isViewer()) {
+    const actions = el('div',{class:'modal-actions'});
     actions.appendChild(el('button',{class:'btn primary',on:{click:()=>renderJiraForm(tc)}}, JIRA_KEYS[tc.id] ? '🎫 File another ticket' : '🎫 Create JIRA ticket'));
+    m.appendChild(actions);
   }
-  actions.appendChild(el('button',{class:'btn',on:{click:e=>copyTc(e.target,tc,'json')}},'Copy as JSON'));
-  actions.appendChild(el('button',{class:'btn',on:{click:e=>copyTc(e.target,tc,'md')}},'Copy as Markdown'));
-  m.appendChild(actions);
   // Anchor where the JIRA ticket form will mount on demand
   m.appendChild(el('div',{id:'jiraMount'}));
   document.getElementById('modalBg').classList.add('on');
