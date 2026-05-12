@@ -2,15 +2,18 @@
 //   GET           -> { [tcId]: status, ... }  (all overrides currently stored)
 //   POST { tcId, status } -> upsert or clear when status is empty/'Not run'
 //
-// Backed by Vercel KV (a single hash keyed 'mel:status').
-import { kv } from '@vercel/kv';
+// Backed by Upstash Redis (a single hash keyed 'mel:status').
+// Env vars: UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN
+// (auto-set by the Upstash Redis integration in Vercel Marketplace).
+import { Redis } from '@upstash/redis';
 
 const KEY = 'mel:status';
+const redis = Redis.fromEnv();
 
 export default async function handler(req, res) {
   try {
     if (req.method === 'GET') {
-      const all = (await kv.hgetall(KEY)) || {};
+      const all = (await redis.hgetall(KEY)) || {};
       return res.status(200).json(all);
     }
     if (req.method === 'POST') {
@@ -24,9 +27,9 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'tcId required' });
       }
       if (!status || status === 'Not run') {
-        await kv.hdel(KEY, tcId);
+        await redis.hdel(KEY, tcId);
       } else {
-        await kv.hset(KEY, { [tcId]: status });
+        await redis.hset(KEY, { [tcId]: status });
       }
       return res.status(200).json({ ok: true });
     }

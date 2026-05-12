@@ -2,8 +2,8 @@
 
 A password-gated dashboard that surfaces every test case in the workbook and
 lets you toggle status to `Pass` / `Fail` / `On Hold`. Status changes persist
-to **Vercel KV** so anyone you share the URL with sees the latest values on
-refresh.
+to **Upstash Redis** (via the Vercel Marketplace integration) so anyone you
+share the URL with sees the latest values on refresh.
 
 ```
 dashboard-app/
@@ -48,11 +48,12 @@ just push `dashboard-app/`.)
 - Output Directory: `public`
 - Click **Deploy**
 
-### c. Add Vercel KV
-- In the Vercel project, go to **Storage** → **Create Database** → **KV**
-- Name it something like `mel-status`
-- Click **Connect** and pick the dashboard project
-- Vercel auto-sets the `KV_*` env vars in your project
+### c. Add Upstash Redis (replaces the now-deprecated Vercel KV)
+- In the Vercel project, go to **Storage** → **Marketplace** → search **Upstash Redis**
+- Click **Add Integration**, pick a region close to the project, and connect it
+  to the dashboard project
+- Upstash auto-sets `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`
+  as env vars in your project (Production, Preview, Development)
 
 ### d. Set the password
 - Go to **Settings** → **Environment Variables**
@@ -77,8 +78,8 @@ Anyone signed in can:
 - Changes save instantly to Vercel KV
 - The developer's view picks up the change on next refresh
 
-Status values flow: **embedded default (Not run)** → **KV override**. If you
-clear the dashboard's Vercel KV, every test case returns to "Not run".
+Status values flow: **embedded default (Not run)** → **Upstash Redis override**.
+If you clear the `mel:status` hash in Upstash, every test case returns to "Not run".
 
 ## 5) Updating test cases
 1. Edit the Excel workbook (`testing/Admin_MasterData_TestPlan.xlsx`)
@@ -88,7 +89,7 @@ clear the dashboard's Vercel KV, every test case returns to "Not run".
    ```
 3. Commit `public/index.html` and push — Vercel auto-deploys.
 
-(Status overrides in KV persist across rebuilds — they're keyed by TC ID.)
+(Status overrides in Redis persist across rebuilds — they're keyed by TC ID.)
 
 ## Local development
 
