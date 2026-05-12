@@ -36,6 +36,17 @@ import os
 XLSX = Path(os.environ.get('MEL_XLSX', str(APP.parent / 'testing' / 'Admin_MasterData_TestPlan.xlsx')))
 OUT = APP / 'public' / 'index.html'
 
+# Touchpoints fallback — if the Excel column is empty for a TC but the JSON
+# file at data/touchpoints.json has entries for it, use those. Lets the
+# dashboard ship touchpoints even before the user replaces the source xlsx.
+TOUCHPOINTS_JSON = APP / 'data' / 'touchpoints.json'
+TOUCHPOINTS_FALLBACK = {}
+if TOUCHPOINTS_JSON.exists():
+    try:
+        TOUCHPOINTS_FALLBACK = json.loads(TOUCHPOINTS_JSON.read_text(encoding='utf-8'))
+    except Exception as e:
+        print(f'Warning: could not load {TOUCHPOINTS_JSON}: {e}')
+
 MODULES = [
     ('Core', 'Authentication',            'auth',     'Authentication',          '🔐', 'tc'),
     ('Core', 'AM-01 Users',               'users',    'Users',                   '👥', 'tc'),
@@ -71,6 +82,16 @@ def detect_roles(*texts):
 def safe(cell):
     v = cell.value if hasattr(cell, 'value') else cell
     return '' if v is None else str(v)
+
+def merge_touchpoints(tc_id, from_excel):
+    """Use Excel touchpoints when present; fall back to the JSON fixture
+    otherwise. Excel is the source of truth — the JSON is just a safety net
+    for the period before the user copies the populated workbook over the
+    original.
+    """
+    if from_excel:
+        return from_excel
+    return TOUCHPOINTS_FALLBACK.get(tc_id, [])
 
 def parse_touchpoints(raw):
     """Parse the Touchpoints cell into a list of {role, screen, action} dicts.
@@ -119,7 +140,7 @@ for category, sheet_name, mod_id, mod_name, icon, layout in MODULES:
             severity = safe(ws.cell(row=r, column=9)) or 'Medium'
             br = safe(ws.cell(row=r, column=10))
             notes = safe(ws.cell(row=r, column=11))
-            touchpoints = parse_touchpoints(safe(ws.cell(row=r, column=12)))
+            touchpoints = merge_touchpoints(tcid, parse_touchpoints(safe(ws.cell(row=r, column=12))))
             tcs.append({
                 'id': tcid, 'scenario': scenario, 'type': ttype,
                 'pre': pre, 'steps': steps, 'expected': expected,
@@ -143,7 +164,7 @@ for category, sheet_name, mod_id, mod_name, icon, layout in MODULES:
             pre = safe(ws.cell(row=r, column=7))
             steps = safe(ws.cell(row=r, column=8))
             expected = safe(ws.cell(row=r, column=9))
-            touchpoints = parse_touchpoints(safe(ws.cell(row=r, column=15)))
+            touchpoints = merge_touchpoints(tcid, parse_touchpoints(safe(ws.cell(row=r, column=15))))
             tcs.append({
                 'id': tcid, 'scenario': scenario, 'type': 'Accessibility',
                 'pre': pre, 'steps': steps, 'expected': expected,
@@ -172,7 +193,7 @@ for category, sheet_name, mod_id, mod_name, icon, layout in MODULES:
             title = safe(ws.cell(row=r, column=4))
             desc = safe(ws.cell(row=r, column=5))
             steps = safe(ws.cell(row=r, column=6))
-            touchpoints = parse_touchpoints(safe(ws.cell(row=r, column=12)))
+            touchpoints = merge_touchpoints(tcid, parse_touchpoints(safe(ws.cell(row=r, column=12))))
             tcs.append({
                 'id': tcid, 'scenario': title, 'type': 'Bug',
                 'pre': desc, 'steps': steps, 'expected': '',
@@ -194,7 +215,7 @@ for category, sheet_name, mod_id, mod_name, icon, layout in MODULES:
             title = safe(ws.cell(row=r, column=3))
             desc = safe(ws.cell(row=r, column=4))
             verify = safe(ws.cell(row=r, column=6))
-            touchpoints = parse_touchpoints(safe(ws.cell(row=r, column=9)))
+            touchpoints = merge_touchpoints(tcid, parse_touchpoints(safe(ws.cell(row=r, column=9))))
             tcs.append({
                 'id': tcid, 'scenario': title, 'type': 'Verification',
                 'pre': desc, 'steps': verify, 'expected': '',

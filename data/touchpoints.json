@@ -1,0 +1,1144 @@
+{
+  "TC-AUTH-001": [
+    {
+      "role": "Admin",
+      "screen": "Login page",
+      "action": "Use admin credentials and confirm post-login redirect to /admin/dashboard"
+    },
+    {
+      "role": "State Head",
+      "screen": "Login page",
+      "action": "Use State Head credentials and confirm post-login redirect to /statehead/dashboard"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Login page",
+      "action": "Use GSCO credentials and confirm post-login redirect to /gsco/dashboard"
+    },
+    {
+      "role": "Any",
+      "screen": "Sidebar (per role)",
+      "action": "Confirm sidebar links match the role matrix (e.g. Master Data only for Admin)"
+    }
+  ],
+  "TC-AUTH-002": [
+    {
+      "role": "Admin",
+      "screen": "Users list",
+      "action": "Newly created State Head / GSCO user appears with status Active and is_temp_password=true badge"
+    },
+    {
+      "role": "Any",
+      "screen": "Email inbox of new user",
+      "action": "Welcome email is delivered automatically with temp password and Set Password link"
+    },
+    {
+      "role": "Any",
+      "screen": "Set Password screen",
+      "action": "Forced password change blocks navigation until the new password is saved"
+    },
+    {
+      "role": "Any",
+      "screen": "Role landing dashboard",
+      "action": "After first password is set, login routes to role-specific dashboard"
+    }
+  ],
+  "TC-AUTH-003": [
+    {
+      "role": "Admin",
+      "screen": "User Management list",
+      "action": "Confirm Reset Password row action is present and audit log records the Admin who triggered the reset"
+    },
+    {
+      "role": "Any",
+      "screen": "Email inbox of target user",
+      "action": "Reset email arrives with fresh temp password and Set Password link"
+    },
+    {
+      "role": "Any",
+      "screen": "Login page",
+      "action": "Old password no longer works; new temp password forces Set Password screen"
+    }
+  ],
+  "TC-AUTH-004": [
+    {
+      "role": "Any",
+      "screen": "Login page",
+      "action": "Use Forgot Password link and confirm OTP delivered via email or mobile"
+    },
+    {
+      "role": "Any",
+      "screen": "OTP verify screen",
+      "action": "Successful OTP routes to Set Password screen"
+    },
+    {
+      "role": "Any",
+      "screen": "Role landing dashboard",
+      "action": "After reset, login routes to role-specific dashboard"
+    }
+  ],
+  "TC-AUTH-005": [],
+  "TC-AUTH-006": [],
+  "TC-AUTH-007": [],
+  "TC-AUTH-008": [],
+  "TC-AUTH-009": [],
+  "TC-AUTH-010": [],
+  "TC-AUTH-011": [],
+  "TC-AUTH-012": [],
+  "TC-AUTH-013": [],
+  "TC-AUTH-014": [],
+  "TC-AUTH-015": [],
+  "TC-USR-001": [],
+  "TC-USR-002": [
+    {
+      "role": "Admin",
+      "screen": "Users list",
+      "action": "New State Head appears at top with role State Head and assigned State chip"
+    },
+    {
+      "role": "Admin",
+      "screen": "User-Pincode cross-reference",
+      "action": "State Head listed against their assigned state(s)"
+    },
+    {
+      "role": "State Head",
+      "screen": "State Head dashboard",
+      "action": "First login lands on /statehead/dashboard scoped to the assigned state"
+    }
+  ],
+  "TC-USR-003": [
+    {
+      "role": "Admin",
+      "screen": "Users list",
+      "action": "State Head row shows multi-state chip set (e.g. MH + KA)"
+    },
+    {
+      "role": "State Head",
+      "screen": "State Head dashboard",
+      "action": "KPI tiles, Centres table and master-data grid aggregate across all assigned states with per-state breakdown"
+    },
+    {
+      "role": "State Head",
+      "screen": "Manage Reports",
+      "action": "Report filters expose the assigned states only"
+    }
+  ],
+  "TC-USR-004": [
+    {
+      "role": "State Head",
+      "screen": "State Head dashboard",
+      "action": "6-card Master Data grid (Centres, Committees, Disabilities, Districts, Pincodes, Villages) aggregates rows across MH and KA"
+    },
+    {
+      "role": "State Head",
+      "screen": "Candidate Directory",
+      "action": "Directory rows are scoped to MH + KA only"
+    },
+    {
+      "role": "State Head",
+      "screen": "Manage Reports",
+      "action": "State Performance table shows one row per assigned state"
+    }
+  ],
+  "TC-USR-005": [
+    {
+      "role": "Admin",
+      "screen": "Users list",
+      "action": "New GSCO row visible with assigned PIN and centre"
+    },
+    {
+      "role": "Admin",
+      "screen": "GSC Centres list",
+      "action": "Auto-created centre appears with name = location name and the new GSCO as owner"
+    },
+    {
+      "role": "State Head",
+      "screen": "State Head dashboard (Centres in state)",
+      "action": "New centre is visible under the state's Centres table and Centres master-data card"
+    },
+    {
+      "role": "GSCO",
+      "screen": "GSCO dashboard (centre badge / My Centers)",
+      "action": "GSCO sees the newly-created centre selected by default"
+    },
+    {
+      "role": "Any",
+      "screen": "Candidate Directory filter",
+      "action": "Centre filter exposes the new centre"
+    }
+  ],
+  "TC-USR-006": [
+    {
+      "role": "Admin",
+      "screen": "GSC Centres list",
+      "action": "N centres (one per location) created with the GSCO linked"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Sidebar — My Centers selector (SHELL-06)",
+      "action": "Selector lists all N centres; switching rescopes dashboard, directory, training"
+    },
+    {
+      "role": "State Head",
+      "screen": "State Head dashboard (Centres in state)",
+      "action": "All N new centres appear under the state's Centres table"
+    }
+  ],
+  "TC-USR-007": [
+    {
+      "role": "Admin",
+      "screen": "Users list",
+      "action": "GSCO row shows 10+ pincode chips without truncation issues"
+    },
+    {
+      "role": "Admin",
+      "screen": "User-Pincode cross-reference (Multiple Pincodes view)",
+      "action": "User appears in the People with Multiple Pincodes report"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Quick Candidate Registration",
+      "action": "All 10+ pincodes are selectable in the PIN cascade"
+    }
+  ],
+  "TC-USR-008": [
+    {
+      "role": "Admin",
+      "screen": "Users list",
+      "action": "User's role chip flips from GSCO to State Head; old centre/pincode links removed from the user record"
+    },
+    {
+      "role": "Admin",
+      "screen": "GSC Centres list",
+      "action": "Affected centres show an 'Unassigned' badge — data otherwise unchanged (name, pincodes, IP, candidates, trainings)"
+    },
+    {
+      "role": "Admin",
+      "screen": "Inbox / Notifications",
+      "action": "'Role changed — reassign required' notification raised for Admin"
+    },
+    {
+      "role": "State Head",
+      "screen": "State Head dashboard",
+      "action": "User lands on /statehead/dashboard on next login"
+    },
+    {
+      "role": "Admin",
+      "screen": "Activity log",
+      "action": "Role change captured with previous and new role"
+    }
+  ],
+  "TC-USR-009": [
+    {
+      "role": "Admin",
+      "screen": "Users list",
+      "action": "Blocked user appears with Inactive/Blocked status filter (soft-delete)"
+    },
+    {
+      "role": "Any",
+      "screen": "Login page",
+      "action": "Blocked user receives 'Account inactive' error and cannot log in"
+    }
+  ],
+  "TC-USR-010": [
+    {
+      "role": "Admin",
+      "screen": "Users list",
+      "action": "Unblocked user's status flips to Active"
+    },
+    {
+      "role": "Any",
+      "screen": "Login page",
+      "action": "User can log in again with their existing password"
+    }
+  ],
+  "TC-USR-011": [],
+  "TC-USR-012": [],
+  "TC-USR-013": [],
+  "TC-USR-014": [],
+  "TC-USR-015": [],
+  "TC-USR-016": [],
+  "TC-USR-017": [],
+  "TC-USR-018": [
+    {
+      "role": "Admin",
+      "screen": "Users list",
+      "action": "100-character Full Name renders fully or with safe ellipsis; no row layout breakage"
+    }
+  ],
+  "TC-USR-019": [],
+  "TC-USR-020": [
+    {
+      "role": "Admin",
+      "screen": "Users list",
+      "action": "State Head's state chip set reflects the add/remove change"
+    },
+    {
+      "role": "State Head",
+      "screen": "State Head dashboard",
+      "action": "Removed state is no longer visible; newly-added state's data is visible"
+    }
+  ],
+  "TC-USR-021": [],
+  "TC-USR-022": [
+    {
+      "role": "Admin",
+      "screen": "Users list",
+      "action": "Re-created user appears as a separate record; previous (blocked) user retained in audit history"
+    }
+  ],
+  "TC-USR-023": [
+    {
+      "role": "Admin",
+      "screen": "Users list",
+      "action": "GSCO row flips to Blocked"
+    },
+    {
+      "role": "Admin",
+      "screen": "Candidate Directory",
+      "action": "5 candidates still visible with original GSC Centre and are reassignable"
+    },
+    {
+      "role": "State Head",
+      "screen": "Candidate Directory",
+      "action": "Candidates remain visible state-wide after the GSCO is blocked"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Login page",
+      "action": "Blocked GSCO can no longer authenticate"
+    }
+  ],
+  "TC-USR-024": [],
+  "TC-USR-025": [],
+  "TC-USR-026": [],
+  "TC-USR-027": [],
+  "TC-USR-028": [
+    {
+      "role": "Admin",
+      "screen": "Users list",
+      "action": "User's role chip flips from State Head to GSCO; state assignment cleared; PIN/centre fields now required"
+    },
+    {
+      "role": "Admin",
+      "screen": "GSC Centres list",
+      "action": "Newly assigned centre links to the user"
+    },
+    {
+      "role": "GSCO",
+      "screen": "GSCO dashboard",
+      "action": "Next login lands on /gsco/dashboard"
+    }
+  ],
+  "TC-USR-029": [],
+  "TC-CTR-001": [
+    {
+      "role": "Admin",
+      "screen": "GSC Centres list",
+      "action": "New centre appears at top with Code, District, State, Pincodes count, Status"
+    },
+    {
+      "role": "Admin",
+      "screen": "Admin dashboard — GSC Centres tile",
+      "action": "Centre count KPI increments"
+    },
+    {
+      "role": "State Head",
+      "screen": "State Head dashboard — Centres card",
+      "action": "Centre visible in state-scoped Centres master-data card"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Sidebar — My Centers / centre badge",
+      "action": "Centre is selectable once a GSCO is assigned"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Quick Candidate Registration",
+      "action": "Centre's pincodes are available in PIN cascade"
+    }
+  ],
+  "TC-CTR-002": [
+    {
+      "role": "Admin",
+      "screen": "Add / Edit Centre modal — Pincode dropdown",
+      "action": "Pincode list is filtered to only those belonging to the selected District"
+    }
+  ],
+  "TC-CTR-003": [
+    {
+      "role": "Admin",
+      "screen": "GSC Centres list",
+      "action": "Auto-listed centre with name = location name and an Edit action"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Quick Candidate Registration",
+      "action": "Centre's PIN is immediately available in the candidate quick-reg PIN cascade"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Create Training form",
+      "action": "PIN dropdown exposes the new centre's pincode"
+    }
+  ],
+  "TC-CTR-004": [
+    {
+      "role": "GSCO",
+      "screen": "Candidate profile — About GarvSe Centre card",
+      "action": "Centre's tied Implementation Partner is shown"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Create Training — Implementation Partner dropdown",
+      "action": "Dropdown filters by the centre's PIN"
+    }
+  ],
+  "TC-CTR-005": [],
+  "TC-CTR-006": [],
+  "TC-CTR-007": [
+    {
+      "role": "Admin",
+      "screen": "GSC Centres list",
+      "action": "Centre row renders 50+ pincodes (truncated chips with overflow indicator)"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Quick Candidate Registration",
+      "action": "All 50+ pincodes appear in PIN cascade"
+    }
+  ],
+  "TC-CTR-008": [],
+  "TC-CTR-009": [
+    {
+      "role": "Admin",
+      "screen": "GSC Centres list — Delete confirm",
+      "action": "Block delete and show dependency list (candidates + trainings + GSCO users) with clickable links"
+    }
+  ],
+  "TC-CTR-010": [],
+  "TC-CTR-011": [],
+  "TC-CTR-012": [],
+  "TC-CTR-013": [
+    {
+      "role": "Admin",
+      "screen": "GSC Centres list",
+      "action": "Reassigned centre's 'Unassigned' badge clears; new GSCO linked"
+    },
+    {
+      "role": "Admin",
+      "screen": "Activity log",
+      "action": "Reassignment recorded with previous and new GSCO"
+    },
+    {
+      "role": "GSCO",
+      "screen": "GSCO dashboard (centre badge / My Centers)",
+      "action": "New GSCO immediately sees the centre and its candidates"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Create Training",
+      "action": "New GSCO can create trainings for the centre's pincodes"
+    }
+  ],
+  "TC-CTR-014": [],
+  "TC-CTR-015": [],
+  "TC-CTR-016": [],
+  "TC-CTR-017": [
+    {
+      "role": "Admin",
+      "screen": "GSC Centres list",
+      "action": "Centre row Status chip reads Published"
+    },
+    {
+      "role": "State Head",
+      "screen": "State Head dashboard — Centres card",
+      "action": "Published centre visible in state-scoped grid"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Quick Candidate Registration",
+      "action": "Published centre / its pincodes are available in PIN cascade"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Create Training",
+      "action": "Published centre selectable in Location / Centre dropdown"
+    }
+  ],
+  "TC-CTR-018": [
+    {
+      "role": "Admin",
+      "screen": "GSC Centres list",
+      "action": "Centre row Status chip reads Unpublished"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Quick Candidate Registration",
+      "action": "Unpublished centre / pincodes are hidden from candidate-facing selection"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Create Training",
+      "action": "Unpublished centre is hidden from the Location dropdown"
+    }
+  ],
+  "TC-CTR-019": [
+    {
+      "role": "Admin",
+      "screen": "GSC Centres list",
+      "action": "Status chip flips to Unpublished and toast confirms the change"
+    },
+    {
+      "role": "Admin",
+      "screen": "Admin dashboard — GSC Centres tile",
+      "action": "Published-centre KPI decrements"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Quick Candidate Registration",
+      "action": "Centre / its pincodes disappear from candidate-facing PIN cascade immediately"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Create Training",
+      "action": "Centre disappears from the Location dropdown"
+    },
+    {
+      "role": "Admin",
+      "screen": "Activity log",
+      "action": "Status change captured with actor and timestamp"
+    }
+  ],
+  "TC-CTR-020": [
+    {
+      "role": "Admin",
+      "screen": "GSC Centres list",
+      "action": "Status chip flips to Published and toast confirms the change"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Quick Candidate Registration",
+      "action": "Centre / its pincodes reappear in PIN cascade immediately"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Create Training",
+      "action": "Centre reappears in the Location dropdown"
+    }
+  ],
+  "TC-CTR-021": [],
+  "TC-CTR-022": [],
+  "TC-DIS-001": [],
+  "TC-DIS-002": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Disability Types tab",
+      "action": "All 21 RPWD-Act-2016 items render in the seeded list"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Quick Candidate Registration — Disability dropdown",
+      "action": "Full 21-item RPWD list visible"
+    },
+    {
+      "role": "Any",
+      "screen": "Public Event Registration form (/register/$eventId)",
+      "action": "Full 21-item RPWD list visible"
+    }
+  ],
+  "TC-DIS-003": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Disability Types tab",
+      "action": "New disability type appears at top with Name, Code, Registered Candidates=0"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Quick Candidate Registration — Disability dropdown",
+      "action": "New disability type is selectable as Primary / Secondary"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Complete Candidate Profile (Step 1)",
+      "action": "New disability type is selectable"
+    },
+    {
+      "role": "Any",
+      "screen": "Public Event Registration form",
+      "action": "New disability type appears in the public registration disability dropdown"
+    },
+    {
+      "role": "State Head",
+      "screen": "State Head dashboard — Disabilities card",
+      "action": "Disability appears in the read-only state-scoped grid"
+    }
+  ],
+  "TC-DIS-004": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Disability Types tab",
+      "action": "Edited label persists in the list"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Quick Candidate Registration — Disability dropdown",
+      "action": "Dropdown reflects the renamed label"
+    },
+    {
+      "role": "Any",
+      "screen": "Existing candidate profiles using this disability",
+      "action": "Stored disability label updates everywhere it is shown"
+    }
+  ],
+  "TC-DIS-005": [],
+  "TC-DIS-006": [],
+  "TC-DIS-007": [],
+  "TC-DIS-008": [],
+  "TC-DIS-009": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Disability Types delete confirm",
+      "action": "Block delete with dependency list (count of candidates using this disability)"
+    }
+  ],
+  "TC-DIS-010": [],
+  "TC-DIS-011": [],
+  "TC-DIS-012": [],
+  "TC-DIS-013": [],
+  "TC-STA-001": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — States list",
+      "action": "New state appears at top with auto-generated State Code (e.g. SC38)"
+    },
+    {
+      "role": "Admin",
+      "screen": "Add User — State dropdown (Role=State Head)",
+      "action": "New state available for assignment"
+    },
+    {
+      "role": "Admin",
+      "screen": "Master Data — Districts (Add District modal)",
+      "action": "New state appears in parent-state dropdown"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Complete Candidate Profile — State dropdown",
+      "action": "New state is selectable, cascades to District / Pincode"
+    }
+  ],
+  "TC-STA-002": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — States list",
+      "action": "Edited state name persists"
+    },
+    {
+      "role": "State Head",
+      "screen": "State Head dashboard greeting",
+      "action": "Greeting reflects updated state name"
+    },
+    {
+      "role": "Any",
+      "screen": "All forms using State dropdown",
+      "action": "Updated state name displays everywhere (Add User, Candidate profile, Centre form)"
+    }
+  ],
+  "TC-STA-003": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — States list",
+      "action": "State no longer appears in list"
+    },
+    {
+      "role": "Admin",
+      "screen": "Add User — State dropdown",
+      "action": "Deleted state no longer selectable"
+    }
+  ],
+  "TC-STA-004": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — States delete confirm",
+      "action": "Block delete with dependency summary (districts, pincodes, centres, candidates)"
+    }
+  ],
+  "TC-STA-005": [],
+  "TC-STA-006": [],
+  "TC-STA-007": [],
+  "TC-STA-008": [],
+  "TC-STA-009": [],
+  "TC-STA-010": [],
+  "TC-STA-011": [],
+  "TC-STA-012": [],
+  "TC-STA-013": [],
+  "TC-STA-014": [],
+  "TC-STA-015": [],
+  "TC-DST-001": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Districts list",
+      "action": "New district appears under its parent state"
+    },
+    {
+      "role": "Admin",
+      "screen": "Add Pincode modal — District dropdown",
+      "action": "New district selectable; cascades from selected state"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Quick Candidate Registration — District auto-fill",
+      "action": "Selecting parent state + PIN populates the new district"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Complete Candidate Profile — District dropdown",
+      "action": "New district is selectable when state is chosen"
+    },
+    {
+      "role": "State Head",
+      "screen": "State Head dashboard — Districts card",
+      "action": "New district appears in state-scoped grid"
+    }
+  ],
+  "TC-DST-002": [
+    {
+      "role": "GSCO",
+      "screen": "Create Training form",
+      "action": "Selecting State=MH exposes Pune in District dropdown; selecting Pune filters Pincode dropdown to Pune pincodes only"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Create Training — Implementation Partner dropdown",
+      "action": "IP dropdown narrows to Pune-area partners"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Quick Candidate Registration",
+      "action": "Same State→District→Pincode cascade applies on candidate forms"
+    }
+  ],
+  "TC-DST-003": [],
+  "TC-DST-004": [],
+  "TC-DST-005": [],
+  "TC-DST-006": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Districts delete confirm",
+      "action": "Block delete with dependency list (blocks, pincodes, villages, candidates)"
+    }
+  ],
+  "TC-DST-007": [],
+  "TC-DST-008": [],
+  "TC-DST-009": [],
+  "TC-DST-010": [],
+  "TC-BLK-001": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Blocks list",
+      "action": "New block appears under parent district"
+    },
+    {
+      "role": "Admin",
+      "screen": "Add Village modal — Block dropdown",
+      "action": "New block selectable after picking the parent district"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Complete Candidate Profile — Block/Taluk dropdown",
+      "action": "New block is selectable when matching district is chosen"
+    }
+  ],
+  "TC-BLK-002": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Blocks list",
+      "action": "State column auto-populates from the district hierarchy"
+    }
+  ],
+  "TC-BLK-003": [],
+  "TC-BLK-004": [],
+  "TC-BLK-005": [],
+  "TC-BLK-006": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Blocks delete confirm",
+      "action": "Block delete with dependency list (villages and downstream usage)"
+    }
+  ],
+  "TC-BLK-007": [],
+  "TC-BLK-008": [],
+  "TC-BLK-009": [],
+  "TC-BLK-010": [],
+  "TC-VLG-001": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Villages list",
+      "action": "New village appears with parent District / Block / Pincode"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Quick Candidate Registration — Village dropdown",
+      "action": "New village is selectable when matching pincode is chosen"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Complete Candidate Profile — Village dropdown",
+      "action": "New village appears in the Step 5 Contact Details Village cascade"
+    },
+    {
+      "role": "State Head",
+      "screen": "State Head dashboard — Villages card",
+      "action": "New village appears in state-scoped grid"
+    }
+  ],
+  "TC-VLG-002": [
+    {
+      "role": "Admin",
+      "screen": "Add Village modal — Block dropdown",
+      "action": "Selecting District=Pune limits Block dropdown to Pune blocks only"
+    }
+  ],
+  "TC-VLG-003": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Villages list",
+      "action": "Migrated village shows new Pincode parent; old Block linkage preserved for audit"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Quick Candidate Registration — Village dropdown",
+      "action": "Village still appears under its (new) Pincode in candidate forms"
+    }
+  ],
+  "TC-VLG-004": [],
+  "TC-VLG-005": [],
+  "TC-VLG-006": [],
+  "TC-VLG-007": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Villages list",
+      "action": "Village renders against both pincode parents (or duplicated row per pincode, per data model)"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Quick Candidate Registration — Village dropdown",
+      "action": "Village appears in either pincode's Village cascade"
+    }
+  ],
+  "TC-VLG-008": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Villages delete confirm",
+      "action": "Block delete with dependency list (candidates linked to this village)"
+    }
+  ],
+  "TC-VLG-009": [],
+  "TC-VLG-010": [],
+  "TC-VLG-011": [],
+  "TC-VLG-012": [],
+  "TC-PIN-001": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Pincodes tab",
+      "action": "New pincode appears at top with Village, District, State"
+    },
+    {
+      "role": "Admin",
+      "screen": "Add Centre modal — Pincode dropdown",
+      "action": "New pincode selectable (filtered by district)"
+    },
+    {
+      "role": "Admin",
+      "screen": "Add User — PIN Code input (Role=GSCO)",
+      "action": "New pincode resolvable via Pincode Master"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Quick Candidate Registration — PIN dropdown",
+      "action": "New pincode selectable; auto-fills District + State"
+    },
+    {
+      "role": "State Head",
+      "screen": "State Head dashboard — Pincodes card",
+      "action": "New pincode appears in state-scoped grid"
+    }
+  ],
+  "TC-PIN-002": [],
+  "TC-PIN-003": [],
+  "TC-PIN-004": [],
+  "TC-PIN-005": [],
+  "TC-PIN-006": [],
+  "TC-PIN-007": [],
+  "TC-PIN-008": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Pincodes delete confirm",
+      "action": "Block delete with dependency list (candidates + GSC Centres + GSCO users assigned to this PIN)"
+    }
+  ],
+  "TC-PIN-009": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Pincodes tab",
+      "action": "All 1000 imported pincodes appear in the list; per-row validation report shown; atomic commit (all-or-nothing)"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Quick Candidate Registration — PIN dropdown",
+      "action": "All 1000 pincodes immediately visible in candidate quick-reg PIN cascade"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Create Training — Location/Pincode dropdown",
+      "action": "All 1000 pincodes immediately visible in training PIN cascade"
+    }
+  ],
+  "TC-PIN-010": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Pincodes tab",
+      "action": "All 10,000 rows visible after bulk import; list pagination remains responsive"
+    }
+  ],
+  "TC-PIN-011": [],
+  "TC-PIN-012": [],
+  "TC-PIN-013": [],
+  "TC-PIN-014": [],
+  "TC-PIN-015": [],
+  "TC-PIN-016": [],
+  "TC-PIN-017": [],
+  "TC-PIN-018": [],
+  "TC-PIN-019": [],
+  "TC-CRT-001": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Course Types list",
+      "action": "New Course Type appears at top with code + name"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Create Training — Course Type dropdown",
+      "action": "New Course Type selectable (e.g. EDP / SDP)"
+    }
+  ],
+  "TC-CRT-002": [
+    {
+      "role": "Admin",
+      "screen": "Admin dashboard — 12-card Master Data grid",
+      "action": "Tile reads 'Courses' (renamed from 'Trainings' per A.11) and links to Course Type master"
+    },
+    {
+      "role": "Admin",
+      "screen": "Sidebar / breadcrumbs",
+      "action": "Label 'Course Management' (or equivalent) renders the new vocabulary, not 'Trainings'"
+    }
+  ],
+  "TC-CRT-003": [
+    {
+      "role": "GSCO",
+      "screen": "Create Training — Course Type dropdown",
+      "action": "EDP is listed; selecting it auto-fills Training ID prefix CRS-EDP-<slug>-NNN and inherits default Course Partner"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Training Management list",
+      "action": "Newly created training appears with Course Type=EDP"
+    },
+    {
+      "role": "State Head",
+      "screen": "Review queue (/review)",
+      "action": "Training Request appears in State Head review queue"
+    }
+  ],
+  "TC-CRT-004": [],
+  "TC-CRT-005": [],
+  "TC-CRT-006": [],
+  "TC-CRT-007": [],
+  "TC-CRT-008": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Course Types delete confirm",
+      "action": "Block delete with dependency list (training count + links to Training list filtered by EDP)"
+    }
+  ],
+  "TC-CRT-009": [],
+  "TC-CRT-010": [],
+  "TC-CRT-011": [],
+  "TC-CRT-012": [],
+  "TC-CRT-013": [],
+  "TC-IPR-001": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Implementation Partners list",
+      "action": "New Implementation Partner appears at top"
+    },
+    {
+      "role": "Admin",
+      "screen": "Add Centre modal — Implementation Partner dropdown",
+      "action": "New IP is selectable on centre form"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Create Training — Implementation Partner dropdown",
+      "action": "New IP selectable (filtered by PIN)"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Candidate profile — About GarvSe Centre card",
+      "action": "If linked to a centre, IP shows in centre detail card"
+    }
+  ],
+  "TC-IPR-002": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Implementation Partners list",
+      "action": "Only Implementation sub-type rows render"
+    },
+    {
+      "role": "Admin",
+      "screen": "Master Data — Course Partners list",
+      "action": "Course Partners are listed only on the Course Partners page"
+    },
+    {
+      "role": "Admin",
+      "screen": "Master Data — Financial Partners list",
+      "action": "Financial Partners are listed only on the Financial Partners page"
+    }
+  ],
+  "TC-IPR-003": [],
+  "TC-IPR-004": [
+    {
+      "role": "Admin",
+      "screen": "Add / Edit Centre modal — Implementation Partner dropdown",
+      "action": "Inactive partner is hidden from active selection"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Create Training — Implementation Partner dropdown",
+      "action": "Inactive partner is hidden from active selection"
+    }
+  ],
+  "TC-IPR-005": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Implementation Partners list",
+      "action": "Migrated default 'GSC' Implementation Partner present with all legacy centre links retained"
+    }
+  ],
+  "TC-IPR-006": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Implementation Partners delete confirm",
+      "action": "Block delete with dependency list (centres using this IP)"
+    }
+  ],
+  "TC-IPR-007": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Implementation Partners list",
+      "action": "Partner with 0 centres deletes cleanly and disappears from list"
+    }
+  ],
+  "TC-IPR-008": [],
+  "TC-IPR-009": [],
+  "TC-IPR-010": [],
+  "TC-IPR-011": [],
+  "TC-CPR-001": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Course Partners list",
+      "action": "New Course Partner appears at top"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Create Training — Course Partner dropdown",
+      "action": "New Course Partner selectable"
+    }
+  ],
+  "TC-CPR-002": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Course Partners list",
+      "action": "Page heading reads 'Course Partners' not 'Training Partners'"
+    },
+    {
+      "role": "Admin",
+      "screen": "Sidebar / breadcrumbs",
+      "action": "Label reads 'Course Partners' everywhere"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Create Training form — Course Partner field label",
+      "action": "Field label reads 'Course Partner' per §5.3.3"
+    },
+    {
+      "role": "Admin",
+      "screen": "Admin dashboard — 12-card Master Data grid",
+      "action": "Tile label reads 'Course Partners' (not legacy sentinel)"
+    }
+  ],
+  "TC-CPR-003": [
+    {
+      "role": "GSCO",
+      "screen": "Create Training — Course Partner dropdown",
+      "action": "NSDC appears and is selectable"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Training detail",
+      "action": "Training detail page shows Course Partner=NSDC"
+    },
+    {
+      "role": "Any",
+      "screen": "Reports — Course Partner breakdown",
+      "action": "NSDC visible in partner-grouped reports"
+    }
+  ],
+  "TC-CPR-004": [],
+  "TC-CPR-005": [],
+  "TC-CPR-006": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Course Partners delete confirm",
+      "action": "Block delete with dependency list (trainings referencing this partner)"
+    }
+  ],
+  "TC-CPR-007": [],
+  "TC-CPR-008": [],
+  "TC-CPR-009": [],
+  "TC-CPR-010": [],
+  "TC-FPR-001": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Financial Partners list",
+      "action": "New Financial Partner appears at top with funder amount"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Candidate profile — Financial Assistance section",
+      "action": "New Financial Partner selectable on assistance entry"
+    },
+    {
+      "role": "Any",
+      "screen": "Reports — funder breakdown",
+      "action": "Partner appears in financial-partner-grouped reports"
+    }
+  ],
+  "TC-FPR-002": [],
+  "TC-FPR-003": [],
+  "TC-FPR-004": [],
+  "TC-FPR-005": [],
+  "TC-FPR-006": [
+    {
+      "role": "Admin",
+      "screen": "Master Data — Financial Partners delete confirm",
+      "action": "Block delete with dependency list (candidate count receiving disbursements + links)"
+    }
+  ],
+  "TC-FPR-007": [],
+  "TC-FPR-008": [],
+  "TC-FPR-009": [],
+  "TC-FPR-010": []
+}
