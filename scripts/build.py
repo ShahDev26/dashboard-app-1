@@ -72,6 +72,28 @@ def safe(cell):
     v = cell.value if hasattr(cell, 'value') else cell
     return '' if v is None else str(v)
 
+def parse_touchpoints(raw):
+    """Parse the Touchpoints cell into a list of {role, screen, action} dicts.
+
+    Each line in the cell is one touchpoint formatted as `Role : Screen : Action`.
+    Lines that don't have at least one colon are accepted as a free-text fallback
+    (placed in `action`, with role/screen empty). Blank lines and empty cells
+    are skipped.
+    """
+    out = []
+    for line in (raw or '').splitlines():
+        line = line.strip().lstrip('-').lstrip('*').strip()
+        if not line:
+            continue
+        parts = [p.strip() for p in line.split(':', 2)]
+        if len(parts) == 3:
+            out.append({'role': parts[0], 'screen': parts[1], 'action': parts[2]})
+        elif len(parts) == 2:
+            out.append({'role': parts[0], 'screen': '', 'action': parts[1]})
+        else:
+            out.append({'role': '', 'screen': '', 'action': parts[0]})
+    return out
+
 
 wb = openpyxl.load_workbook(XLSX, data_only=False)
 
@@ -97,11 +119,13 @@ for category, sheet_name, mod_id, mod_name, icon, layout in MODULES:
             severity = safe(ws.cell(row=r, column=9)) or 'Medium'
             br = safe(ws.cell(row=r, column=10))
             notes = safe(ws.cell(row=r, column=11))
+            touchpoints = parse_touchpoints(safe(ws.cell(row=r, column=12)))
             tcs.append({
                 'id': tcid, 'scenario': scenario, 'type': ttype,
                 'pre': pre, 'steps': steps, 'expected': expected,
                 'status': status, 'severity': severity, 'br': br,
                 'notes': notes, 'roles': detect_roles(scenario, pre, steps, expected),
+                'touchpoints': touchpoints,
             })
     elif layout == 'wcag':
         for r in range(5, ws.max_row + 1):
@@ -119,6 +143,7 @@ for category, sheet_name, mod_id, mod_name, icon, layout in MODULES:
             pre = safe(ws.cell(row=r, column=7))
             steps = safe(ws.cell(row=r, column=8))
             expected = safe(ws.cell(row=r, column=9))
+            touchpoints = parse_touchpoints(safe(ws.cell(row=r, column=15)))
             tcs.append({
                 'id': tcid, 'scenario': scenario, 'type': 'Accessibility',
                 'pre': pre, 'steps': steps, 'expected': expected,
@@ -127,6 +152,7 @@ for category, sheet_name, mod_id, mod_name, icon, layout in MODULES:
                 'br': ' · '.join(extras),
                 'notes': safe(ws.cell(row=r, column=14)),
                 'roles': detect_roles(scenario, pre, steps),
+                'touchpoints': touchpoints,
             })
     elif layout == 'defects':
         for r in range(4, ws.max_row + 1):
@@ -146,6 +172,7 @@ for category, sheet_name, mod_id, mod_name, icon, layout in MODULES:
             title = safe(ws.cell(row=r, column=4))
             desc = safe(ws.cell(row=r, column=5))
             steps = safe(ws.cell(row=r, column=6))
+            touchpoints = parse_touchpoints(safe(ws.cell(row=r, column=12)))
             tcs.append({
                 'id': tcid, 'scenario': title, 'type': 'Bug',
                 'pre': desc, 'steps': steps, 'expected': '',
@@ -153,6 +180,7 @@ for category, sheet_name, mod_id, mod_name, icon, layout in MODULES:
                 'severity': safe(ws.cell(row=r, column=7)) or 'Medium',
                 'br': ' · '.join(extras), 'notes': '',
                 'roles': detect_roles(title, desc, steps),
+                'touchpoints': touchpoints,
             })
     elif layout == 'resol':
         for r in range(4, ws.max_row + 1):
@@ -166,6 +194,7 @@ for category, sheet_name, mod_id, mod_name, icon, layout in MODULES:
             title = safe(ws.cell(row=r, column=3))
             desc = safe(ws.cell(row=r, column=4))
             verify = safe(ws.cell(row=r, column=6))
+            touchpoints = parse_touchpoints(safe(ws.cell(row=r, column=9)))
             tcs.append({
                 'id': tcid, 'scenario': title, 'type': 'Verification',
                 'pre': desc, 'steps': verify, 'expected': '',
@@ -173,6 +202,7 @@ for category, sheet_name, mod_id, mod_name, icon, layout in MODULES:
                 'severity': safe(ws.cell(row=r, column=5)) or 'Medium',
                 'br': ' · '.join(extras), 'notes': '',
                 'roles': detect_roles(title, desc, verify),
+                'touchpoints': touchpoints,
             })
 
     if not tcs: continue
@@ -307,7 +337,18 @@ HTML = r"""<!DOCTYPE html>
   .tc-card:hover::before{opacity:1;width:4px}
   .tc-card .row1{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .tc-card .tcid{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-3);font-weight:600;letter-spacing:0.05em}
-  .tc-card h3{margin:0;font-size:15px;font-weight:600;color:var(--text);line-height:1.45;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .tc-card h3{margin:0;font-size:15.5px;font-weight:700;color:var(--text);line-height:1.4;letter-spacing:-0.005em;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .tc-card .meta-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .tc-card .meta-row .tag{font-size:10.5px;font-weight:600;letter-spacing:0.04em;color:var(--text-3);text-transform:uppercase}
+  .tc-card .meta-row .tag b{color:var(--text-2);font-weight:700;margin-left:3px;text-transform:none;letter-spacing:0}
+  .tc-card .meta-row .tag.priority b{color:var(--text)}
+  .tc-card .meta-row .tag.priority.Critical b{color:#b91c1c}
+  .tc-card .meta-row .tag.priority.High b{color:#c2410c}
+  .tc-card .meta-row .tag.priority.Medium b{color:#b45309}
+  .tc-card .meta-row .tag.priority.Low b{color:#047857}
+  .tc-card .meta-row .tag.priority.Serious b{color:#be123c}
+  .tc-card .meta-row .tag.priority.Minor b{color:var(--slate)}
+  .tc-card .meta-row .sep{color:var(--text-3);opacity:0.5}
   .tc-card .foot{display:flex;align-items:center;gap:8px;margin-top:auto;flex-wrap:wrap}
   /* status dot + label (subtle replacement for full pill on card) */
   .dot-status{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--text-2)}
@@ -364,6 +405,17 @@ HTML = r"""<!DOCTYPE html>
   .modal h4{font-size:10.5px;font-weight:700;color:var(--text-3);margin:0 0 10px;text-transform:uppercase;letter-spacing:0.12em}
   .modal pre{margin:0;font-family:'Inter',sans-serif;font-size:14px;line-height:1.65;color:var(--text-2);white-space:pre-wrap;word-wrap:break-word}
   .modal-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:28px;padding-top:22px;border-top:1px solid var(--border)}
+
+  /* Touchpoints section — grouped checklist of role → screen → action */
+  .touchpoints{display:flex;flex-direction:column;gap:14px}
+  .touchpoints .role-group{padding:14px 16px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px}
+  .touchpoints .role-head{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--text);margin-bottom:10px;letter-spacing:0.01em}
+  .touchpoints .role-head .role-badge{font-size:10px;padding:3px 9px}
+  .touchpoints ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+  .touchpoints li{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--text-2);line-height:1.5}
+  .touchpoints li::before{content:'';flex:0 0 6px;height:6px;border-radius:50%;background:var(--primary);margin-top:8px;opacity:0.45}
+  .touchpoints .screen{font-weight:600;color:var(--text);margin-right:6px}
+  .touchpoints .empty{color:var(--text-3);font-size:13px;font-style:italic;padding:10px 0}
   .status-edit{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .status-edit label{font-size:12px;font-weight:600;color:var(--text-2)}
   .status-edit select{padding:7px 28px 7px 12px;border:1px solid var(--border);border-radius:8px;background-color:var(--surface);background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%2364748b'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.06l3.71-3.83a.75.75 0 111.08 1.04l-4.25 4.39a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:14px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;appearance:none;-webkit-appearance:none;-moz-appearance:none;min-width:140px;outline:none}
@@ -690,6 +742,12 @@ function tcCard(tc) {
     el('span',{class:'tcid'}, tc.id)
   ));
   c.appendChild(el('h3',{}, tc.scenario || '(no name)'));
+  // Type + Priority labels (compact, scannable, not loud pills)
+  const meta = el('div',{class:'meta-row'});
+  meta.appendChild(el('span',{class:'tag'}, 'Type', el('b',{}, ' ', tc.type || 'Functional')));
+  meta.appendChild(el('span',{class:'sep'}, '·'));
+  meta.appendChild(el('span',{class:'tag priority '+(tc.severity||'')}, 'Priority', el('b',{}, ' ', tc.severity || '—')));
+  c.appendChild(meta);
   const foot = el('div',{class:'foot'});
   if (s && s!=='Not run') {
     foot.appendChild(el('span',{class:'dot-status','data-status':s}, el('span',{class:'dot'}), s));
@@ -771,6 +829,7 @@ function openTc(tc) {
   if (tc.pre)      m.appendChild(section('Precondition', tc.pre));
   if (tc.steps)    m.appendChild(section('Steps', tc.steps));
   if (tc.expected) m.appendChild(section('Expected Result', tc.expected));
+  m.appendChild(renderTouchpoints(tc));
   if (tc.notes)    m.appendChild(section('Notes', tc.notes));
   if (tc.br)       m.appendChild(section('References', tc.br));
   if (!isViewer()) {
@@ -945,6 +1004,43 @@ function renderJiraForm(tc) {
   titleInput.focus();
 }
 function section(label,text){return el('section',{},el('h4',{},label),el('pre',{},text));}
+function renderTouchpoints(tc) {
+  const sec = el('section',{});
+  sec.appendChild(el('h4',{}, 'Touchpoints to verify'));
+  const list = tc.touchpoints || [];
+  if (!list.length) {
+    sec.appendChild(el('div',{class:'empty', style:'color:var(--text-3);font-size:13px;font-style:italic;padding:6px 0 0;'},
+      'No touchpoints recorded yet — the developer should verify only the primary screen for this test.'));
+    return sec;
+  }
+  // Group by role; preserve first-seen order
+  const byRole = new Map();
+  for (const tp of list) {
+    const r = tp.role || 'Any';
+    if (!byRole.has(r)) byRole.set(r, []);
+    byRole.get(r).push(tp);
+  }
+  const wrap = el('div',{class:'touchpoints'});
+  for (const [role, items] of byRole.entries()) {
+    const grp = el('div',{class:'role-group'});
+    const cls = role==='State Head' ? 'role-StateHead' : 'role-'+role.replace(/\s/g,'');
+    grp.appendChild(el('div',{class:'role-head'},
+      el('span',{class:'role-badge '+cls},
+        role==='Admin'?'👑 Admin':role==='State Head'?'🛡 State Head':role==='GSCO'?'🎯 GSCO':'◇ '+role)
+    ));
+    const ul = el('ul',{});
+    for (const it of items) {
+      const li = el('li',{});
+      if (it.screen) li.appendChild(el('span',{class:'screen'}, it.screen, ' — '));
+      li.appendChild(document.createTextNode(it.action || ''));
+      ul.appendChild(li);
+    }
+    grp.appendChild(ul);
+    wrap.appendChild(grp);
+  }
+  sec.appendChild(wrap);
+  return sec;
+}
 function closeTc(){document.getElementById('modalBg').classList.remove('on');}
 document.getElementById('modalBg').addEventListener('click',e=>{if(e.target===document.getElementById('modalBg'))closeTc();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeTc();});
