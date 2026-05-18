@@ -1140,5 +1140,4058 @@
   "TC-FPR-007": [],
   "TC-FPR-008": [],
   "TC-FPR-009": [],
-  "TC-FPR-010": []
+  "TC-FPR-010": [],
+  "TC-CM-001": [
+    {
+      "role": "GSCO",
+      "screen": "GSCO Dashboard",
+      "action": "Click FAB → Register Candidate"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/register/pwd",
+      "action": "Fill Full Name, Phone (+91 prefilled), pick disability from 21-item RPWD list, Save"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Candidate detail page",
+      "action": "Verify success toast and 'Complete Profile' CTA"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Candidate's mobile (SMS)",
+      "action": "6-digit OTP delivered within seconds of save"
+    }
+  ],
+  "TC-CM-002": [
+    {
+      "role": "GSCO",
+      "screen": "/register/pwd",
+      "action": "Aadhaar field accepts 12 digits; gets stored masked on save"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Candidate detail page",
+      "action": "Aadhaar visible as masked (e.g. XXXX-XXXX-1234)"
+    }
+  ],
+  "TC-CM-003": [
+    {
+      "role": "GSCO",
+      "screen": "Phone Verification screen",
+      "action": "Enter 6-digit OTP, submit"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Candidate detail page",
+      "action": "Phone shown with 'Verified' badge"
+    }
+  ],
+  "TC-CM-004": [
+    {
+      "role": "GSCO",
+      "screen": "/register/pwd",
+      "action": "Fetch UDID enabled only after Phone + Aadhaar validated"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Consent prompt",
+      "action": "Confirm candidate consent before fetch fires"
+    },
+    {
+      "role": "GSCO",
+      "screen": "#reg-udid-fetch-status (status region)",
+      "action": "In-flight then success message announced to screen readers"
+    },
+    {
+      "role": "GSCO",
+      "screen": "UDID field",
+      "action": "Auto-populated with 'Auto-fetched' badge; field becomes read-only with Edit override"
+    }
+  ],
+  "TC-CM-005": [
+    {
+      "role": "GSCO",
+      "screen": "#reg-udid-fetch-status",
+      "action": "'Not found' announced; manual entry remains available"
+    },
+    {
+      "role": "GSCO",
+      "screen": "UDID field",
+      "action": "Editable, no 'Auto-fetched' badge"
+    },
+    {
+      "role": "Admin",
+      "screen": "UIDAI fetch audit log",
+      "action": "Entry written with outcome=not_found (timestamp, gsco_id, phone, aadhaar)"
+    }
+  ],
+  "TC-CM-006": [
+    {
+      "role": "GSCO",
+      "screen": "#reg-udid-fetch-status",
+      "action": "'Service unavailable' announced; Retry button offered"
+    },
+    {
+      "role": "GSCO",
+      "screen": "UDID field",
+      "action": "Manual entry permitted"
+    },
+    {
+      "role": "Admin",
+      "screen": "UIDAI fetch audit log",
+      "action": "Entry written with outcome=service_down"
+    }
+  ],
+  "TC-CM-007": [
+    {
+      "role": "GSCO",
+      "screen": "/training/complete-profile (Step 1)",
+      "action": "Fill v3.4 Step 1 fields; UDID below Aadhaar; removed fields absent"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/training/complete-profile (Step 2)",
+      "action": "Employment Interest (Self/Wage) gates Interest options"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/training/complete-profile (Step 4)",
+      "action": "Field label = 'Caste' (renamed from Social Category); single-select dropdown from Castes master; Family Income numeric; pension sub-buckets"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/training/complete-profile (Step 5)",
+      "action": "Accessible Toilet follow-up; Loan Availed conditional on PWD Govt Facility"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Wizard navigation",
+      "action": "Back/Next + Save at each step; partial save persists"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/training/complete-profile (Step 7 Preview)",
+      "action": "Document multi-upload + camera capture; Preview → Submit flips status to Profile Complete"
+    }
+  ],
+  "TC-CM-008": [
+    {
+      "role": "GSCO",
+      "screen": "/directory",
+      "action": "3 candidates visible; PIN 560002 candidates hidden"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Directory toolbar",
+      "action": "Search / Filters / Export CSV available"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Phone column filter",
+      "action": "Digits-only substring filter works"
+    }
+  ],
+  "TC-CM-009": [
+    {
+      "role": "GSCO",
+      "screen": "/directory",
+      "action": "Union of all assigned PINs shown"
+    },
+    {
+      "role": "GSCO",
+      "screen": "LOCATION column",
+      "action": "Per-row PIN displayed"
+    }
+  ],
+  "TC-CM-010": [
+    {
+      "role": "GSCO",
+      "screen": "/directory filter rail",
+      "action": "All 5 dimensions + Village/From/To visible"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/directory",
+      "action": "Filters compose; counts update live"
+    },
+    {
+      "role": "State Head",
+      "screen": "/directory filter rail",
+      "action": "Same dimensions visible at state scope"
+    },
+    {
+      "role": "Admin",
+      "screen": "/directory filter rail",
+      "action": "Same dimensions visible at national scope"
+    }
+  ],
+  "TC-CM-011": [
+    {
+      "role": "GSCO",
+      "screen": "/register/pwd",
+      "action": "Inline alert on phone field; Submit disabled"
+    }
+  ],
+  "TC-CM-012": [
+    {
+      "role": "GSCO",
+      "screen": "/register/pwd",
+      "action": "Inline alert on Aadhaar field; Submit disabled"
+    }
+  ],
+  "TC-CM-013": [
+    {
+      "role": "GSCO",
+      "screen": "/register/pwd phone field",
+      "action": "Live inline validation; Submit disabled until valid"
+    }
+  ],
+  "TC-CM-014": [
+    {
+      "role": "GSCO",
+      "screen": "/register/pwd Aadhaar field",
+      "action": "Live inline validation"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Fetch UDID button",
+      "action": "Disabled until Aadhaar is exactly 12 digits"
+    }
+  ],
+  "TC-CM-015": [
+    {
+      "role": "GSCO",
+      "screen": "/register/pwd Fetch UDID button",
+      "action": "Disabled state with tooltip until composite key valid"
+    }
+  ],
+  "TC-CM-016": [
+    {
+      "role": "GSCO",
+      "screen": "/directory search",
+      "action": "B01045 not in results"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/directory/B01045 (direct URL)",
+      "action": "Server returns 404 / scope-error page"
+    }
+  ],
+  "TC-CM-017": [
+    {
+      "role": "GSCO",
+      "screen": "Edit Profile → UDID field",
+      "action": "Read-only; no Edit button"
+    },
+    {
+      "role": "GSCO",
+      "screen": "PATCH /candidates/{id} (direct API)",
+      "action": "Server rejects with 403"
+    }
+  ],
+  "TC-CM-018": [
+    {
+      "role": "GSCO",
+      "screen": "Complete-Profile Step 1 — DOB",
+      "action": "Live validation: derived age ≥ 16; valid date required; future dates rejected"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Complete-Profile Step 1 — Age field",
+      "action": "Field NOT rendered (removed in v3.4)"
+    }
+  ],
+  "TC-CM-019": [
+    {
+      "role": "GSCO",
+      "screen": "/register/pwd Save button",
+      "action": "Disabled while in-flight indicator visible"
+    }
+  ],
+  "TC-CM-020": [
+    {
+      "role": "GSCO",
+      "screen": "Add Candidate to Training",
+      "action": "409 error surfaced; row disabled"
+    },
+    {
+      "role": "Admin",
+      "screen": "Add Candidate to Training",
+      "action": "No override path; same 409 enforced"
+    }
+  ],
+  "TC-CM-021": [
+    {
+      "role": "State Head",
+      "screen": "/directory",
+      "action": "120 candidates visible; out-of-state hidden"
+    },
+    {
+      "role": "State Head",
+      "screen": "Scope indicator",
+      "action": "Reads 'Karnataka'"
+    }
+  ],
+  "TC-CM-022": [
+    {
+      "role": "State Head",
+      "screen": "Edit Profile",
+      "action": "Edit non-UDID fields; Save persists"
+    }
+  ],
+  "TC-CM-023": [
+    {
+      "role": "State Head",
+      "screen": "/directory search",
+      "action": "Out-of-state candidate hidden"
+    },
+    {
+      "role": "State Head",
+      "screen": "/directory/{id} direct URL",
+      "action": "404 / scope error"
+    }
+  ],
+  "TC-CM-024": [
+    {
+      "role": "State Head",
+      "screen": "Edit Profile UDID field",
+      "action": "Read-only"
+    },
+    {
+      "role": "State Head",
+      "screen": "PATCH /candidates/{id}",
+      "action": "403"
+    }
+  ],
+  "TC-CM-025": [
+    {
+      "role": "Admin",
+      "screen": "/directory",
+      "action": "All candidates visible nationally"
+    },
+    {
+      "role": "Admin",
+      "screen": "Scope indicator",
+      "action": "Reads 'National'"
+    }
+  ],
+  "TC-CM-026": [
+    {
+      "role": "Admin",
+      "screen": "Edit Profile → UDID",
+      "action": "Edit affordance only visible to Admin"
+    },
+    {
+      "role": "Admin",
+      "screen": "UIDAI fetch audit log",
+      "action": "Manual override entry written"
+    }
+  ],
+  "TC-CM-027": [
+    {
+      "role": "Admin",
+      "screen": "Candidate → Audit log",
+      "action": "All required columns and entries present"
+    }
+  ],
+  "TC-CM-028": [
+    {
+      "role": "Admin",
+      "screen": "Dashboard / Sidebar",
+      "action": "No Register Candidate CTA"
+    },
+    {
+      "role": "Admin",
+      "screen": "/register/pwd (direct URL)",
+      "action": "Blocked or GSCO-only message"
+    }
+  ],
+  "TC-CM-029": [
+    {
+      "role": "GSCO",
+      "screen": "/register/pwd",
+      "action": "Quick Reg saves Sita Rao"
+    },
+    {
+      "role": "State Head",
+      "screen": "/directory (Karnataka)",
+      "action": "Sita Rao appears with status Candidate-Registered"
+    },
+    {
+      "role": "Admin",
+      "screen": "/directory (National)",
+      "action": "Sita Rao appears"
+    },
+    {
+      "role": "State Head",
+      "screen": "/directory (Tamil Nadu)",
+      "action": "Sita Rao does NOT appear (out-of-state)"
+    }
+  ],
+  "TC-CM-030": [
+    {
+      "role": "Admin",
+      "screen": "Edit Profile → UDID",
+      "action": "Save"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Candidate detail (read-only UDID)",
+      "action": "Shows new value"
+    },
+    {
+      "role": "State Head",
+      "screen": "Candidate detail (read-only UDID)",
+      "action": "Shows new value"
+    }
+  ],
+  "TC-CM-031": [
+    {
+      "role": "State Head",
+      "screen": "Edit Profile (Marital Status)",
+      "action": "Save"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Candidate detail",
+      "action": "Marital Status reflects new value"
+    },
+    {
+      "role": "Admin",
+      "screen": "Audit log",
+      "action": "Change attributed to State Head's user id"
+    }
+  ],
+  "TC-CM-032": [
+    {
+      "role": "GSCO",
+      "screen": "Settlement form",
+      "action": "Read-only 'Published — locked' state"
+    },
+    {
+      "role": "State Head",
+      "screen": "Settlement form",
+      "action": "Read-only after publish; can view"
+    },
+    {
+      "role": "Admin",
+      "screen": "Settlement form",
+      "action": "Read-only after publish; can view"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Basic profile (non-settlement fields)",
+      "action": "Still editable"
+    }
+  ],
+  "TC-TM-001": [
+    {
+      "role": "GSCO",
+      "screen": "/training",
+      "action": "'Start New Training' CTA"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/training/new",
+      "action": "Fill 9-field form and submit"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/training list",
+      "action": "New training row appears with status 'Pending Approval' and IDs TRAINING-YYYY-NNN / #NNNN"
+    }
+  ],
+  "TC-TM-002": [
+    {
+      "role": "GSCO",
+      "screen": "Training detail page",
+      "action": "'Add Candidates' button visible only when Initiated"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Eligible candidate picker",
+      "action": "One-active-training candidates greyed out"
+    }
+  ],
+  "TC-TM-003": [
+    {
+      "role": "GSCO",
+      "screen": "Training detail",
+      "action": "Add Candidates remains available in Ongoing"
+    }
+  ],
+  "TC-TM-004": [
+    {
+      "role": "GSCO",
+      "screen": "Closure form",
+      "action": "4-item checklist with live tick-off"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/training row",
+      "action": "Renders disabled 'Approval Pending' state"
+    },
+    {
+      "role": "State Head",
+      "screen": "/review → Training Closure",
+      "action": "Closure request listed"
+    }
+  ],
+  "TC-TM-005": [
+    {
+      "role": "GSCO",
+      "screen": "/training/followup",
+      "action": "Submit each cycle"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Inbox",
+      "action": "'View Follow-up' / 'Do Follow-up' notifications"
+    }
+  ],
+  "TC-TM-006": [
+    {
+      "role": "GSCO",
+      "screen": "45-day follow-up — WSA block",
+      "action": "Capture WSA Category / Item / Urgency / Justification / Status / Provider"
+    },
+    {
+      "role": "GSCO",
+      "screen": "WSA Status transitions",
+      "action": "Pending → On Hold → Done flow visible"
+    }
+  ],
+  "TC-TM-007": [
+    {
+      "role": "GSCO",
+      "screen": "/training tabs",
+      "action": "All / Initiated / Ongoing / Pending / Completed / Closed"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/training rows",
+      "action": "Per-status action label matches BR-SET-02"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/training row",
+      "action": "'N pending profiles' warning visible"
+    },
+    {
+      "role": "State Head",
+      "screen": "/training",
+      "action": "Same tab+action layout (state-scoped)"
+    },
+    {
+      "role": "Admin",
+      "screen": "/training",
+      "action": "Same tab+action layout (national)"
+    }
+  ],
+  "TC-TM-008": [
+    {
+      "role": "GSCO",
+      "screen": "/training/settlement KPI tiles",
+      "action": "Total / Wage / Self / Settled"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Settlement rows",
+      "action": "Action labels per BR-SET-02"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Bottom of page",
+      "action": "Wage + Self flow diagrams visible"
+    }
+  ],
+  "TC-TM-009": [
+    {
+      "role": "GSCO",
+      "screen": "Training detail (Pending Approval)",
+      "action": "'Add Candidates' hidden / disabled"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Direct POST /trainings/{id}/candidates",
+      "action": "403 Forbidden"
+    }
+  ],
+  "TC-TM-010": [
+    {
+      "role": "GSCO",
+      "screen": "/training/new date fields",
+      "action": "Live validation; submit blocked on bad ranges"
+    }
+  ],
+  "TC-TM-011": [
+    {
+      "role": "GSCO",
+      "screen": "/training/new Start Date",
+      "action": "Live validation; past dates blocked"
+    }
+  ],
+  "TC-TM-012": [
+    {
+      "role": "GSCO",
+      "screen": "/training/new Training Size",
+      "action": "Live validation 1–200"
+    }
+  ],
+  "TC-TM-013": [
+    {
+      "role": "GSCO",
+      "screen": "Closure form 4-item checklist",
+      "action": "Each item must tick green"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Closure Submit",
+      "action": "Disabled until all 4 ticked"
+    }
+  ],
+  "TC-TM-014": [
+    {
+      "role": "GSCO",
+      "screen": "Settlement form",
+      "action": "'Published — locked' banner; all fields read-only"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Direct PATCH",
+      "action": "403 Forbidden"
+    }
+  ],
+  "TC-TM-015": [
+    {
+      "role": "GSCO",
+      "screen": "/training row",
+      "action": "Status auto-flips to Pending"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Row Action",
+      "action": "Reads 'Complete & Submit'"
+    }
+  ],
+  "TC-TM-016": [
+    {
+      "role": "State Head",
+      "screen": "Publish action",
+      "action": "Last candidate published"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/training row",
+      "action": "Status flips to Closed"
+    },
+    {
+      "role": "Admin",
+      "screen": "/training",
+      "action": "Closed status visible nationally"
+    }
+  ],
+  "TC-TM-017": [
+    {
+      "role": "GSCO",
+      "screen": "Training detail roster",
+      "action": "Opted-out candidate shown with 'Opted Out' tag"
+    },
+    {
+      "role": "Admin",
+      "screen": "Reports",
+      "action": "Opted-out excluded from active counts"
+    }
+  ],
+  "TC-TM-018": [
+    {
+      "role": "GSCO",
+      "screen": "/training row",
+      "action": "Disabled Waiting-for-Approval style + label"
+    }
+  ],
+  "TC-TM-019": [
+    {
+      "role": "State Head",
+      "screen": "/review → Training Requests",
+      "action": "Row listed"
+    },
+    {
+      "role": "State Head",
+      "screen": "Approve button",
+      "action": "Click → Initiated"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Bell + email",
+      "action": "Notification of approval"
+    }
+  ],
+  "TC-TM-020": [
+    {
+      "role": "State Head",
+      "screen": "Reject dialog",
+      "action": "Comment field required"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Notification",
+      "action": "Rejection reason included"
+    }
+  ],
+  "TC-TM-021": [
+    {
+      "role": "State Head",
+      "screen": "/review → Training Closure",
+      "action": "Inspect artifacts"
+    },
+    {
+      "role": "State Head",
+      "screen": "Approve button",
+      "action": "Click → Completed"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/training row + bell",
+      "action": "Action label flips to Follow Up"
+    }
+  ],
+  "TC-TM-022": [
+    {
+      "role": "State Head",
+      "screen": "Reject Closure dialog",
+      "action": "Comment required"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Bell + email",
+      "action": "Reason included; status reverted"
+    }
+  ],
+  "TC-TM-023": [
+    {
+      "role": "State Head",
+      "screen": "/training/settlement row",
+      "action": "Verify & Settle / Publish action"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Settlement form for that candidate",
+      "action": "Read-only 'Published' state"
+    }
+  ],
+  "TC-TM-024": [
+    {
+      "role": "State Head",
+      "screen": "Any Reject dialog",
+      "action": "Comment-required validation"
+    }
+  ],
+  "TC-TM-025": [
+    {
+      "role": "State Head",
+      "screen": "/review queue",
+      "action": "Out-of-state requests not listed"
+    },
+    {
+      "role": "State Head",
+      "screen": "POST /trainings/{id}/approve",
+      "action": "403"
+    }
+  ],
+  "TC-TM-026": [
+    {
+      "role": "Admin",
+      "screen": "/training",
+      "action": "National scope"
+    },
+    {
+      "role": "Admin",
+      "screen": "Export CSV",
+      "action": "Available"
+    }
+  ],
+  "TC-TM-027": [
+    {
+      "role": "Admin",
+      "screen": "/review",
+      "action": "No Approve/Reject buttons"
+    },
+    {
+      "role": "Admin",
+      "screen": "Direct approve API",
+      "action": "403"
+    }
+  ],
+  "TC-TM-028": [
+    {
+      "role": "GSCO",
+      "screen": "/training/new",
+      "action": "Submit"
+    },
+    {
+      "role": "State Head",
+      "screen": "/review queue",
+      "action": "Row appears"
+    },
+    {
+      "role": "Admin",
+      "screen": "/training",
+      "action": "Row appears with Pending Approval"
+    }
+  ],
+  "TC-TM-029": [
+    {
+      "role": "State Head",
+      "screen": "Approve",
+      "action": "Click"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Bell + email",
+      "action": "Notification received"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/training row",
+      "action": "Status = Initiated"
+    },
+    {
+      "role": "Admin",
+      "screen": "/training row",
+      "action": "Status = Initiated nationally"
+    }
+  ],
+  "TC-TM-030": [
+    {
+      "role": "GSCO",
+      "screen": "/training row",
+      "action": "Closed; View only"
+    },
+    {
+      "role": "State Head",
+      "screen": "/training row",
+      "action": "Closed"
+    },
+    {
+      "role": "Admin",
+      "screen": "/training row",
+      "action": "Closed nationally"
+    }
+  ],
+  "TC-TM-031": [
+    {
+      "role": "State Head",
+      "screen": "Settlement row",
+      "action": "Verify & Settle → Settled"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Settlement row",
+      "action": "Action flips to 'View Details'; form locked"
+    },
+    {
+      "role": "Admin",
+      "screen": "Settlement row",
+      "action": "View Details available; view-only"
+    }
+  ],
+  "TC-TM-032": [
+    {
+      "role": "GSCO",
+      "screen": "Bell + email",
+      "action": "Notification received"
+    },
+    {
+      "role": "State Head",
+      "screen": "Bell + email",
+      "action": "Notification received"
+    },
+    {
+      "role": "Admin",
+      "screen": "Bell + email",
+      "action": "Notification received"
+    }
+  ],
+  "TC-SET-001": [
+    {
+      "role": "GSCO",
+      "screen": "/training/settlement",
+      "action": "Total / Wage / Self / Settled KPI tiles visible"
+    },
+    {
+      "role": "GSCO",
+      "screen": "KPI tile counts",
+      "action": "Match the row list below"
+    }
+  ],
+  "TC-SET-002": [
+    {
+      "role": "GSCO",
+      "screen": "/training/settlement table",
+      "action": "All 8 columns present in order"
+    }
+  ],
+  "TC-SET-003": [
+    {
+      "role": "GSCO",
+      "screen": "/training/settlement bottom panel",
+      "action": "Wage flow diagram visible"
+    }
+  ],
+  "TC-SET-004": [
+    {
+      "role": "GSCO",
+      "screen": "/training/settlement bottom panel",
+      "action": "Self-Employment flow diagram visible"
+    }
+  ],
+  "TC-SET-005": [
+    {
+      "role": "GSCO",
+      "screen": "Row action 'Record Placement'",
+      "action": "Open placement form"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Placement form",
+      "action": "Fill employer + salary + joining + docs, Submit"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Row action",
+      "action": "Label updates to 'Verify & Settle'"
+    },
+    {
+      "role": "State Head",
+      "screen": "Inbox",
+      "action": "Notification for verification"
+    }
+  ],
+  "TC-SET-006": [
+    {
+      "role": "GSCO",
+      "screen": "Row action 'Schedule Follow-up'",
+      "action": "Open schedule dialog"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Row action label",
+      "action": "Updates to 'Do Follow-up'"
+    }
+  ],
+  "TC-SET-007": [
+    {
+      "role": "GSCO",
+      "screen": "Initial Follow-up form",
+      "action": "All 28-ish business/loan/document fields"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Row status",
+      "action": "Flips to 'Initial Follow-up'"
+    }
+  ],
+  "TC-SET-008": [
+    {
+      "role": "GSCO",
+      "screen": "45-day form WSA block",
+      "action": "Category + Item + Urgency + Justification + Status + Provider"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Initial follow-up form (verify)",
+      "action": "WSA block NOT present on Initial"
+    }
+  ],
+  "TC-SET-009": [
+    {
+      "role": "GSCO",
+      "screen": "90-day form WSA block",
+      "action": "Independent record from 45-day"
+    }
+  ],
+  "TC-SET-010": [
+    {
+      "role": "GSCO",
+      "screen": "WSA detail",
+      "action": "Pending → On Hold → Done transitions"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Sub-Outcome dropdown",
+      "action": "Only enabled at Done"
+    },
+    {
+      "role": "Admin",
+      "screen": "Audit log",
+      "action": "Each transition recorded"
+    }
+  ],
+  "TC-SET-011": [
+    {
+      "role": "GSCO",
+      "screen": "N-th follow-up form",
+      "action": "Same fields as 45/90 minus WSA (or per latest spec)"
+    }
+  ],
+  "TC-SET-012": [
+    {
+      "role": "GSCO",
+      "screen": "Export CSV button",
+      "action": "Downloads CSV with fixed contract"
+    }
+  ],
+  "TC-SET-013": [
+    {
+      "role": "GSCO",
+      "screen": "Settlement row at Placed",
+      "action": "'Verify & Settle' not available to GSCO"
+    },
+    {
+      "role": "GSCO",
+      "screen": "POST /settlements/{id}/publish",
+      "action": "403"
+    }
+  ],
+  "TC-SET-014": [
+    {
+      "role": "GSCO",
+      "screen": "Out-of-order 'Do Follow-up' click",
+      "action": "'Complete the previous follow-up first' error"
+    }
+  ],
+  "TC-SET-015": [
+    {
+      "role": "GSCO",
+      "screen": "Follow-up form",
+      "action": "Live inline validation on mandatory fields"
+    }
+  ],
+  "TC-SET-016": [
+    {
+      "role": "GSCO",
+      "screen": "Follow-up record post-publish",
+      "action": "Read-only 'Published — locked'"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Direct PATCH",
+      "action": "403"
+    }
+  ],
+  "TC-SET-017": [
+    {
+      "role": "GSCO",
+      "screen": "Settlement rows for A and B",
+      "action": "Independent statuses and actions"
+    }
+  ],
+  "TC-SET-018": [
+    {
+      "role": "GSCO",
+      "screen": "Training detail (in-training)",
+      "action": "No WSA UI"
+    }
+  ],
+  "TC-SET-019": [
+    {
+      "role": "GSCO",
+      "screen": "KPI tiles",
+      "action": "Opted-out excluded from active counts"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Row with 'Opted Out' tag",
+      "action": "Still listed"
+    }
+  ],
+  "TC-SET-020": [
+    {
+      "role": "GSCO",
+      "screen": "Settlement rows",
+      "action": "Every status row labelled per §5.3.4"
+    }
+  ],
+  "TC-SET-021": [
+    {
+      "role": "State Head",
+      "screen": "Settlement row 'Verify & Settle'",
+      "action": "Review and Publish"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Settlement row",
+      "action": "Updates to 'Verified & Settled', form locked"
+    }
+  ],
+  "TC-SET-022": [
+    {
+      "role": "State Head",
+      "screen": "Settlement row 'Publish'",
+      "action": "Lock for GSCO"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Settlement row",
+      "action": "'Settled' badge; form locked"
+    }
+  ],
+  "TC-SET-023": [
+    {
+      "role": "State Head",
+      "screen": "/training/settlement",
+      "action": "Karnataka rows only"
+    }
+  ],
+  "TC-SET-024": [
+    {
+      "role": "State Head",
+      "screen": "/training/settlement",
+      "action": "No out-of-state row visible"
+    },
+    {
+      "role": "State Head",
+      "screen": "POST publish",
+      "action": "403"
+    }
+  ],
+  "TC-SET-025": [
+    {
+      "role": "Admin",
+      "screen": "/training/settlement",
+      "action": "National scope"
+    },
+    {
+      "role": "Admin",
+      "screen": "Filters",
+      "action": "Compose state + stream + status"
+    }
+  ],
+  "TC-SET-026": [
+    {
+      "role": "Admin",
+      "screen": "Settlement rows",
+      "action": "No Publish action"
+    },
+    {
+      "role": "Admin",
+      "screen": "Direct POST publish",
+      "action": "403"
+    }
+  ],
+  "TC-SET-027": [
+    {
+      "role": "GSCO",
+      "screen": "Record Placement",
+      "action": "Submit"
+    },
+    {
+      "role": "State Head",
+      "screen": "/training/settlement",
+      "action": "Row appears in queue"
+    },
+    {
+      "role": "State Head",
+      "screen": "Verify & Settle",
+      "action": "Publish"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Bell + email",
+      "action": "Publish notification"
+    },
+    {
+      "role": "Admin",
+      "screen": "/training/settlement",
+      "action": "Status visible nationally"
+    }
+  ],
+  "TC-SET-028": [
+    {
+      "role": "State Head",
+      "screen": "Per-candidate Publish",
+      "action": "Settled badge applied"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/training row",
+      "action": "Status still Completed"
+    },
+    {
+      "role": "Admin",
+      "screen": "/training row",
+      "action": "Status still Completed"
+    }
+  ],
+  "TC-SET-029": [
+    {
+      "role": "State Head",
+      "screen": "Candidate WSA detail",
+      "action": "Read-only view"
+    },
+    {
+      "role": "Admin",
+      "screen": "Candidate WSA detail",
+      "action": "Read-only view"
+    }
+  ],
+  "TC-SET-030": [
+    {
+      "role": "GSCO",
+      "screen": "/training row",
+      "action": "Closed status"
+    },
+    {
+      "role": "State Head",
+      "screen": "/training row",
+      "action": "Closed status"
+    },
+    {
+      "role": "Admin",
+      "screen": "/training row",
+      "action": "Closed status"
+    }
+  ],
+  "TC-SET-031": [
+    {
+      "role": "GSCO",
+      "screen": "Export CSV",
+      "action": "Headers match"
+    },
+    {
+      "role": "State Head",
+      "screen": "Export CSV",
+      "action": "Headers match"
+    },
+    {
+      "role": "Admin",
+      "screen": "Export CSV",
+      "action": "Headers match"
+    }
+  ],
+  "TC-SET-032": [
+    {
+      "role": "GSCO",
+      "screen": "Bell + email",
+      "action": "Settlement-published notification"
+    },
+    {
+      "role": "Admin",
+      "screen": "Bell + email",
+      "action": "Settlement-published notification"
+    }
+  ],
+  "TC-REP-001": [
+    {
+      "role": "GSCO",
+      "screen": "/dashboard header",
+      "action": "Personalised greeting + centre badge"
+    }
+  ],
+  "TC-REP-002": [
+    {
+      "role": "GSCO",
+      "screen": "/dashboard Setup banner",
+      "action": "Amber strip with Enabler + Influencer copy"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Banner click",
+      "action": "Routes to /my-centers"
+    }
+  ],
+  "TC-REP-003": [
+    {
+      "role": "GSCO",
+      "screen": "Needs Your Attention",
+      "action": "5 rows with counts"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Row click",
+      "action": "Routes to filtered list"
+    }
+  ],
+  "TC-REP-004": [
+    {
+      "role": "GSCO",
+      "screen": "4 Journey tiles",
+      "action": "Pre-filtered routes work"
+    }
+  ],
+  "TC-REP-005": [
+    {
+      "role": "GSCO",
+      "screen": "Committee tiles",
+      "action": "Enabler + Influencer both visible"
+    }
+  ],
+  "TC-REP-006": [
+    {
+      "role": "GSCO",
+      "screen": "KPI tiles",
+      "action": "Signed growth %"
+    }
+  ],
+  "TC-REP-007": [
+    {
+      "role": "GSCO",
+      "screen": "Candidates widget",
+      "action": "Total + disability rows + week-delta"
+    }
+  ],
+  "TC-REP-008": [
+    {
+      "role": "GSCO",
+      "screen": "Income Statistics widget",
+      "action": "Self-Employed / Working tabs + top business list"
+    }
+  ],
+  "TC-REP-009": [
+    {
+      "role": "GSCO",
+      "screen": "Disability Distribution",
+      "action": "6 categories + %"
+    }
+  ],
+  "TC-REP-010": [
+    {
+      "role": "GSCO",
+      "screen": "FAB",
+      "action": "Add-actions menu opens"
+    }
+  ],
+  "TC-REP-011": [
+    {
+      "role": "State Head",
+      "screen": "/dashboard header",
+      "action": "Personalised + state name"
+    }
+  ],
+  "TC-REP-012": [
+    {
+      "role": "State Head",
+      "screen": "KPI strip",
+      "action": "6 tiles for state scope"
+    }
+  ],
+  "TC-REP-013": [
+    {
+      "role": "State Head",
+      "screen": "Needs Your Attention",
+      "action": "5 buckets / 22 items"
+    }
+  ],
+  "TC-REP-014": [
+    {
+      "role": "State Head",
+      "screen": "Centres table",
+      "action": "CENTRE · GSCO · CANDIDATES · EMPLOYED"
+    }
+  ],
+  "TC-REP-015": [
+    {
+      "role": "State Head",
+      "screen": "Master-data grid",
+      "action": "Read-only; no Edit affordances"
+    }
+  ],
+  "TC-REP-016": [
+    {
+      "role": "State Head",
+      "screen": "Dashboard committee area",
+      "action": "NO Influencer tile"
+    },
+    {
+      "role": "State Head",
+      "screen": "Needs Your Attention",
+      "action": "NO Influencer bucket"
+    }
+  ],
+  "TC-REP-017": [
+    {
+      "role": "Admin",
+      "screen": "/dashboard",
+      "action": "Greeting + 7 KPI tiles + State Performance table"
+    }
+  ],
+  "TC-REP-018": [
+    {
+      "role": "Admin",
+      "screen": "Manage Master Data",
+      "action": "12-card grid; Courses card replaces Trainings"
+    }
+  ],
+  "TC-REP-019": [
+    {
+      "role": "Admin",
+      "screen": "Purple Dots overview tile",
+      "action": "States/Centres/SH counts; click → /map"
+    }
+  ],
+  "TC-REP-020": [
+    {
+      "role": "State Head",
+      "screen": "/reports",
+      "action": "KPIs + Recent Reports list"
+    },
+    {
+      "role": "Admin",
+      "screen": "/reports",
+      "action": "KPIs + Recent Reports list"
+    }
+  ],
+  "TC-REP-021": [
+    {
+      "role": "State Head",
+      "screen": "Report catalogue",
+      "action": "All 10 named reports listed"
+    },
+    {
+      "role": "Admin",
+      "screen": "Report catalogue",
+      "action": "All 10 named reports listed"
+    }
+  ],
+  "TC-REP-022": [
+    {
+      "role": "GSCO",
+      "screen": "Sidebar",
+      "action": "No Reports link"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/reports (direct URL)",
+      "action": "403 / redirect"
+    }
+  ],
+  "TC-REP-023": [
+    {
+      "role": "GSCO",
+      "screen": "/map breadcrumb",
+      "action": "4 tabs"
+    },
+    {
+      "role": "State Head",
+      "screen": "/map breadcrumb",
+      "action": "4 tabs"
+    },
+    {
+      "role": "Admin",
+      "screen": "/map breadcrumb",
+      "action": "4 tabs"
+    }
+  ],
+  "TC-REP-024": [
+    {
+      "role": "Admin",
+      "screen": "/map drill",
+      "action": "India → State → Centre → Candidate"
+    },
+    {
+      "role": "Admin",
+      "screen": "Right panel",
+      "action": "KPIs refresh on drill (BR-PD-05)"
+    }
+  ],
+  "TC-REP-025": [
+    {
+      "role": "Admin",
+      "screen": "/map right panel India view",
+      "action": "India Overview + Outcomes + Distributions"
+    }
+  ],
+  "TC-REP-026": [
+    {
+      "role": "Admin",
+      "screen": "Gender Distribution panel",
+      "action": "Male/Female/Other counts"
+    }
+  ],
+  "TC-REP-027": [
+    {
+      "role": "Admin",
+      "screen": "Dots on /map",
+      "action": "Status palette"
+    },
+    {
+      "role": "Admin",
+      "screen": "Disability colour mode",
+      "action": "Six disability colours match canonical"
+    }
+  ],
+  "TC-REP-028": [
+    {
+      "role": "GSCO",
+      "screen": "/map",
+      "action": "Centre-scope only"
+    },
+    {
+      "role": "State Head",
+      "screen": "/map",
+      "action": "State-scope only"
+    },
+    {
+      "role": "Admin",
+      "screen": "/map",
+      "action": "National"
+    }
+  ],
+  "TC-REP-029": [
+    {
+      "role": "GSCO",
+      "screen": "/dashboard",
+      "action": "Centre lens widgets"
+    },
+    {
+      "role": "State Head",
+      "screen": "/dashboard",
+      "action": "State lens widgets"
+    },
+    {
+      "role": "Admin",
+      "screen": "/dashboard",
+      "action": "National lens widgets"
+    }
+  ],
+  "TC-REP-030": [
+    {
+      "role": "GSCO",
+      "screen": "Top-bar date picker",
+      "action": "KPIs respect range"
+    },
+    {
+      "role": "State Head",
+      "screen": "Top-bar date picker",
+      "action": "KPIs respect range"
+    },
+    {
+      "role": "Admin",
+      "screen": "Top-bar date picker",
+      "action": "KPIs respect range"
+    }
+  ],
+  "TC-REP-031": [
+    {
+      "role": "State Head",
+      "screen": "Export CSV",
+      "action": "Columns + order stable"
+    },
+    {
+      "role": "Admin",
+      "screen": "Export CSV",
+      "action": "Columns + order stable"
+    }
+  ],
+  "TC-REP-032": [
+    {
+      "role": "GSCO",
+      "screen": "/dashboard banner",
+      "action": "Persists until both committees set"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/my-centers",
+      "action": "Configure Enabler + Influencer"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/dashboard banner",
+      "action": "Disappears after both complete"
+    }
+  ],
+  "TC-WE-001": [
+    {
+      "role": "GSCO",
+      "screen": "/register/pwd Employment Type",
+      "action": "Pick 'Wage Employment' or 'Both'"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Candidate profile",
+      "action": "is_wage_employment_interest = true"
+    }
+  ],
+  "TC-WE-002": [
+    {
+      "role": "GSCO",
+      "screen": "Candidate profile edit",
+      "action": "Toggle is_wage_employment_interest"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/training/wage-employment?tab=interested",
+      "action": "Candidate appears"
+    }
+  ],
+  "TC-WE-003": [
+    {
+      "role": "GSCO",
+      "screen": "/training/wage-employment",
+      "action": "Record Placement"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Placement form",
+      "action": "7 mandatory fields filled"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Auto-schedule",
+      "action": "30-day + 90-day reminders created"
+    },
+    {
+      "role": "State Head",
+      "screen": "Settlement queue",
+      "action": "Row flips to 'Verify & Settle'"
+    }
+  ],
+  "TC-WE-004": [
+    {
+      "role": "GSCO",
+      "screen": "Placement form",
+      "action": "Contract Duration shows when Type = Contract"
+    }
+  ],
+  "TC-WE-005": [
+    {
+      "role": "GSCO",
+      "screen": "Placement form Work Location",
+      "action": "GPS + manual modes"
+    }
+  ],
+  "TC-WE-006": [
+    {
+      "role": "GSCO",
+      "screen": "Inbox",
+      "action": "30-day reminder notification"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Follow-up tab — 30 day form",
+      "action": "Still Employed = Yes flow"
+    }
+  ],
+  "TC-WE-007": [
+    {
+      "role": "GSCO",
+      "screen": "90-day form",
+      "action": "Still Employed = Yes → WE-Active"
+    }
+  ],
+  "TC-WE-008": [
+    {
+      "role": "GSCO",
+      "screen": "Follow-up form",
+      "action": "Still Employed=No reveals exit fields"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Status",
+      "action": "Flips to WE-Exited only after all three captured"
+    }
+  ],
+  "TC-WE-009": [
+    {
+      "role": "GSCO",
+      "screen": "/training/wage-employment tabs",
+      "action": "6 tabs filter correctly"
+    },
+    {
+      "role": "State Head",
+      "screen": "/training/wage-employment",
+      "action": "Same view at state scope"
+    },
+    {
+      "role": "Admin",
+      "screen": "/training/wage-employment",
+      "action": "Same view nationally"
+    }
+  ],
+  "TC-WE-010": [
+    {
+      "role": "GSCO",
+      "screen": "/training/settlement",
+      "action": "TYPE column shows Wage for wage rows"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Action cascade",
+      "action": "Per BR-SET-02 Wage flow"
+    }
+  ],
+  "TC-WE-011": [
+    {
+      "role": "GSCO",
+      "screen": "Joining Date field",
+      "action": "Future dates blocked"
+    }
+  ],
+  "TC-WE-012": [
+    {
+      "role": "GSCO",
+      "screen": "Placement form",
+      "action": "Contract Duration optional for Full-time"
+    }
+  ],
+  "TC-WE-013": [
+    {
+      "role": "GSCO",
+      "screen": "HR Phone field",
+      "action": "Live 10-digit validation"
+    }
+  ],
+  "TC-WE-014": [
+    {
+      "role": "GSCO",
+      "screen": "Placement record",
+      "action": "Read-only after publish"
+    },
+    {
+      "role": "GSCO",
+      "screen": "PATCH /placements/{id}",
+      "action": "403"
+    }
+  ],
+  "TC-WE-015": [
+    {
+      "role": "GSCO",
+      "screen": "/training/wage-employment",
+      "action": "Candidate present"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Self pipeline",
+      "action": "Same candidate present"
+    }
+  ],
+  "TC-WE-016": [
+    {
+      "role": "GSCO",
+      "screen": "Status",
+      "action": "WE-Active after both retentions Yes"
+    }
+  ],
+  "TC-WE-017": [
+    {
+      "role": "GSCO",
+      "screen": "Profile",
+      "action": "Re-employment Interest visible post-exit"
+    }
+  ],
+  "TC-WE-018": [
+    {
+      "role": "GSCO",
+      "screen": "Training lifecycle",
+      "action": "Same as Self per §5.3.1"
+    }
+  ],
+  "TC-WE-019": [
+    {
+      "role": "State Head",
+      "screen": "/review",
+      "action": "Wage placements in scope"
+    }
+  ],
+  "TC-WE-020": [
+    {
+      "role": "State Head",
+      "screen": "Settlement workbench",
+      "action": "Verify & Settle Wage row"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Placement record",
+      "action": "Locked"
+    }
+  ],
+  "TC-WE-021": [
+    {
+      "role": "State Head",
+      "screen": "/training/wage-employment",
+      "action": "State-scoped rows"
+    }
+  ],
+  "TC-WE-022": [
+    {
+      "role": "State Head",
+      "screen": "/training/wage-employment",
+      "action": "No Record Placement button"
+    },
+    {
+      "role": "State Head",
+      "screen": "POST /placements",
+      "action": "403"
+    }
+  ],
+  "TC-WE-023": [
+    {
+      "role": "Admin",
+      "screen": "/training/wage-employment",
+      "action": "National scope"
+    }
+  ],
+  "TC-WE-024": [
+    {
+      "role": "Admin",
+      "screen": "Wage row",
+      "action": "No Verify & Settle"
+    },
+    {
+      "role": "Admin",
+      "screen": "POST publish",
+      "action": "403"
+    }
+  ],
+  "TC-WE-025": [
+    {
+      "role": "GSCO",
+      "screen": "Record Placement",
+      "action": "Submit"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Inbox",
+      "action": "30/90-day reminder scheduled"
+    },
+    {
+      "role": "State Head",
+      "screen": "Settlement queue",
+      "action": "Row visible"
+    },
+    {
+      "role": "State Head",
+      "screen": "Verify & Settle",
+      "action": "Publish"
+    },
+    {
+      "role": "Admin",
+      "screen": "Settlement",
+      "action": "Verified & Settled visible nationally"
+    }
+  ],
+  "TC-WE-026": [
+    {
+      "role": "GSCO",
+      "screen": "Inbox",
+      "action": "30-day reminder waiting"
+    }
+  ],
+  "TC-WE-027": [
+    {
+      "role": "State Head",
+      "screen": "/training/wage-employment",
+      "action": "WE-Exited row visible"
+    },
+    {
+      "role": "Admin",
+      "screen": "/training/wage-employment",
+      "action": "WE-Exited row visible"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/directory",
+      "action": "Candidate still present"
+    }
+  ],
+  "TC-WE-028": [
+    {
+      "role": "GSCO",
+      "screen": "Self training enrolment",
+      "action": "Allowed"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Wage placement after training",
+      "action": "Allowed in parallel"
+    }
+  ],
+  "TC-WE-029": [
+    {
+      "role": "GSCO",
+      "screen": "Placement record",
+      "action": "Locked"
+    },
+    {
+      "role": "State Head",
+      "screen": "Placement record",
+      "action": "Locked"
+    },
+    {
+      "role": "Admin",
+      "screen": "Placement record",
+      "action": "Locked"
+    }
+  ],
+  "TC-WE-030": [
+    {
+      "role": "GSCO",
+      "screen": "Export CSV",
+      "action": "Wage + Self in one file with TYPE column"
+    }
+  ],
+  "TC-WE-031": [
+    {
+      "role": "GSCO",
+      "screen": "Inbox",
+      "action": "Per-candidate reminder independence"
+    }
+  ],
+  "TC-WE-032": [
+    {
+      "role": "GSCO",
+      "screen": "Employer Type",
+      "action": "All 4 enums accepted"
+    }
+  ],
+  "TC-EI-001": [
+    {
+      "role": "GSCO",
+      "screen": "/register/enabler Step 1",
+      "action": "Village + Role Type + Permission Letter"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/register/enabler Step 2",
+      "action": "Pick 'Enabler'"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/register/enabler Step 3",
+      "action": "Verify + Register"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/committees Enabler tab",
+      "action": "New row Active, Certificate Status='Uploaded'"
+    }
+  ],
+  "TC-EI-002": [
+    {
+      "role": "GSCO",
+      "screen": "/register/enabler Step 1",
+      "action": "No Permission Letter for Influencer"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/committees Influencer tab",
+      "action": "Row appears with Certificate Status='N/A'"
+    }
+  ],
+  "TC-EI-003": [
+    {
+      "role": "GSCO",
+      "screen": "/my-centers Add button",
+      "action": "Modal scoped to active tab"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Enabler modal",
+      "action": "Letter field visible"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Influencer modal",
+      "action": "No letter field"
+    }
+  ],
+  "TC-EI-004": [
+    {
+      "role": "GSCO",
+      "screen": "/committees",
+      "action": "Summary tiles + tabs + columns"
+    },
+    {
+      "role": "Admin",
+      "screen": "/committees",
+      "action": "Same view at national scope"
+    }
+  ],
+  "TC-EI-005": [
+    {
+      "role": "GSCO",
+      "screen": "Remove action",
+      "action": "Status flips to Inactive"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/committees Inactive filter",
+      "action": "Member still listed"
+    }
+  ],
+  "TC-EI-006": [
+    {
+      "role": "GSCO",
+      "screen": "Export CSV",
+      "action": "Columns match on-screen"
+    }
+  ],
+  "TC-EI-007": [
+    {
+      "role": "GSCO",
+      "screen": "Village dropdown",
+      "action": "Only allocated villages"
+    },
+    {
+      "role": "GSCO",
+      "screen": "POST /committees with V99",
+      "action": "403"
+    }
+  ],
+  "TC-EI-008": [
+    {
+      "role": "GSCO",
+      "screen": "Role Type dropdown",
+      "action": "Disjoint per committee type"
+    }
+  ],
+  "TC-EI-009": [
+    {
+      "role": "GSCO",
+      "screen": "Wizard Step 2",
+      "action": "'Existing committee — add member' branch shown"
+    }
+  ],
+  "TC-EI-010": [
+    {
+      "role": "GSCO",
+      "screen": "Enabler upload field",
+      "action": "Required"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Influencer upload field",
+      "action": "NOT required (field absent)"
+    }
+  ],
+  "TC-EI-011": [
+    {
+      "role": "GSCO",
+      "screen": "Permission Letter upload",
+      "action": "Format + size validation"
+    }
+  ],
+  "TC-EI-012": [
+    {
+      "role": "GSCO",
+      "screen": "Enabler committee detail",
+      "action": "Add 2nd member"
+    }
+  ],
+  "TC-EI-013": [
+    {
+      "role": "GSCO",
+      "screen": "New row",
+      "action": "Status=Active by default"
+    }
+  ],
+  "TC-EI-014": [
+    {
+      "role": "GSCO",
+      "screen": "Export CSV",
+      "action": "Inactive members listed"
+    }
+  ],
+  "TC-EI-015": [
+    {
+      "role": "State Head",
+      "screen": "/committees Enabler",
+      "action": "State-scoped rows; no Add/Edit"
+    }
+  ],
+  "TC-EI-016": [
+    {
+      "role": "State Head",
+      "screen": "Sidebar",
+      "action": "No Influencer link present"
+    }
+  ],
+  "TC-EI-017": [
+    {
+      "role": "State Head",
+      "screen": "/committees?tab=influencer (direct URL)",
+      "action": "403"
+    },
+    {
+      "role": "State Head",
+      "screen": "GET /committees?type=influencer",
+      "action": "HTTP 403 ROLE_NO_INFLUENCER_ACCESS"
+    }
+  ],
+  "TC-EI-018": [
+    {
+      "role": "State Head",
+      "screen": "/dashboard",
+      "action": "No Influencer tile or count"
+    },
+    {
+      "role": "State Head",
+      "screen": "/reports",
+      "action": "No Influencer report option"
+    }
+  ],
+  "TC-EI-019": [
+    {
+      "role": "Admin",
+      "screen": "/committees",
+      "action": "Both tabs, national scope"
+    }
+  ],
+  "TC-EI-020": [
+    {
+      "role": "Admin",
+      "screen": "POST /committees",
+      "action": "403"
+    }
+  ],
+  "TC-EI-021": [
+    {
+      "role": "GSCO",
+      "screen": "Register Enabler",
+      "action": "Save"
+    },
+    {
+      "role": "Admin",
+      "screen": "/committees Enabler",
+      "action": "Visible nationally"
+    },
+    {
+      "role": "State Head",
+      "screen": "/committees Enabler (KA)",
+      "action": "Visible"
+    },
+    {
+      "role": "State Head",
+      "screen": "/committees Enabler (TN)",
+      "action": "NOT visible"
+    }
+  ],
+  "TC-EI-022": [
+    {
+      "role": "GSCO",
+      "screen": "Register Influencer",
+      "action": "Save"
+    },
+    {
+      "role": "Admin",
+      "screen": "/committees Influencer",
+      "action": "Visible"
+    },
+    {
+      "role": "State Head",
+      "screen": "/committees?tab=influencer",
+      "action": "403"
+    }
+  ],
+  "TC-EI-023": [
+    {
+      "role": "GSCO",
+      "screen": "Remove action",
+      "action": "Inactive"
+    },
+    {
+      "role": "State Head",
+      "screen": "/committees",
+      "action": "Status=Inactive (Enabler in-state)"
+    },
+    {
+      "role": "Admin",
+      "screen": "/committees",
+      "action": "Status=Inactive nationally"
+    }
+  ],
+  "TC-EI-024": [
+    {
+      "role": "GSCO",
+      "screen": "/my-centers Enabler step",
+      "action": "Complete"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/dashboard banner",
+      "action": "Persists"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/my-centers Influencer step",
+      "action": "Complete"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/dashboard banner",
+      "action": "Dismissed"
+    }
+  ],
+  "TC-EI-025": [
+    {
+      "role": "GSCO",
+      "screen": "Influencer committee creation",
+      "action": "Second attempt routes to 'add member'"
+    }
+  ],
+  "TC-EI-026": [
+    {
+      "role": "GSCO",
+      "screen": "Wizard Back",
+      "action": "Preserves state"
+    }
+  ],
+  "TC-EI-027": [
+    {
+      "role": "GSCO",
+      "screen": "Certificate Status badge",
+      "action": "3 states render correctly"
+    }
+  ],
+  "TC-EI-028": [
+    {
+      "role": "GSCO",
+      "screen": "Summary tiles",
+      "action": "Live update"
+    }
+  ],
+  "TC-EI-029": [
+    {
+      "role": "GSCO",
+      "screen": "PATCH /committees/{out-of-scope}",
+      "action": "403"
+    }
+  ],
+  "TC-EI-030": [
+    {
+      "role": "GSCO",
+      "screen": "POST /committees",
+      "action": "409 INFLUENCER_ALREADY_EXISTS_FOR_GSC"
+    }
+  ],
+  "TC-EI-031": [
+    {
+      "role": "Admin",
+      "screen": "/committees Influencer",
+      "action": "National read-only"
+    }
+  ],
+  "TC-EI-032": [
+    {
+      "role": "GSCO",
+      "screen": "Permission Letter field help",
+      "action": "DDWO expansion visible on hover"
+    }
+  ],
+  "TC-NAV-001": [
+    {
+      "role": "GSCO",
+      "screen": "All authenticated routes",
+      "action": "Sidebar always visible"
+    },
+    {
+      "role": "State Head",
+      "screen": "All authenticated routes",
+      "action": "Sidebar always visible"
+    },
+    {
+      "role": "Admin",
+      "screen": "All authenticated routes",
+      "action": "Sidebar always visible"
+    }
+  ],
+  "TC-NAV-002": [
+    {
+      "role": "GSCO",
+      "screen": "Sidebar",
+      "action": "11 links present; no Manage Reports; no Master Data"
+    }
+  ],
+  "TC-NAV-003": [
+    {
+      "role": "State Head",
+      "screen": "Sidebar",
+      "action": "No Master Data; no Committees"
+    }
+  ],
+  "TC-NAV-004": [
+    {
+      "role": "Admin",
+      "screen": "Sidebar",
+      "action": "13 links incl. Master Data, Manage Reports, Committees"
+    }
+  ],
+  "TC-NAV-005": [
+    {
+      "role": "GSCO",
+      "screen": "Sidebar top",
+      "action": "Centre Selector + GarvSe link"
+    },
+    {
+      "role": "State Head",
+      "screen": "Sidebar top",
+      "action": "Centre Selector + GarvSe link"
+    },
+    {
+      "role": "Admin",
+      "screen": "Sidebar top",
+      "action": "Centre Selector + GarvSe link"
+    }
+  ],
+  "TC-NAV-006": [
+    {
+      "role": "GSCO",
+      "screen": "Sidebar toggle button",
+      "action": "Collapse / expand toggles"
+    }
+  ],
+  "TC-NAV-007": [
+    {
+      "role": "GSCO",
+      "screen": "Tab order",
+      "action": "Skip link is first focusable"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Skip link activation",
+      "action": "Focus jumps to main content"
+    }
+  ],
+  "TC-NAV-008": [
+    {
+      "role": "GSCO",
+      "screen": "Sidebar Tab order",
+      "action": "All items reachable"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Focus ring",
+      "action": "Visible on each focus"
+    }
+  ],
+  "TC-NAV-009": [
+    {
+      "role": "GSCO",
+      "screen": "/my-centers",
+      "action": "Direct centres table for single-state GSCO"
+    }
+  ],
+  "TC-NAV-010": [
+    {
+      "role": "GSCO",
+      "screen": "/my-centers state-cards",
+      "action": "N states listed"
+    },
+    {
+      "role": "GSCO",
+      "screen": "State pick",
+      "action": "Drills to centres table"
+    }
+  ],
+  "TC-NAV-011": [
+    {
+      "role": "State Head",
+      "screen": "/my-centers",
+      "action": "State-cards landing always"
+    }
+  ],
+  "TC-NAV-012": [
+    {
+      "role": "GSCO",
+      "screen": "/my-centers controls",
+      "action": "Search + Filters + Export CSV"
+    }
+  ],
+  "TC-NAV-013": [
+    {
+      "role": "GSCO",
+      "screen": "/my-centers row click",
+      "action": "Routes to centre detail"
+    }
+  ],
+  "TC-NAV-014": [
+    {
+      "role": "Admin",
+      "screen": "/login footer",
+      "action": "EnAble India + Copyright + Terms + Privacy"
+    }
+  ],
+  "TC-NAV-015": [
+    {
+      "role": "Admin",
+      "screen": "Event registration footer",
+      "action": "Powered-by tagline"
+    }
+  ],
+  "TC-NAV-016": [
+    {
+      "role": "GSCO",
+      "screen": "/master-data (direct URL)",
+      "action": "Blocked"
+    },
+    {
+      "role": "GSCO",
+      "screen": "API GET /master-data",
+      "action": "403"
+    }
+  ],
+  "TC-NAV-017": [
+    {
+      "role": "GSCO",
+      "screen": "/manage-reports direct URL",
+      "action": "Blocked"
+    }
+  ],
+  "TC-NAV-018": [
+    {
+      "role": "State Head",
+      "screen": "/committees?tab=influencer URL",
+      "action": "403"
+    },
+    {
+      "role": "State Head",
+      "screen": "GET /committees?type=influencer",
+      "action": "403 ROLE_NO_INFLUENCER_ACCESS"
+    }
+  ],
+  "TC-NAV-019": [
+    {
+      "role": "State Head",
+      "screen": "/master-data",
+      "action": "403"
+    }
+  ],
+  "TC-NAV-020": [
+    {
+      "role": "GSCO",
+      "screen": "Anonymous /directory",
+      "action": "Redirected to /login?next=/directory"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Post-login",
+      "action": "Returned to /directory"
+    }
+  ],
+  "TC-NAV-021": [
+    {
+      "role": "GSCO",
+      "screen": "Sidebar state",
+      "action": "Collapsed persists across routes/refresh"
+    }
+  ],
+  "TC-NAV-022": [
+    {
+      "role": "GSCO",
+      "screen": "Centre Selector",
+      "action": "Data on every page scopes to picked centre"
+    }
+  ],
+  "TC-NAV-023": [
+    {
+      "role": "GSCO",
+      "screen": "/dashboard",
+      "action": "GSCO sidebar + GSCO widget tree"
+    },
+    {
+      "role": "State Head",
+      "screen": "/dashboard",
+      "action": "SH sidebar + SH widget tree"
+    },
+    {
+      "role": "Admin",
+      "screen": "/dashboard",
+      "action": "Admin sidebar + Admin widget tree"
+    }
+  ],
+  "TC-NAV-024": [
+    {
+      "role": "GSCO",
+      "screen": "/dashboard banner",
+      "action": "Click → /my-centers"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/my-centers Enabler/Influencer",
+      "action": "Both completed"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/dashboard banner",
+      "action": "Dismissed after both"
+    }
+  ],
+  "TC-NAV-025": [
+    {
+      "role": "GSCO",
+      "screen": "Inbox notification",
+      "action": "Deep-links to the originating screen"
+    }
+  ],
+  "TC-NAV-026": [
+    {
+      "role": "GSCO",
+      "screen": "Sidebar Meetings",
+      "action": "Read+Write"
+    },
+    {
+      "role": "State Head",
+      "screen": "Sidebar Meetings",
+      "action": "Read only"
+    },
+    {
+      "role": "Admin",
+      "screen": "Sidebar Meetings",
+      "action": "Read only"
+    }
+  ],
+  "TC-NAV-027": [
+    {
+      "role": "GSCO",
+      "screen": "Sidebar Purple Dots",
+      "action": "Routes to /map"
+    }
+  ],
+  "TC-NAV-028": [
+    {
+      "role": "GSCO",
+      "screen": "Sidebar labels",
+      "action": "'Candidate Management' / 'Training Management' / 'Campaign Management'"
+    }
+  ],
+  "TC-NAV-029": [
+    {
+      "role": "GSCO",
+      "screen": "Sidebar Settlement",
+      "action": "/training/settlement"
+    }
+  ],
+  "TC-NAV-030": [
+    {
+      "role": "GSCO",
+      "screen": "OPTIONS /master-data",
+      "action": "405 / 403"
+    }
+  ],
+  "TC-NAV-031": [
+    {
+      "role": "GSCO",
+      "screen": "Sidebar Inbox badge",
+      "action": "Live increment/decrement"
+    }
+  ],
+  "TC-NAV-032": [
+    {
+      "role": "GSCO",
+      "screen": "Viewport 700px",
+      "action": "Off-canvas sidebar with hamburger"
+    }
+  ],
+  "TC-PROF-001": [
+    {
+      "role": "GSCO",
+      "screen": "/profile header",
+      "action": "All identity fields visible"
+    },
+    {
+      "role": "State Head",
+      "screen": "/profile header",
+      "action": "All identity fields visible"
+    },
+    {
+      "role": "Admin",
+      "screen": "/profile header",
+      "action": "All identity fields visible"
+    }
+  ],
+  "TC-PROF-002": [
+    {
+      "role": "GSCO",
+      "screen": "/profile About card",
+      "action": "4 fields visible"
+    }
+  ],
+  "TC-PROF-003": [
+    {
+      "role": "GSCO",
+      "screen": "/profile action tiles",
+      "action": "Help & FAQ + Support + Change Password"
+    }
+  ],
+  "TC-PROF-004": [
+    {
+      "role": "GSCO",
+      "screen": "Allocated Centres list",
+      "action": "Centre name + code + pincode/village/district counts"
+    }
+  ],
+  "TC-PROF-005": [
+    {
+      "role": "GSCO",
+      "screen": "Contact Directory",
+      "action": "State Head + Admin entries"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Phone link",
+      "action": "tel: opens dialer"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Email link",
+      "action": "mailto: opens email client"
+    }
+  ],
+  "TC-PROF-006": [
+    {
+      "role": "GSCO",
+      "screen": "/profile Log Out",
+      "action": "Session ends → /login"
+    }
+  ],
+  "TC-PROF-007": [
+    {
+      "role": "GSCO",
+      "screen": "Change Password screen",
+      "action": "Submit valid form"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Next login",
+      "action": "New password works; old does not"
+    }
+  ],
+  "TC-PROF-008": [
+    {
+      "role": "GSCO",
+      "screen": "Current password field",
+      "action": "Wrong → reject"
+    }
+  ],
+  "TC-PROF-009": [
+    {
+      "role": "GSCO",
+      "screen": "New password field",
+      "action": "Live strength meter + reject if weak"
+    }
+  ],
+  "TC-PROF-010": [
+    {
+      "role": "GSCO",
+      "screen": "Confirm Password field",
+      "action": "Mismatch → reject"
+    }
+  ],
+  "TC-PROF-011": [
+    {
+      "role": "GSCO",
+      "screen": "/directory/profile Employment section",
+      "action": "Current placement or business + Purple Economy stat"
+    }
+  ],
+  "TC-PROF-012": [
+    {
+      "role": "GSCO",
+      "screen": "Trainings section",
+      "action": "Row click → training detail"
+    }
+  ],
+  "TC-PROF-013": [
+    {
+      "role": "GSCO",
+      "screen": "Assistance section",
+      "action": "Devices Open/Closed + human-support log"
+    }
+  ],
+  "TC-PROF-014": [
+    {
+      "role": "GSCO",
+      "screen": "Candidate profile post-publish",
+      "action": "Read-only Employment + Training + Assistance"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Basic profile fields",
+      "action": "Still editable"
+    }
+  ],
+  "TC-PROF-015": [
+    {
+      "role": "State Head",
+      "screen": "/directory/profile",
+      "action": "Read-only view; no edit buttons"
+    }
+  ],
+  "TC-PROF-016": [
+    {
+      "role": "Admin",
+      "screen": "/directory/profile",
+      "action": "National read-only view; UDID editable per BR-PwD-03"
+    }
+  ],
+  "TC-PROF-017": [
+    {
+      "role": "State Head",
+      "screen": "/directory/profile Employment",
+      "action": "No Edit"
+    },
+    {
+      "role": "State Head",
+      "screen": "PATCH /candidates/{id}",
+      "action": "403"
+    }
+  ],
+  "TC-PROF-018": [
+    {
+      "role": "Admin",
+      "screen": "Allocated Centres section",
+      "action": "Shows 'No centres allocated yet'"
+    }
+  ],
+  "TC-PROF-019": [
+    {
+      "role": "GSCO",
+      "screen": "/profile Member-since",
+      "action": "Consistent date format"
+    }
+  ],
+  "TC-PROF-020": [
+    {
+      "role": "GSCO",
+      "screen": "/profile avatar",
+      "action": "Initials fallback"
+    }
+  ],
+  "TC-PROF-021": [
+    {
+      "role": "GSCO",
+      "screen": "Edit candidate",
+      "action": "Save"
+    },
+    {
+      "role": "State Head",
+      "screen": "Candidate profile",
+      "action": "New value visible"
+    },
+    {
+      "role": "Admin",
+      "screen": "Candidate profile",
+      "action": "New value visible"
+    }
+  ],
+  "TC-PROF-022": [
+    {
+      "role": "Admin",
+      "screen": "UDID edit",
+      "action": "Save"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Candidate profile",
+      "action": "New UDID shown"
+    },
+    {
+      "role": "State Head",
+      "screen": "Candidate profile",
+      "action": "New UDID shown"
+    }
+  ],
+  "TC-PROF-023": [
+    {
+      "role": "GSCO",
+      "screen": "Candidate profile",
+      "action": "Read-only on settlement-adjacent sections"
+    },
+    {
+      "role": "State Head",
+      "screen": "Candidate profile",
+      "action": "Read-only"
+    },
+    {
+      "role": "Admin",
+      "screen": "Candidate profile",
+      "action": "Read-only"
+    }
+  ],
+  "TC-PROF-024": [
+    {
+      "role": "State Head",
+      "screen": "Change Password",
+      "action": "Submit"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Active session",
+      "action": "Unaffected"
+    }
+  ],
+  "TC-PROF-025": [
+    {
+      "role": "GSCO",
+      "screen": "Help & FAQ",
+      "action": "GSCO-specific content"
+    },
+    {
+      "role": "State Head",
+      "screen": "Help & FAQ",
+      "action": "SH-specific content"
+    },
+    {
+      "role": "Admin",
+      "screen": "Help & FAQ",
+      "action": "Admin-specific content"
+    }
+  ],
+  "TC-PROF-026": [
+    {
+      "role": "GSCO",
+      "screen": "Support form",
+      "action": "Submit ticket"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Inbox",
+      "action": "Acknowledgement notification"
+    }
+  ],
+  "TC-PROF-027": [
+    {
+      "role": "GSCO",
+      "screen": "/profile/{other-user-id}",
+      "action": "Blocked / own profile shown"
+    }
+  ],
+  "TC-PROF-028": [
+    {
+      "role": "GSCO",
+      "screen": "Phone link (mobile)",
+      "action": "Dialer opens with number"
+    }
+  ],
+  "TC-PROF-029": [
+    {
+      "role": "GSCO",
+      "screen": "Email link",
+      "action": "mailto: opens"
+    }
+  ],
+  "TC-PROF-030": [
+    {
+      "role": "GSCO",
+      "screen": "Contact Directory",
+      "action": "Only own state SH visible"
+    }
+  ],
+  "TC-PROF-031": [
+    {
+      "role": "GSCO",
+      "screen": "Avatar upload",
+      "action": "PNG ≤ 2 MB accepted"
+    }
+  ],
+  "TC-PROF-032": [
+    {
+      "role": "GSCO",
+      "screen": "/profile phone edit",
+      "action": "Save"
+    },
+    {
+      "role": "Admin",
+      "screen": "/users list",
+      "action": "Updated phone"
+    }
+  ],
+  "TC-NOTIF-001": [
+    {
+      "role": "GSCO",
+      "screen": "/inbox tabs",
+      "action": "Notifications + Support Requests with counts"
+    },
+    {
+      "role": "State Head",
+      "screen": "/inbox tabs",
+      "action": "Same"
+    },
+    {
+      "role": "Admin",
+      "screen": "/inbox tabs",
+      "action": "Same"
+    }
+  ],
+  "TC-NOTIF-002": [
+    {
+      "role": "GSCO",
+      "screen": "Notifications tab",
+      "action": "ACTION REQUIRED above ALL NOTIFICATIONS"
+    }
+  ],
+  "TC-NOTIF-003": [
+    {
+      "role": "GSCO",
+      "screen": "Inbox item",
+      "action": "Title + body + actor + timestamp + badge + inline action"
+    }
+  ],
+  "TC-NOTIF-004": [
+    {
+      "role": "GSCO",
+      "screen": "Complete Follow-ups button",
+      "action": "Routes to settlement follow-up"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Start Follow-up button",
+      "action": "Routes to follow-up form"
+    },
+    {
+      "role": "GSCO",
+      "screen": "View Training Details button",
+      "action": "Routes to training detail"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Complete Profile button",
+      "action": "Routes to 7-step wizard"
+    },
+    {
+      "role": "GSCO",
+      "screen": "View Follow-up button",
+      "action": "Opens follow-up view"
+    }
+  ],
+  "TC-NOTIF-005": [
+    {
+      "role": "GSCO",
+      "screen": "Top-bar bell",
+      "action": "Unread count badge"
+    }
+  ],
+  "TC-NOTIF-006": [
+    {
+      "role": "GSCO",
+      "screen": "Bell popover",
+      "action": "Up to 4 items + 'View all in Inbox'"
+    }
+  ],
+  "TC-NOTIF-007": [
+    {
+      "role": "GSCO",
+      "screen": "Inbox visit",
+      "action": "Badge clears"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Per-item Mark-as-read",
+      "action": "Badge decrements"
+    }
+  ],
+  "TC-NOTIF-008": [
+    {
+      "role": "GSCO",
+      "screen": "Bell badge",
+      "action": "Increments within 30s of event"
+    }
+  ],
+  "TC-NOTIF-009": [
+    {
+      "role": "GSCO",
+      "screen": "/requests",
+      "action": "3 buckets + Raise New Request CTA"
+    }
+  ],
+  "TC-NOTIF-010": [
+    {
+      "role": "GSCO",
+      "screen": "/requests rows",
+      "action": "Type + Title + actor + date + status"
+    }
+  ],
+  "TC-NOTIF-011": [
+    {
+      "role": "GSCO",
+      "screen": "Raise New Request",
+      "action": "4 types selectable"
+    }
+  ],
+  "TC-NOTIF-012": [
+    {
+      "role": "State Head",
+      "screen": "/review",
+      "action": "4 sections with counts"
+    }
+  ],
+  "TC-NOTIF-013": [
+    {
+      "role": "State Head",
+      "screen": "/review row",
+      "action": "Requester · Centre · State · description · date · actions"
+    }
+  ],
+  "TC-NOTIF-014": [
+    {
+      "role": "State Head",
+      "screen": "Reject dialog",
+      "action": "Reason required"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Inbox notification",
+      "action": "Reason included on rejection"
+    }
+  ],
+  "TC-NOTIF-015": [
+    {
+      "role": "GSCO",
+      "screen": "Create Training",
+      "action": "Submit"
+    },
+    {
+      "role": "State Head",
+      "screen": "Bell + Inbox",
+      "action": "New notification arrives"
+    }
+  ],
+  "TC-NOTIF-016": [
+    {
+      "role": "GSCO",
+      "screen": "Inbox",
+      "action": "Approval notification"
+    }
+  ],
+  "TC-NOTIF-017": [
+    {
+      "role": "GSCO",
+      "screen": "Inbox",
+      "action": "Settlement-published notification"
+    },
+    {
+      "role": "Admin",
+      "screen": "Inbox",
+      "action": "Settlement-published notification"
+    }
+  ],
+  "TC-NOTIF-018": [
+    {
+      "role": "State Head",
+      "screen": "Inbox + /review",
+      "action": "Closure approval request"
+    }
+  ],
+  "TC-NOTIF-019": [
+    {
+      "role": "GSCO",
+      "screen": "PIN 560001 GSCO Inbox",
+      "action": "Receives notification"
+    },
+    {
+      "role": "GSCO",
+      "screen": "PIN 560002 GSCO Inbox",
+      "action": "No notification"
+    }
+  ],
+  "TC-NOTIF-020": [
+    {
+      "role": "GSCO",
+      "screen": "SMS gateway logs",
+      "action": "Empty for in-app events"
+    }
+  ],
+  "TC-NOTIF-021": [
+    {
+      "role": "GSCO",
+      "screen": "Inbox feed",
+      "action": "Older notifications grouped / paginated"
+    }
+  ],
+  "TC-NOTIF-022": [
+    {
+      "role": "GSCO",
+      "screen": "POST /notifications/{other-id}/read",
+      "action": "403/404"
+    }
+  ],
+  "TC-NOTIF-023": [
+    {
+      "role": "GSCO",
+      "screen": "Bell popover",
+      "action": "4 visible + View All footer"
+    }
+  ],
+  "TC-NOTIF-024": [
+    {
+      "role": "GSCO",
+      "screen": "Submit Closure",
+      "action": "Closure request created"
+    },
+    {
+      "role": "State Head",
+      "screen": "Inbox",
+      "action": "Closure request notification"
+    },
+    {
+      "role": "State Head",
+      "screen": "/review",
+      "action": "Row appears under Training Closure section"
+    }
+  ],
+  "TC-NOTIF-025": [
+    {
+      "role": "State Head",
+      "screen": "Reject reason",
+      "action": "'Missing RCI certificate; please re-upload.'"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Inbox item",
+      "action": "Reason text shown verbatim"
+    }
+  ],
+  "TC-NOTIF-026": [
+    {
+      "role": "GSCO",
+      "screen": "Bell → View all",
+      "action": "Routes to /inbox preserving filter"
+    }
+  ],
+  "TC-NOTIF-027": [
+    {
+      "role": "GSCO",
+      "screen": "Inline action click",
+      "action": "Deep-link + auto mark-as-read"
+    }
+  ],
+  "TC-NOTIF-028": [
+    {
+      "role": "GSCO",
+      "screen": "Anonymous /inbox",
+      "action": "Redirect to /login"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Anonymous /requests",
+      "action": "Redirect to /login"
+    }
+  ],
+  "TC-NOTIF-029": [
+    {
+      "role": "GSCO",
+      "screen": "/inbox",
+      "action": "Smooth pagination at scale"
+    }
+  ],
+  "TC-NOTIF-030": [
+    {
+      "role": "State Head",
+      "screen": "/requests Reject",
+      "action": "Reason required"
+    }
+  ],
+  "TC-NOTIF-031": [
+    {
+      "role": "GSCO",
+      "screen": "Bell badge",
+      "action": "Live update without refresh"
+    }
+  ],
+  "TC-NOTIF-032": [
+    {
+      "role": "GSCO",
+      "screen": "/requests Support Request",
+      "action": "Submit"
+    },
+    {
+      "role": "State Head",
+      "screen": "/review Support Request section",
+      "action": "Approve / Reject"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Inbox",
+      "action": "Resolution notification"
+    }
+  ],
+  "TC-CS-001": [
+    {
+      "role": "GSCO",
+      "screen": "/dashboard amber banner",
+      "action": "Click → /setup/centre"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/setup/centre Step 1",
+      "action": "Enabler Committee form"
+    }
+  ],
+  "TC-CS-002": [
+    {
+      "role": "GSCO",
+      "screen": "Step 1",
+      "action": "Village + Letter + Y/N + chips"
+    }
+  ],
+  "TC-CS-003": [
+    {
+      "role": "GSCO",
+      "screen": "Step 1 Permission Letter field",
+      "action": "Optional skip allowed"
+    }
+  ],
+  "TC-CS-004": [
+    {
+      "role": "GSCO",
+      "screen": "Letter upload",
+      "action": "Format + size validation"
+    }
+  ],
+  "TC-CS-005": [
+    {
+      "role": "GSCO",
+      "screen": "Step 2",
+      "action": "Village + Y/N + 5 chips"
+    }
+  ],
+  "TC-CS-006": [
+    {
+      "role": "GSCO",
+      "screen": "Step 2",
+      "action": "No Permission Letter field"
+    }
+  ],
+  "TC-CS-007": [
+    {
+      "role": "GSCO",
+      "screen": "Step 2 final button",
+      "action": "Label = 'Save'"
+    }
+  ],
+  "TC-CS-008": [
+    {
+      "role": "GSCO",
+      "screen": "Save action",
+      "action": "Commit + dismiss banner"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/dashboard",
+      "action": "Banner removed"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/committees",
+      "action": "Both committees listed"
+    }
+  ],
+  "TC-CS-009": [
+    {
+      "role": "GSCO",
+      "screen": "Wizard Back",
+      "action": "Preserves Step 1"
+    }
+  ],
+  "TC-CS-010": [
+    {
+      "role": "GSCO",
+      "screen": "Village dropdown",
+      "action": "Allocated only"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Direct POST",
+      "action": "403 out-of-scope"
+    }
+  ],
+  "TC-CS-011": [
+    {
+      "role": "State Head",
+      "screen": "/setup/centre URL",
+      "action": "403"
+    }
+  ],
+  "TC-CS-012": [
+    {
+      "role": "Admin",
+      "screen": "/setup/centre URL",
+      "action": "403"
+    }
+  ],
+  "TC-CS-013": [
+    {
+      "role": "State Head",
+      "screen": "/dashboard",
+      "action": "No setup banner"
+    },
+    {
+      "role": "Admin",
+      "screen": "/dashboard",
+      "action": "No setup banner"
+    }
+  ],
+  "TC-CS-014": [
+    {
+      "role": "GSCO",
+      "screen": "/dashboard banner",
+      "action": "Still visible until both steps done"
+    }
+  ],
+  "TC-CS-015": [
+    {
+      "role": "GSCO",
+      "screen": "/setup/centre revisit",
+      "action": "Read-only summary or /committees redirect"
+    }
+  ],
+  "TC-CS-016": [
+    {
+      "role": "GSCO",
+      "screen": "Step 1 N path",
+      "action": "Continue allowed"
+    }
+  ],
+  "TC-CS-017": [
+    {
+      "role": "GSCO",
+      "screen": "Step 2 N path",
+      "action": "Save still possible"
+    }
+  ],
+  "TC-CS-018": [
+    {
+      "role": "GSCO",
+      "screen": "Step 1 chips",
+      "action": "PDO / Sarpanch / Disability Officer toggle"
+    }
+  ],
+  "TC-CS-019": [
+    {
+      "role": "GSCO",
+      "screen": "Step 2 chips",
+      "action": "5 toggleable chips"
+    }
+  ],
+  "TC-CS-020": [
+    {
+      "role": "GSCO",
+      "screen": "Save with both No",
+      "action": "Banner dismissed"
+    }
+  ],
+  "TC-CS-021": [
+    {
+      "role": "GSCO",
+      "screen": "Save in setup wizard",
+      "action": "Commits both committees"
+    },
+    {
+      "role": "Admin",
+      "screen": "/committees Enabler",
+      "action": "New row visible"
+    },
+    {
+      "role": "Admin",
+      "screen": "/committees Influencer",
+      "action": "New row visible"
+    }
+  ],
+  "TC-CS-022": [
+    {
+      "role": "State Head",
+      "screen": "/committees Enabler (KA)",
+      "action": "Visible"
+    },
+    {
+      "role": "State Head",
+      "screen": "/committees?tab=influencer",
+      "action": "403"
+    }
+  ],
+  "TC-CS-023": [
+    {
+      "role": "GSCO",
+      "screen": "/dashboard Committee tiles",
+      "action": "Both populated post-setup"
+    }
+  ],
+  "TC-CS-024": [
+    {
+      "role": "GSCO",
+      "screen": "/my-centers Add/Edit modal",
+      "action": "Subsequent edits happen here"
+    }
+  ],
+  "TC-CS-025": [
+    {
+      "role": "GSCO",
+      "screen": "Wizard tab order",
+      "action": "Full keyboard access"
+    }
+  ],
+  "TC-CS-026": [
+    {
+      "role": "GSCO",
+      "screen": "Step indicator",
+      "action": "'Step 1 of 2' / 'Step 2 of 2'"
+    }
+  ],
+  "TC-CS-027": [
+    {
+      "role": "GSCO",
+      "screen": "Browser navigation",
+      "action": "Wizard state preserved"
+    }
+  ],
+  "TC-CS-028": [
+    {
+      "role": "GSCO",
+      "screen": "Save retry path",
+      "action": "Atomic — no partial commit"
+    }
+  ],
+  "TC-CS-029": [
+    {
+      "role": "Admin",
+      "screen": "Audit log",
+      "action": "setup_completed entry"
+    }
+  ],
+  "TC-CS-030": [
+    {
+      "role": "GSCO",
+      "screen": "/dashboard for new centre B",
+      "action": "Banner re-shows until B set up"
+    }
+  ],
+  "TC-CS-031": [
+    {
+      "role": "State Head",
+      "screen": "/committees",
+      "action": "No Influencer surface"
+    }
+  ],
+  "TC-CS-032": [
+    {
+      "role": "GSCO",
+      "screen": "Save with blank village",
+      "action": "'Village is required'"
+    }
+  ],
+  "TC-QR-001": [
+    {
+      "role": "GSCO",
+      "screen": "/campaign Create modal",
+      "action": "Fill 5 fields and Save"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Campaign card",
+      "action": "Three metric pills (Inquiries · Pending Review · Registered)"
+    },
+    {
+      "role": "GSCO",
+      "screen": "QR download",
+      "action": "Download QR pointing at /register/ev-XXXX"
+    }
+  ],
+  "TC-QR-002": [
+    {
+      "role": "GSCO",
+      "screen": "/campaign",
+      "action": "Create CTA"
+    },
+    {
+      "role": "Admin",
+      "screen": "/qr-management",
+      "action": "Same list (alias)"
+    },
+    {
+      "role": "State Head",
+      "screen": "/campaign",
+      "action": "Create CTA"
+    }
+  ],
+  "TC-QR-003": [
+    {
+      "role": "GSCO",
+      "screen": "Campaign edit",
+      "action": "URL unchanged after edit"
+    }
+  ],
+  "TC-QR-004": [
+    {
+      "role": "GSCO",
+      "screen": "Create modal",
+      "action": "Each required field validated inline"
+    }
+  ],
+  "TC-QR-005": [
+    {
+      "role": "Admin",
+      "screen": "/register/ev-1234 (anonymous)",
+      "action": "No sidebar / no top bar; footer tagline"
+    }
+  ],
+  "TC-QR-006": [
+    {
+      "role": "GSCO",
+      "screen": "/register/ev-XXXX",
+      "action": "Form fields + campaign sub-heading"
+    }
+  ],
+  "TC-QR-007": [
+    {
+      "role": "GSCO",
+      "screen": "Hindi toggle",
+      "action": "EN ↔ HI switching"
+    }
+  ],
+  "TC-QR-008": [
+    {
+      "role": "GSCO",
+      "screen": "Public form duplicate phone",
+      "action": "Reject with 'already registered'"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Public form duplicate email",
+      "action": "Reject with 'already registered'"
+    }
+  ],
+  "TC-QR-009": [
+    {
+      "role": "GSCO",
+      "screen": "Public form phone",
+      "action": "Live 10-digit validation"
+    }
+  ],
+  "TC-QR-010": [
+    {
+      "role": "GSCO",
+      "screen": "Public form submit",
+      "action": "Thank-you state"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Campaign card Inquiries metric",
+      "action": "+1"
+    }
+  ],
+  "TC-QR-011": [
+    {
+      "role": "GSCO",
+      "screen": "Closed-campaign /register/ev-XXXX",
+      "action": "Closed page rendered"
+    }
+  ],
+  "TC-QR-012": [
+    {
+      "role": "GSCO",
+      "screen": "Inquiry detail Approve",
+      "action": "Click"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/directory",
+      "action": "New PWD-Registered candidate linked to campaign"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Campaign card",
+      "action": "Inquiries → Registered metric flip"
+    }
+  ],
+  "TC-QR-013": [
+    {
+      "role": "GSCO",
+      "screen": "Reject dialog",
+      "action": "Reason required"
+    }
+  ],
+  "TC-QR-014": [
+    {
+      "role": "State Head",
+      "screen": "Inquiry detail",
+      "action": "Read-only, no Approve/Reject"
+    },
+    {
+      "role": "Admin",
+      "screen": "Inquiry detail",
+      "action": "Read-only, no Approve/Reject"
+    },
+    {
+      "role": "State Head",
+      "screen": "POST /inquiries/{id}/approve",
+      "action": "403"
+    }
+  ],
+  "TC-QR-015": [
+    {
+      "role": "GSCO",
+      "screen": "Campaign metric pills",
+      "action": "Counts shift correctly on each action"
+    }
+  ],
+  "TC-QR-016": [
+    {
+      "role": "GSCO",
+      "screen": "/campaign card",
+      "action": "Name + Status + Date + Venue + 3 metric pills"
+    }
+  ],
+  "TC-QR-017": [
+    {
+      "role": "GSCO",
+      "screen": "/campaign toolbar",
+      "action": "Search + Create + Export CSV"
+    }
+  ],
+  "TC-QR-018": [
+    {
+      "role": "GSCO",
+      "screen": "/campaign empty state",
+      "action": "'No campaigns match your search.'"
+    }
+  ],
+  "TC-QR-019": [
+    {
+      "role": "GSCO",
+      "screen": "/campaign (other GSCO)",
+      "action": "Not visible"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Direct URL",
+      "action": "403 / not-in-centre page"
+    }
+  ],
+  "TC-QR-020": [
+    {
+      "role": "State Head",
+      "screen": "/campaign",
+      "action": "In-state campaigns read-only"
+    }
+  ],
+  "TC-QR-021": [
+    {
+      "role": "Admin",
+      "screen": "/campaign",
+      "action": "National read-only"
+    }
+  ],
+  "TC-QR-022": [
+    {
+      "role": "GSCO",
+      "screen": "QR scan Active",
+      "action": "Form opens"
+    },
+    {
+      "role": "GSCO",
+      "screen": "QR scan after Close",
+      "action": "Closed-campaign page"
+    }
+  ],
+  "TC-QR-023": [
+    {
+      "role": "GSCO",
+      "screen": "Public submission",
+      "action": "Triggers inquiry"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/campaign inquiries",
+      "action": "GSCO sees new inquiry"
+    },
+    {
+      "role": "State Head",
+      "screen": "/campaign",
+      "action": "Read-only inquiry detail"
+    },
+    {
+      "role": "Admin",
+      "screen": "/campaign",
+      "action": "Read-only national view"
+    }
+  ],
+  "TC-QR-024": [
+    {
+      "role": "GSCO",
+      "screen": "Approve inquiry",
+      "action": "Auto-create candidate"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/directory",
+      "action": "New candidate visible"
+    },
+    {
+      "role": "State Head",
+      "screen": "/directory",
+      "action": "New candidate visible (in-state)"
+    },
+    {
+      "role": "Admin",
+      "screen": "/directory",
+      "action": "New candidate visible (national)"
+    }
+  ],
+  "TC-QR-025": [
+    {
+      "role": "Admin",
+      "screen": "Anonymous /campaign",
+      "action": "Redirect /login"
+    }
+  ],
+  "TC-QR-026": [
+    {
+      "role": "GSCO",
+      "screen": "Metric pills",
+      "action": "Live update"
+    }
+  ],
+  "TC-QR-027": [
+    {
+      "role": "GSCO",
+      "screen": "Public form duplicate vs /directory",
+      "action": "Rejected"
+    }
+  ],
+  "TC-QR-028": [
+    {
+      "role": "GSCO",
+      "screen": "Create modal Pincode",
+      "action": "Validates against master"
+    }
+  ],
+  "TC-QR-029": [
+    {
+      "role": "GSCO",
+      "screen": "Public form mobile",
+      "action": "Single-column, tap-friendly"
+    }
+  ],
+  "TC-QR-030": [
+    {
+      "role": "GSCO",
+      "screen": "Public form a11y",
+      "action": "Keyboard + labels OK"
+    }
+  ],
+  "TC-QR-031": [
+    {
+      "role": "GSCO",
+      "screen": "Export CSV",
+      "action": "Per-campaign metric snapshot"
+    }
+  ],
+  "TC-QR-032": [
+    {
+      "role": "GSCO",
+      "screen": "Closed URL anonymous",
+      "action": "Closed page"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Closed URL authenticated",
+      "action": "Closed page"
+    }
+  ],
+  "TC-MTG-001": [
+    {
+      "role": "GSCO",
+      "screen": "/meetings",
+      "action": "Heading + Committee Type + Date Range + Search"
+    }
+  ],
+  "TC-MTG-002": [
+    {
+      "role": "GSCO",
+      "screen": "/meetings zero-record",
+      "action": "First-meeting CTA"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/meetings zero-match",
+      "action": "Clear filters CTA"
+    }
+  ],
+  "TC-MTG-003": [
+    {
+      "role": "State Head",
+      "screen": "/meetings",
+      "action": "State-scoped read-only"
+    }
+  ],
+  "TC-MTG-004": [
+    {
+      "role": "Admin",
+      "screen": "/meetings",
+      "action": "National read-only on list rows"
+    }
+  ],
+  "TC-MTG-005": [
+    {
+      "role": "GSCO",
+      "screen": "/meetings list",
+      "action": "Soft-deleted hidden"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/meetings/$id direct URL",
+      "action": "404-equivalent"
+    }
+  ],
+  "TC-MTG-006": [
+    {
+      "role": "GSCO",
+      "screen": "/meetings/new",
+      "action": "Form save"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/meetings/$id",
+      "action": "Detail view after save"
+    }
+  ],
+  "TC-MTG-007": [
+    {
+      "role": "GSCO",
+      "screen": "Committee Type dropdown",
+      "action": "Enabler + Influencer"
+    }
+  ],
+  "TC-MTG-008": [
+    {
+      "role": "GSCO",
+      "screen": "Committee dropdown",
+      "action": "Cascades correctly"
+    }
+  ],
+  "TC-MTG-009": [
+    {
+      "role": "GSCO",
+      "screen": "Meeting Date field",
+      "action": "Future dates rejected"
+    }
+  ],
+  "TC-MTG-010": [
+    {
+      "role": "GSCO",
+      "screen": "Description field",
+      "action": "200-char counter + cap"
+    }
+  ],
+  "TC-MTG-011": [
+    {
+      "role": "GSCO",
+      "screen": "Transcript field",
+      "action": "10000-char soft cap with warning"
+    }
+  ],
+  "TC-MTG-012": [
+    {
+      "role": "GSCO",
+      "screen": "Photos field",
+      "action": "Max 5 + ≤5 MB + image-only"
+    }
+  ],
+  "TC-MTG-013": [
+    {
+      "role": "GSCO",
+      "screen": "Create form",
+      "action": "No Attendees field"
+    }
+  ],
+  "TC-MTG-014": [
+    {
+      "role": "State Head",
+      "screen": "/meetings/new",
+      "action": "403"
+    },
+    {
+      "role": "Admin",
+      "screen": "/meetings/new",
+      "action": "403"
+    },
+    {
+      "role": "State Head",
+      "screen": "POST /meetings",
+      "action": "403"
+    }
+  ],
+  "TC-MTG-015": [
+    {
+      "role": "GSCO",
+      "screen": "/meetings/$id header",
+      "action": "All header elements rendered"
+    }
+  ],
+  "TC-MTG-016": [
+    {
+      "role": "GSCO",
+      "screen": "Editable-window banner",
+      "action": "Time remaining shown; Edit/Delete visible"
+    }
+  ],
+  "TC-MTG-017": [
+    {
+      "role": "GSCO",
+      "screen": "/meetings/$id post-24h",
+      "action": "No Edit/Delete; PATCH 403"
+    }
+  ],
+  "TC-MTG-018": [
+    {
+      "role": "Admin",
+      "screen": "/meetings/$id post-24h",
+      "action": "Edit + Save available"
+    }
+  ],
+  "TC-MTG-019": [
+    {
+      "role": "GSCO",
+      "screen": "Transcript <pre>",
+      "action": "Whitespace preserved + wrap"
+    }
+  ],
+  "TC-MTG-020": [
+    {
+      "role": "GSCO",
+      "screen": "Photo grid",
+      "action": "Click thumb opens lightbox"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Lightbox",
+      "action": "Next/prev/close keyboard accessible"
+    }
+  ],
+  "TC-MTG-021": [
+    {
+      "role": "State Head",
+      "screen": "/meetings/$id",
+      "action": "Read-only banner; no actions"
+    }
+  ],
+  "TC-MTG-022": [
+    {
+      "role": "GSCO",
+      "screen": "Soft-delete dialog",
+      "action": "role=dialog + aria-modal=true + focus trap"
+    }
+  ],
+  "TC-MTG-023": [
+    {
+      "role": "GSCO",
+      "screen": "Soft-delete confirm",
+      "action": "softDeleted=true"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Redirect",
+      "action": "/meetings"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Direct link revisit",
+      "action": "404-equivalent"
+    }
+  ],
+  "TC-MTG-024": [
+    {
+      "role": "GSCO",
+      "screen": "/meetings",
+      "action": "Own GSC only"
+    },
+    {
+      "role": "GSCO",
+      "screen": "/meetings/$id other GSC",
+      "action": "404"
+    }
+  ],
+  "TC-MTG-025": [
+    {
+      "role": "GSCO",
+      "screen": "Search",
+      "action": "Description / Transcript / CommitteeName / gscName"
+    }
+  ],
+  "TC-MTG-026": [
+    {
+      "role": "State Head",
+      "screen": "Search",
+      "action": "State-scoped results only"
+    }
+  ],
+  "TC-MTG-027": [
+    {
+      "role": "GSCO",
+      "screen": "/meetings list",
+      "action": "Sorted meetingDate desc by default"
+    }
+  ],
+  "TC-MTG-028": [
+    {
+      "role": "GSCO",
+      "screen": "Submit",
+      "action": "Record created"
+    },
+    {
+      "role": "State Head",
+      "screen": "/meetings",
+      "action": "Visible in-state"
+    },
+    {
+      "role": "Admin",
+      "screen": "/meetings",
+      "action": "Visible nationally"
+    }
+  ],
+  "TC-MTG-029": [
+    {
+      "role": "Admin",
+      "screen": "Edit > 24h",
+      "action": "Save"
+    },
+    {
+      "role": "GSCO",
+      "screen": "Detail view",
+      "action": "New description visible"
+    },
+    {
+      "role": "Admin",
+      "screen": "Audit log",
+      "action": "Admin attributed"
+    }
+  ],
+  "TC-MTG-030": [
+    {
+      "role": "State Head",
+      "screen": "Bell + Inbox",
+      "action": "No meeting notification"
+    },
+    {
+      "role": "Admin",
+      "screen": "Bell + Inbox",
+      "action": "No meeting notification"
+    }
+  ],
+  "TC-MTG-031": [
+    {
+      "role": "GSCO",
+      "screen": "/meetings/$id soft-deleted",
+      "action": "404"
+    },
+    {
+      "role": "State Head",
+      "screen": "/meetings/$id soft-deleted",
+      "action": "404"
+    },
+    {
+      "role": "Admin",
+      "screen": "/meetings/$id soft-deleted",
+      "action": "404"
+    }
+  ],
+  "TC-MTG-032": [
+    {
+      "role": "GSCO",
+      "screen": "Search",
+      "action": "No soft-deleted matches"
+    }
+  ]
 }
