@@ -8,3 +8,7 @@ node_modules/
 
 .vercel
 .env*.local
+
+# Claude Code instruction files — local only, never committed
+CLAUDE.md
+.claude/
