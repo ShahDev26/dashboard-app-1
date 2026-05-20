@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <!-- SheetJS — used by QA Excel exports (per-module + bulk) -->
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
 <style>
   :root {
     --bg:#f6f7fb; --surface:#ffffff; --surface-2:#f9fafc; --surface-hi:#eef0f6;
@@ -262,6 +262,7 @@
   .ticket-chip[data-tstatus="Pending"]{background:var(--slate-soft);color:var(--slate);border-color:var(--border)}
   .ticket-chip[data-tstatus="Done"]{background:var(--emerald-soft);color:#047857;border-color:rgba(16,185,129,0.35)}
   .ticket-chip[data-tstatus="On Hold"]{background:var(--amber-soft);color:#b45309;border-color:rgba(245,158,11,0.4)}
+  .ticket-chip[data-tstatus="Not Applicable"]{background:#f1f5f9;color:#64748b;border-color:#cbd5e1;font-style:italic;text-decoration:line-through;text-decoration-color:#94a3b8}
   .ticket-chip .lbl{font-size:9.5px;opacity:0.7;font-weight:600;letter-spacing:0.06em}
   .pill.jira a{color:inherit;text-decoration:none}
   .pill.jira a:hover{text-decoration:underline}
@@ -16151,7 +16152,7 @@ const SEVS  = ['Critical','High','Medium','Low','Serious','Minor'];
 const STATS = ['Not run','Pass','Fail','On Hold','Open'];
 const ROLES = ['Admin','State Head','GSCO'];
 const STATUS_CHOICES = ['Not run','Pass','Fail','On Hold'];
-const TICKET_STATUS_CHOICES = ['Pending','Done','On Hold'];
+const TICKET_STATUS_CHOICES = ['Pending','Done','On Hold','Not Applicable'];
 
 // Modules hidden from sidebar / home / reports / exports.
 // (Data is still in DATA, just not surfaced to the user.)
@@ -16351,6 +16352,8 @@ function renderSidebar() {
   const sb = document.getElementById('sidebar');
   sb.innerHTML = '';
   sb.appendChild(el('div',{class:'home-link'+(state.view==='home'?' active':''),on:{click:goHome}},'⌂ ','Dashboard Home'));
+  // Cross-module 'Not Applicable' bin — TCs whose Ticket Status is Not Applicable are hidden from regular module views and surface only here.
+  sb.appendChild(el('div',{class:'home-link'+(state.view==='notApplicable'?' active':''),on:{click:goNotApplicable}},'🚫 ','Not Applicable'));
 
   for (const node of NAV_STRUCTURE) {
     if (node.type === 'module') {
@@ -16422,6 +16425,11 @@ function renderSidebar() {
 }
 function goHome() {
   state.view='home'; state.moduleId=null;
+  state.filters={type:'All',sev:'All',status:'All'}; state.search='';
+  closeSidebar(); render();
+}
+function goNotApplicable() {
+  state.view='notApplicable'; state.moduleId=null;
   state.filters={type:'All',sev:'All',status:'All'}; state.search='';
   closeSidebar(); render();
 }
@@ -16584,12 +16592,69 @@ function filteredTcs(m) {
     if (f.sev!=='All' && tc.severity!==f.sev) return false;
     if (!isDeveloper() && f.status!=='All' && effectiveStatus(tc)!==f.status) return false;
     if (isDeveloper() && f.ticket && f.ticket!=='All' && effectiveTicketStatus(tc)!==f.ticket) return false;
+    // Hide 'Not Applicable' TCs from regular module views — they live in the dedicated NA bin (sidebar 🚫). Still visible if the developer explicitly filters for them.
+    if (effectiveTicketStatus(tc) === 'Not Applicable' && !(isDeveloper() && f.ticket === 'Not Applicable')) return false;
     if (q) {
       const blob = [tc.id, tc.scenario, tc.pre, tc.steps, tc.expected, tc.notes].join(' ').toLowerCase();
       if (!blob.includes(q)) return false;
     }
     return true;
   });
+}
+// Render the cross-module Not Applicable bin: every TC whose effective Ticket Status is 'Not Applicable', tagged with its source module.
+function renderNotApplicable() {
+  const root = document.getElementById('root');
+  root.innerHTML = '';
+  root.appendChild(el('div',{class:'crumb'},
+    el('a',{on:{click:goHome}},'⌂ Home'), el('span',{},' › '),
+    el('span',{},'Not Applicable')));
+  // Header + sub-line count (computed below once we have the visible items).
+  const head = el('div',{class:'page-head'},
+    el('div',{class:'ic'},'🚫'),
+    el('div',{}, el('h1',{},'Not Applicable'),
+      el('div',{class:'sub',id:'naSub'}, 'Loading…')));
+  root.appendChild(head);
+  const search = el('input',{class:'search',type:'search',placeholder:'Search id, scenario, steps, expected…',style:'max-width:380px;margin:0 0 14px 0;display:block;'});
+  search.value = state.search;
+  search.addEventListener('input', e => { state.search = e.target.value; renderNotApplicableGrid(); });
+  root.appendChild(search);
+  root.appendChild(el('div',{class:'tc-grid',id:'tcGrid'}));
+  renderNotApplicableGrid();
+}
+function renderNotApplicableGrid() {
+  const grid = document.getElementById('tcGrid');
+  grid.innerHTML = '';
+  const q = state.search.trim().toLowerCase();
+  const items = [];
+  for (const m of visibleModules()) {
+    for (const tc of m.tcs) {
+      if (!tcMatchesRole(tc)) continue;
+      if (effectiveTicketStatus(tc) !== 'Not Applicable') continue;
+      if (q) {
+        const blob = [tc.id, tc.scenario, tc.pre, tc.steps, tc.expected, tc.notes].join(' ').toLowerCase();
+        if (!blob.includes(q)) continue;
+      }
+      items.push({m, tc});
+    }
+  }
+  const sub = document.getElementById('naSub');
+  if (sub) sub.textContent = items.length
+    ? `${items.length} test case${items.length===1?'':'s'} marked Not Applicable across ${new Set(items.map(x=>x.m.id)).size} module${new Set(items.map(x=>x.m.id)).size===1?'':'s'}`
+    : 'Nothing here yet — set a testcase\'s Ticket Status to "Not Applicable" from any module page to file it in this bin.';
+  if (!items.length) {
+    grid.appendChild(el('div',{class:'empty'},
+      el('b',{},'No Not Applicable testcases'),
+      'Open any module, change a testcase\'s Ticket Status to "Not Applicable", and it moves here automatically.'));
+    return;
+  }
+  for (const {m, tc} of items) {
+    const card = tcCard(tc);
+    // Stamp the module context on top of the card so the user knows where the TC came from.
+    const ctx = el('div',{style:'font-size:10px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:6px;'},
+      `${m.category} · ${m.name}`);
+    card.insertBefore(ctx, card.firstChild);
+    grid.appendChild(card);
+  }
 }
 function renderGrid(m) {
   const grid = document.getElementById('tcGrid');
@@ -17161,6 +17226,33 @@ function styleHeaderRow(ws, ncols) {
     { wch: 28 }, { wch: 10 }, { wch: 10 }, { wch: 18 }, { wch: 32 }, { wch: 14 },
     { wch: 14 }, { wch: 22 }, { wch: 50 },
   ].slice(0, ncols);
+  // Navy header (#1E40AF) + white bold text. Requires xlsx-js-style — plain xlsx ignores .s.
+  const headerStyle = {
+    fill: { patternType: 'solid', fgColor: { rgb: '1E40AF' } },
+    font: { bold: true, color: { rgb: 'FFFFFF' }, sz: 11 },
+    alignment: { horizontal: 'left', vertical: 'center', wrapText: true },
+    border: {
+      top:    { style: 'thin', color: { rgb: '1E3A8A' } },
+      bottom: { style: 'thin', color: { rgb: '1E3A8A' } },
+      left:   { style: 'thin', color: { rgb: '1E3A8A' } },
+      right:  { style: 'thin', color: { rgb: '1E3A8A' } },
+    },
+  };
+  for (let c = 0; c < ncols; c++) {
+    const addr = XLSX.utils.encode_cell({ r: 0, c });
+    if (ws[addr]) ws[addr].s = headerStyle;
+  }
+  // Body cells: wrapText so embedded \n in Steps / Expected / Touchpoints renders as visible line breaks; top-align so multi-line cells anchor nicely.
+  const bodyStyle = { alignment: { vertical: 'top', wrapText: true } };
+  const range = XLSX.utils.decode_range(ws['!ref'] || 'A1');
+  for (let r = 1; r <= range.e.r; r++) {
+    for (let c = 0; c <= range.e.c; c++) {
+      const addr = XLSX.utils.encode_cell({ r, c });
+      if (ws[addr]) ws[addr].s = bodyStyle;
+    }
+  }
+  // Give the header a bit more vertical room so wrapped header titles aren't cramped.
+  ws['!rows'] = [{ hpt: 26 }];
 }
 
 async function exportModuleExcel(m) {
@@ -17498,6 +17590,7 @@ function generateReport() {
   .t-badge.t-Pending{background:#f1f5f9;color:#64748b;border-color:#e2e6ef}
   .t-badge.t-Done{background:#ecfdf5;color:#047857;border-color:rgba(16,185,129,0.35)}
   .t-badge.t-OnHold{background:#fef3c7;color:#b45309;border-color:rgba(245,158,11,0.4)}
+  .t-badge.t-NotApplicable{background:#f1f5f9;color:#64748b;border-color:#cbd5e1;font-style:italic}
   .muted{color:#94a3b8}
   .footer{margin-top:30px;padding-top:18px;border-top:1px solid #e2e6ef;text-align:center;color:#94a3b8;font-size:12px}
   @media print{
@@ -17597,6 +17690,7 @@ function render() {
   renderTopNav(); renderTopStats(); renderSidebar();
   if (state.view==='runs') renderRuns();
   else if (state.view==='home') renderHome();
+  else if (state.view==='notApplicable') renderNotApplicable();
   else renderModule();
 }
 Promise.allSettled([loadRole(), loadStatusOverrides(), loadJiraKeys(), loadTcEdits()]).then(render).catch(render);
