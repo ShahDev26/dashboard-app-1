@@ -1,0 +1,23 @@
+{
+  "name": "mel-qa-automation",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Playwright + JS automation framework for MEL platform. Reads testcases live from the MEL Test Dashboard and verifies touchpoints across dev/stage/prod.",
+  "scripts": {
+    "test": "playwright test",
+    "tc": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "PWDEBUG=1 playwright test",
+    "test:dev": "cross-env TEST_ENV=dev playwright test",
+    "test:stage": "cross-env TEST_ENV=stage playwright test",
+    "test:prod": "cross-env TEST_ENV=prod playwright test",
+    "auth:refresh": "playwright test --project=setup",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5"
+  }
+}

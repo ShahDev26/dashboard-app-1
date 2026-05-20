@@ -90,8 +90,8 @@ export default async function handler(req, res) {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ error: 'method not allowed' });
   }
-  if (roleFromRequest(req) !== 'editor') {
-    return res.status(403).json({ error: 'viewer role cannot create JIRA tickets' });
+  if (roleFromRequest(req) !== 'qa') {
+    return res.status(403).json({ error: 'only QA role can create JIRA tickets' });
   }
   try {
     let body = req.body;

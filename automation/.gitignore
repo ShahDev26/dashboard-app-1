@@ -1,0 +1,19 @@
+node_modules/
+.env
+.env.local
+.env.*.local
+
+# Playwright runtime artefacts
+test-results/
+playwright-report/
+playwright/.cache/
+playwright/.auth/
+
+# Local TC cache (fetched from dashboard)
+.tc-cache/
+
+# OS / IDE
+.DS_Store
+*.log
+.vscode/
+.idea/

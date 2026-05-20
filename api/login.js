@@ -25,8 +25,8 @@ export default async function handler(req, res) {
 
   let matched = null;
   let role = null;
-  if (editor && submitted === editor) { matched = editor; role = 'editor'; }
-  else if (viewer && submitted === viewer) { matched = viewer; role = 'viewer'; }
+  if (editor && submitted === editor) { matched = editor; role = 'qa'; }
+  else if (viewer && submitted === viewer) { matched = viewer; role = 'developer'; }
 
   if (!matched) {
     return res.status(401).json({ error: 'invalid password' });

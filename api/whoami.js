@@ -1,7 +1,7 @@
 // GET /api/whoami
-// Returns { role: 'editor' | 'viewer' } based on which password the
-// current session's cookie matches. Used by the dashboard JS on load
-// to hide edit controls and the JIRA-ticket button for viewers.
+// Returns { role: 'qa' | 'developer' } based on which password the current
+// session's cookie matches. The dashboard front-end uses the role to label
+// the status column, gate JIRA ticket creation, and pick the report flavour.
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -14,14 +14,14 @@ export default async function handler(req, res) {
 }
 
 export function roleFromRequest(req) {
-  const editor = process.env.DASHBOARD_PASSWORD || '';
-  const viewer = process.env.DASHBOARD_VIEWER_PASSWORD || '';
+  const qaPwd  = process.env.DASHBOARD_PASSWORD || '';
+  const devPwd = process.env.DASHBOARD_VIEWER_PASSWORD || '';
   const raw = (req.headers && req.headers.cookie) || '';
   const m = raw.match(/(?:^|;\s*)mel_auth=([^;]+)/);
   if (!m) return null;
   let v = '';
   try { v = decodeURIComponent(m[1]); } catch { v = m[1]; }
-  if (editor && v === editor) return 'editor';
-  if (viewer && v === viewer) return 'viewer';
+  if (qaPwd  && v === qaPwd)  return 'qa';
+  if (devPwd && v === devPwd) return 'developer';
   return null;
 }
