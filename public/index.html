@@ -16196,7 +16196,10 @@ function el(tag, attrs={}, ...children) {
 }
 function tcMatchesRole(tc) {
   if (state.role === 'All') return true;
-  return tc.roles.includes(state.role);
+  const roles = tc.roles || [];
+  if (roles.length === 0) return true;      // No explicit role assignment = applies to every role.
+  if (roles.includes('Any')) return true;   // 'Any' is a wildcard — TC is role-agnostic, show under every role filter.
+  return roles.includes(state.role);
 }
 
 async function loadRole() {
