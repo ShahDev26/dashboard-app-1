@@ -226,14 +226,6 @@
   .status-edit .save-ind.on{display:inline}
   .status-edit .save-ind.ok{color:var(--emerald)}
   .status-edit .save-ind.err{color:var(--red)}
-  /* Compact status select on each card (outside the ticket detail modal) */
-  .card-status-edit{padding:5px 24px 5px 10px;border:1px solid var(--border);border-radius:8px;background-color:var(--surface-hi);background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%2364748b'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.06l3.71-3.83a.75.75 0 111.08 1.04l-4.25 4.39a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;background-size:12px;font-family:'Inter',sans-serif;font-size:11.5px;font-weight:600;color:var(--text-2);cursor:pointer;appearance:none;-webkit-appearance:none;-moz-appearance:none;outline:none;transition:120ms}
-  .card-status-edit:hover{border-color:var(--border-hi)}
-  .card-status-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(99,102,241,0.15)}
-  .card-status-edit[data-status="Pass"]{color:#047857;background-color:var(--emerald-soft);border-color:var(--emerald)}
-  .card-status-edit[data-status="Fail"]{color:#b91c1c;background-color:var(--red-soft);border-color:var(--red)}
-  .card-status-edit[data-status="On Hold"]{color:#b45309;background-color:var(--amber-soft);border-color:var(--amber)}
-  .card-status-edit.saving{opacity:0.6;pointer-events:none}
   @media (max-width:960px){.menu-btn{display:flex}.shell{grid-template-columns:1fr}.sidebar{position:fixed;top:var(--topbar-h);left:0;bottom:0;width:var(--sidebar-w);z-index:50;transform:translateX(-105%);transition:transform 220ms;box-shadow:var(--shadow-lg)}.sidebar.open{transform:translateX(0)}.topnav{display:none}.top-stats{display:none}main{padding:18px 14px 60px}}
   @media (max-width:520px){.tc-grid{grid-template-columns:1fr}.logo-sub{display:none}}
 
@@ -330,7 +322,7 @@
   <div class="topbar-sep" aria-hidden="true"></div>
   <div class="top-actions">
     <button class="logout-btn" id="bulkExportBtn" title="Export all modules to Excel" style="display:none;">⤓ Bulk Export</button>
-    <button class="logout-btn" id="reportBtn" title="Generate report">📄 <span id="reportBtnLabel">Generate Report</span></button>
+    <button class="logout-btn" id="runsBtn" title="View Playwright execution history by date">📅 Reports</button>
     <button class="logout-btn" id="logoutBtn" title="Sign out">⏻ Sign out</button>
   </div>
 </div>
@@ -1142,15 +1134,15 @@
         },
         {
           "id": "TC-USR-018",
-          "scenario": "Boundary — Full Name 100 chars",
+          "scenario": "Boundary — Full Name 150 chars",
           "type": "Edge",
           "pre": "Add User",
-          "steps": "1. Name = 100 char string\n2. Save",
-          "expected": "Accepted at 100; rejected at 101 with inline error",
+          "steps": "1. Name = 150 char string\n2. Save",
+          "expected": "Accepted at 150; rejected at 151 with inline error",
           "status": "Not run",
           "severity": "Medium",
           "br": "-",
-          "notes": "",
+          "notes": "Per ERD 2026-05-20: BE users.name is varchar(150). Updated from wireframe-era 100-char cap.",
           "roles": [
             "Any"
           ],
@@ -1158,7 +1150,7 @@
             {
               "role": "Admin",
               "screen": "Users list",
-              "action": "100-character Full Name renders fully or with safe ellipsis; no row layout breakage"
+              "action": "150-character Full Name renders fully or with safe ellipsis; no row layout breakage"
             }
           ]
         },
@@ -1495,13 +1487,13 @@
           "id": "TC-CTR-001",
           "scenario": "Add new GSC Centre — modal field set + cascades",
           "type": "Functional",
-          "pre": "Admin is logged in and on the Master Data → GSC Centres screen. At least one Implementation Partner, one State (with at least one District, Pincode, and Village), and one GSCO user exist.",
-          "steps": "1. Click \"Add GSC Center\" (top-right).\n2. Confirm modal fields in order: Centre Name *, Implementation Partner *, State *, District *, Provider, Villages * (multi-select), GSCO *.\n3. Implementation Partner dropdown is populated from the Implementation Partners master (TC-IPR-* prerequisites).\n4. State → District → Villages cascade.\n5. Save with valid values.",
+          "pre": "Admin is logged in and on the Master Data → GSC Centres screen. At least one Implementation Partner, one State (with at least one District and Pincode), and one GSCO user exist.",
+          "steps": "1. Click \"Add GSC Center\" (top-right).\n2. Confirm modal fields in order: Centre Code * (unique, ≤20 chars), Centre Name *, Implementation Partner *, State *, District *, Pincodes * (multi-select), Incorporated Date, GSCO *, Status.\n3. Implementation Partner dropdown is populated from the Implementation Partners master (TC-IPR-* prerequisites).\n4. State → District → Pincodes cascade.\n5. Save with valid values.",
           "expected": "Centre created. Row appears in list with columns NAME · PARTNER · LOCATION · HEAD · STAFF · CANDIDATES · ENABLERS · INFLUENCERS · STATUS · ACTIONS. STAFF/CANDIDATES/ENABLERS/INFLUENCERS start at 0 and auto-update as those entities are added.",
           "status": "Not run",
           "severity": "Critical",
           "br": "BR-MDM-01, BR-MDM-07",
-          "notes": "Reflects the Add GSC Center form shown in the UI (Centre Name, Implementation Partner, State, District, Pincodes, Villages, GSCO, Status).",
+          "notes": "Per ERD 2026-05-20: BE gsc_centres = {code UQ varchar(20), name varchar(150), implPartnerId FK, stateId, districtId, pincodeId JSON array, incorporatedDate, status}. Wireframe-era 'Provider' field removed (not in BE). 'Villages' multi-select was wireframe only — BE does not store villages at centre level; villages cascade is for display lookup only.",
           "roles": [
             "Admin",
             "GSCO"
@@ -1723,7 +1715,7 @@
           "status": "Not run",
           "severity": "Critical",
           "br": "OWASP A05",
-          "notes": "File upload safety",
+          "notes": "Per ERD 2026-05-20: gsc_centres has NO logo column. Logo upload is wireframe-only — verify whether logo is stored elsewhere (e.g. files table) or scope to design intent until BE adds a logo_url column.",
           "roles": [
             "Any"
           ],
@@ -1858,7 +1850,7 @@
           "status": "Not run",
           "severity": "Critical",
           "br": "BR-MDM-07",
-          "notes": "Published = visible to downstream candidate / training flows.",
+          "notes": "Published = visible to downstream candidate / training flows. Per ERD 2026-05-20: BE gsc_centres.status is varchar(20) default 'active' — UI value 'Published' likely maps to BE 'active'. Confirm BE enum/seed values match wireframe Published/Unpublished labels.",
           "roles": [
             "Admin",
             "State Head",
@@ -2442,12 +2434,12 @@
           "scenario": "Add District — happy path",
           "type": "Functional",
           "pre": "Admin; State=MH exists",
-          "steps": "1. Click \"Add District\" (top-right).\n2. Modal fields: District Name * + State * (dropdown of all states).\n3. Pick State = Uttar Pradesh, Name = \"Sandbox District\".\n4. Save.",
-          "expected": "Row appears in list with columns CODE · DISTRICT NAME · STATE · BLOCK COUNT · ACTIONS. BLOCK COUNT starts at 0 and auto-rolls when blocks are added under this district.",
+          "steps": "1. Click \"Add District\" (top-right).\n2. Modal fields: District Name * + State * (dropdown of all states). District Code is auto-generated by the system (BE districts.code text NOT NULL).\n3. Pick State = Uttar Pradesh, Name = \"Sandbox District\".\n4. Save.",
+          "expected": "Row appears in list with columns CODE · DISTRICT NAME · STATE · BLOCK COUNT · ACTIONS. CODE is auto-generated. BLOCK COUNT starts at 0 and auto-rolls when blocks are added under this district.",
           "status": "Not run",
           "severity": "Critical",
           "br": "BR-MDM-02",
-          "notes": "Cross-surface",
+          "notes": "Cross-surface. Per ERD 2026-05-20: BE districts = {code text NOT NULL, name text NOT NULL, stateId FK}. Code auto-generated (Admin does not type it).",
           "roles": [
             "Admin"
           ],
@@ -2695,12 +2687,12 @@
           "scenario": "Add Block — happy path",
           "type": "Functional",
           "pre": "Admin; District=Pune exists",
-          "steps": "1. Click \"Add Block/Taluk\" (top-right).\n2. Modal fields: Block/Taluk Name * + District * (dropdown of all districts).\n3. Pick District = Pune, Name = \"Pune City\".\n4. Save.",
-          "expected": "Row appears in list with columns CODE · BLOCK NAME · DISTRICT · VILLAGES COUNT · ACTIONS. VILLAGES COUNT starts at 0.",
+          "steps": "1. Click \"Add Block/Taluk\" (top-right).\n2. Modal fields: Block/Taluk Name * + District * (dropdown of all districts). Block Code is auto-generated (BE blocks.code text NOT NULL, UNIQUE).\n3. Pick District = Pune, Name = \"Pune City\".\n4. Save.",
+          "expected": "Row appears in list with columns CODE · BLOCK NAME · DISTRICT · VILLAGES COUNT · ACTIONS. CODE auto-generated. VILLAGES COUNT starts at 0.",
           "status": "Not run",
           "severity": "Critical",
           "br": "BR-MDM-02",
-          "notes": "Cross-surface",
+          "notes": "Cross-surface. Per ERD 2026-05-20: BE blocks = {code text UNIQUE NOT NULL, name text NOT NULL, districtId FK}. Code is auto-generated (Admin does not type it).",
           "roles": [
             "Admin"
           ],
@@ -2928,12 +2920,12 @@
           "scenario": "Add Village — happy path",
           "type": "Functional",
           "pre": "Admin; District + Block + Pincode exist",
-          "steps": "1. Click \"Add Village\" (top-right).\n2. Modal fields in order: Village Name *, District *, Block/Taluk *, Pincode *.\n3. Cascade: pick District → Block list filters → pick Block → Pincode list filters.\n4. Save.",
-          "expected": "Row appears in list with columns CODE · VILLAGE NAME · BLOCK · DISTRICT · PINCODE · ACTIONS.",
+          "steps": "1. Click \"Add Village\" (top-right).\n2. Modal fields in order: Village Name *, District * (cascade filter only — not stored on village), Block/Taluk *, Pincode *.\n3. Cascade: pick District → Block list filters → pick Block → Pincode list filters.\n4. Save.",
+          "expected": "Row appears in list with columns VILLAGE NAME · BLOCK · DISTRICT (derived) · PINCODE · ACTIONS.",
           "status": "Not run",
           "severity": "Critical",
           "br": "BR-MDM-02",
-          "notes": "Migration risk path",
+          "notes": "Migration risk path. Per ERD 2026-05-20: BE villages = {name text NOT NULL, blockId FK, pincodeId FK}. District is DERIVED via block→district hierarchy (not stored on village). State similarly derived. Wireframe-era CODE column on the list has no BE backing — confirm whether UI should drop it or compute from block.code+sequence. NOTE: ERD board v3.4 candidate frame FKs candidates to all 5 geo levels — BE may need to add state_id/district_id back to villages before candidate tables ship.",
           "roles": [
             "Admin",
             "GSCO"
@@ -3209,12 +3201,12 @@
           "scenario": "Add Pincode — happy path",
           "type": "Functional",
           "pre": "Admin; State + District exist",
-          "steps": "1. Click \"Add Pincode\" (top-right).\n2. Modal fields in order: Pincode *, State *, District *, Village *.\n3. Cascade: State → District → Village.\n4. Pincode = 271801. Save.",
-          "expected": "Row appears in list with columns PINCODE · VILLAGE · DISTRICT · STATE · ACTIONS.",
+          "steps": "1. Click \"Add Pincode\" (top-right).\n2. Modal fields in order: Pincode * (6-digit, UNIQUE), Post Office (text, optional), State * (cascade filter only — not stored), District *.\n3. Cascade: State → District.\n4. Pincode = 271801, Post Office = \"Bahraich H.O.\". Save.",
+          "expected": "Row appears in list with columns PINCODE · POST OFFICE · DISTRICT · STATE (derived) · VILLAGES (derived count) · ACTIONS.",
           "status": "Not run",
           "severity": "Critical",
           "br": "BR-MDM-02",
-          "notes": "Cross-surface",
+          "notes": "Cross-surface. Per ERD 2026-05-20: BE pincodes = {code text UNIQUE NOT NULL, postOffice text indexed, districtId FK}. Wireframe Village * field REMOVED — villages FK to pincodes (not the other way). State is derived via district→state. DRIFT: ERD board says pincodes.block_id NOT NULL; BE only FKs to districts — block linkage is derived via district→blocks. Confirm whether block_id needs to be added to pincodes before candidate tables ship.",
           "roles": [
             "Admin",
             "GSCO"
@@ -3649,12 +3641,12 @@
           "scenario": "Add new disability type — modal field check",
           "type": "Functional",
           "pre": "Admin on Disability Types",
-          "steps": "1. Click \"Add Disability Type\" (top-right) OR the FAB \"+ Add\" (bottom-right).\n2. Confirm modal title = \"Add New Disability Type\", fields = Disability Name * + Code (auto/optional).\n3. Name=Test Cognitive, Code=TC. Click \"Add Disability Type\".",
-          "expected": "Row appears with CODE=TC, NAME=Test Cognitive, REGISTERED CANDIDATES=0. Item immediately visible in: GSCO Quick Registration Disability dropdown, public /register/$eventId Disability dropdown, complete-profile wizard Step 1 Primary + Secondary Disability dropdowns, /directory Disability filter, Purple Dots legend, Admin reports.",
+          "steps": "1. Click \"Add Disability Type\" (top-right) OR the FAB \"+ Add\" (bottom-right).\n2. Confirm modal title = \"Add New Disability Type\", fields = Disability Name *, Code * (unique, ≤50 chars), Type * (Primary / Secondary), Parent Disability (optional — select existing disability to make this a sub-type), Display Order (integer, default 0), Status.\n3. Name=Test Cognitive, Code=TC, Type=Primary. Click \"Add Disability Type\".",
+          "expected": "Row appears with CODE=TC, NAME=Test Cognitive, REGISTERED CANDIDATES=0. Item immediately visible in: GSCO Quick Registration Disability dropdown (filtered by Type=Primary), public /register/$eventId Disability dropdown, complete-profile wizard Step 1 Primary + Secondary Disability dropdowns, /directory Disability filter, Purple Dots legend, Admin reports.",
           "status": "Not run",
           "severity": "High",
           "br": "BR-PwD-21",
-          "notes": "Cross-surface verification",
+          "notes": "Per ERD 2026-05-20: BE disability_types = {name varchar(150) UQ, code varchar(50) UQ NOT NULL, type enum(primary/secondary), parentDisabilityId self-FK, displayOrder int=0, status}. Wireframe Code is NOT optional — it is UNIQUE NOT NULL. Type and parentDisabilityId support the hierarchical disability_subtypes referenced by the Candidate v3.4 frame.",
           "roles": [
             "Admin",
             "GSCO"
@@ -3774,12 +3766,12 @@
           "scenario": "Code length boundary",
           "type": "Edge",
           "pre": "Add Disability",
-          "steps": "1. Code = 8 chars (e.g. ABCDEFGH)",
-          "expected": "Accepted at 8; 9 chars rejected — confirm max length with PO",
+          "steps": "1. Code = 50 chars\n2. Code = 51 chars",
+          "expected": "Accepted at 50; 51 chars rejected with inline error.",
           "status": "Not run",
           "severity": "Low",
           "br": "-",
-          "notes": "",
+          "notes": "Per ERD 2026-05-20: BE disability_types.code is varchar(50). Updated from wireframe-era 8/9 boundary.",
           "roles": [
             "Any"
           ],
@@ -3945,12 +3937,12 @@
           "scenario": "Add Course Type — happy path",
           "type": "Functional",
           "pre": "Admin",
-          "steps": "1. Click \"Add Course Type\" (top-right).\n2. Modal fields: Code * (e.g., \"EDP\"), Label *, Description (textarea).\n3. Status defaults to Draft on creation.\n4. Save.",
+          "steps": "1. Click \"Add Course Type\" (top-right).\n2. Modal fields: Code * (UNIQUE, ≤30 chars, e.g. \"EDP\"), Label * (≤100 chars), Description (textarea).\n3. Status defaults to Draft on creation.\n4. Save.",
           "expected": "Row appears in list with columns CODE · LABEL · DESCRIPTION · STATUS · COURSES · ACTIONS. STATUS shows Draft for newly created Course Types until explicitly Published.",
           "status": "Not run",
           "severity": "Critical",
           "br": "BR-CRS-01",
-          "notes": "Promoted from free-text in v1.0",
+          "notes": "Promoted from free-text in v1.0. Per ERD 2026-05-20: BE course_types = {code varchar(30) UNIQUE, label varchar(100), description text, status varchar(20) default 'active'}. UI label 'Draft' / 'Published' may map to BE 'active' / 'inactive' — confirm BE seed/enum values match wireframe terminology.",
           "roles": [
             "Admin",
             "GSCO"
@@ -4046,15 +4038,15 @@
         },
         {
           "id": "TC-CRT-005",
-          "scenario": "Code > 8 chars",
+          "scenario": "Code > 30 chars",
           "type": "Negative",
           "pre": "Add Course Type",
-          "steps": "1. Code=ABCDEFGHI",
-          "expected": "Blocked at 9th char",
+          "steps": "1. Code = 31-char string",
+          "expected": "Blocked at 31st char with inline error.",
           "status": "Not run",
           "severity": "High",
           "br": "-",
-          "notes": "",
+          "notes": "Per ERD 2026-05-20: BE course_types.code is varchar(30). Updated from wireframe-era 8-char boundary.",
           "roles": [
             "Any"
           ],
@@ -4119,7 +4111,7 @@
           "scenario": "XSS in Course Type Description",
           "type": "Negative",
           "pre": "Add Course Type",
-          "steps": "1. Description=<script>alert(1)</script>",
+          "steps": "1. Description=<script>alert(1)<\/script>",
           "expected": "Stored as literal text; rendered as text in list and Training detail; no script execution",
           "status": "Not run",
           "severity": "Critical",
@@ -4244,12 +4236,12 @@
           "scenario": "Add Implementation Partner",
           "type": "Functional",
           "pre": "Admin",
-          "steps": "1. Click \"Add Implementation Partner\" (top-right).\n2. Modal fields: Partner Name *, Type * (dropdown — e.g., NGO, Government), Status (Published / Unpublished), Contact Email.\n3. Save.",
-          "expected": "Row appears in list with columns NAME · TYPE · STATUS · CONTACT · ACTIONS. STATUS chip = Published (green) or Unpublished (red).",
+          "steps": "1. Click \"Add Implementation Partner\" (top-right).\n2. Modal fields: Partner Name * (UNIQUE), Type * (free-text, e.g. NGO / Government), Contact Email * (REQUIRED in BE), Contact Phone (optional, ≤20 chars), Status (Published / Unpublished).\n3. Save.",
+          "expected": "Row appears in list with columns NAME · TYPE · CONTACT EMAIL · CONTACT PHONE · STATUS · ACTIONS. STATUS chip = Published (green) or Unpublished (red).",
           "status": "Not run",
           "severity": "Critical",
           "br": "BR-MDM-07",
-          "notes": "Cross-surface",
+          "notes": "Cross-surface. Per ERD 2026-05-20: BE implementation_partners = {name varchar(150) UNIQUE, partnerType varchar(50) NOT NULL, contactEmail varchar(150) NOT NULL, contactPhone varchar(20) nullable, status}. Wireframe missed contactPhone field and didn't mark contactEmail as required. UI 'Published / Unpublished' likely maps to BE 'active' / 'inactive'.",
           "roles": [
             "Admin",
             "GSCO"
@@ -4520,12 +4512,12 @@
           "scenario": "Add Course Partner",
           "type": "Functional",
           "pre": "Admin",
-          "steps": "1. Click \"Add Course Partner\" (top-right).\n2. Modal fields: Partner Name *, Course Types (multi-select from Course Types master), Status (Published / Unpublished).\n3. Save.",
-          "expected": "Row appears in list with columns NAME · COURSE TYPES (multi-tag) · STATUS · ACTIONS. STATUS chip = Published (green) or Unpublished (red).",
+          "steps": "1. Click \"Add Course Partner\" (top-right).\n2. Modal fields: Partner Name * (UNIQUE), Contact Email * (REQUIRED in BE), Contact Phone (optional, ≤20 chars), Status (Published / Unpublished).\n3. Save.",
+          "expected": "Row appears in list with columns NAME · CONTACT EMAIL · CONTACT PHONE · STATUS · COURSES (derived count) · ACTIONS. STATUS chip = Published (green) or Unpublished (red).",
           "status": "Not run",
           "severity": "Critical",
           "br": "BR-MDM-07",
-          "notes": "Cross-surface",
+          "notes": "Cross-surface. Per ERD 2026-05-20: BE course_partners = {name varchar(150) UNIQUE, contactEmail varchar(150) NOT NULL, contactPhone varchar(20) nullable, status}. Wireframe missed contactEmail (REQUIRED) and contactPhone fields. The wireframe-era 'Course Types (multi-select)' field does NOT exist in BE — there is no course_partners↔course_types join. The relationship is via courses.coursePartnerId (single FK). Course Types tagging on partners is a wireframe-only concept that needs BE schema work if required.",
           "roles": [
             "Admin",
             "GSCO"
@@ -4768,12 +4760,12 @@
           "scenario": "Add Financial Partner",
           "type": "Functional",
           "pre": "Admin",
-          "steps": "1. Click \"Add Financial Partner\" (top-right).\n2. Modal fields: Partner Name *, Type * (dropdown: Bank · Government Scheme · CSR · NGO · Private), Amount Disbursed (₹) *, Status (Active / Inactive).\n3. Save.",
-          "expected": "Row appears in list with columns NAME · TYPE · AMOUNT DISBURSED · STATUS · ACTIONS. STATUS chip = Active (green) or Inactive (red).",
+          "steps": "1. Click \"Add Financial Partner\" (top-right).\n2. Modal fields: Partner Name *, Type * (dropdown sourced from Financial Partner Types master — Bank · Government Scheme · CSR · NGO · Private), Contact Email, Contact Phone, Status (Active / Inactive).\n3. Save.",
+          "expected": "Row appears in list with columns NAME · TYPE · CONTACT EMAIL · CONTACT PHONE · STATUS · ACTIONS. STATUS chip = Active (green) or Inactive (red).",
           "status": "Not run",
           "severity": "Critical",
           "br": "BR-MDM-07",
-          "notes": "Cross-surface",
+          "notes": "Cross-surface. Per ERD 2026-05-20: financial_partners has no `amount` column — partner-level disbursement amounts removed. Contact details (email/phone) added.",
           "roles": [
             "Admin"
           ],
@@ -4781,7 +4773,7 @@
             {
               "role": "Admin",
               "screen": "Master Data — Financial Partners list",
-              "action": "New Financial Partner appears at top with funder amount"
+              "action": "New Financial Partner appears at top with contact details"
             },
             {
               "role": "GSCO",
@@ -4801,59 +4793,11 @@
           "type": "Functional",
           "pre": "List",
           "steps": "1. Click Download as Excel",
-          "expected": "CSV downloads with header NAME, TYPE, AMOUNT DISBURSED, STATUS (Actions excluded).",
+          "expected": "CSV downloads with header NAME, TYPE, CONTACT EMAIL, CONTACT PHONE, STATUS (Actions excluded).",
           "status": "Not run",
           "severity": "High",
           "br": "BR-MDM-04",
-          "notes": "",
-          "roles": [
-            "Any"
-          ],
-          "touchpoints": []
-        },
-        {
-          "id": "TC-FPR-003",
-          "scenario": "Negative amount",
-          "type": "Negative",
-          "pre": "Add",
-          "steps": "1. Amount=-1000",
-          "expected": "Blocked; \"Amount must be ≥ 0\"",
-          "status": "Not run",
-          "severity": "High",
-          "br": "-",
-          "notes": "",
-          "roles": [
-            "Any"
-          ],
-          "touchpoints": []
-        },
-        {
-          "id": "TC-FPR-004",
-          "scenario": "Amount with currency symbol",
-          "type": "Negative",
-          "pre": "Add",
-          "steps": "1. Amount=\"₹1,00,000\"",
-          "expected": "Either strip symbol and accept 100000, OR block with \"numeric only\" — confirm acceptance criteria with the product owner",
-          "status": "Not run",
-          "severity": "Medium",
-          "br": "-",
-          "notes": "",
-          "roles": [
-            "Any"
-          ],
-          "touchpoints": []
-        },
-        {
-          "id": "TC-FPR-005",
-          "scenario": "Amount > Rs 99 cr",
-          "type": "Edge",
-          "pre": "Add",
-          "steps": "1. Amount=10000000000",
-          "expected": "Either accepted (large funder OK) or boundary error — confirm AC; verify candidate-side Income Statistics widget renders correctly",
-          "status": "Not run",
-          "severity": "Medium",
-          "br": "-",
-          "notes": "",
+          "notes": "Amount Disbursed column removed per ERD reconciliation 2026-05-20.",
           "roles": [
             "Any"
           ],
@@ -4863,13 +4807,13 @@
           "id": "TC-FPR-006",
           "scenario": "Delete partner referenced by candidate financial assistance",
           "type": "Integration",
-          "pre": "ABF disbursed to 100 candidates",
+          "pre": "Financial assistance disbursed to candidates referencing this partner",
           "steps": "1. Delete",
           "expected": "Blocked; dependency list shows candidate count and links",
           "status": "Not run",
           "severity": "Critical",
           "br": "BR-MDM-03",
-          "notes": "",
+          "notes": "Design intent only — candidates table not yet shipped in BE (board v3.4 frame). Verify once candidates + financial-assistance FK lands.",
           "roles": [
             "Any"
           ],
@@ -4880,22 +4824,6 @@
               "action": "Block delete with dependency list (candidate count receiving disbursements + links)"
             }
           ]
-        },
-        {
-          "id": "TC-FPR-007",
-          "scenario": "Amount input — numeric input mode hint",
-          "type": "Accessibility",
-          "pre": "Add Financial Partner on mobile",
-          "steps": "1. Focus Amount field on iPhone",
-          "expected": "iOS keyboard switches to numeric pad (inputmode=\"numeric\"); SR announces \"Amount Disbursed in rupees, numeric\"",
-          "status": "Not run",
-          "severity": "Moderate",
-          "br": "WCAG 1.3.5",
-          "notes": "Mobile UX + a11y",
-          "roles": [
-            "Any"
-          ],
-          "touchpoints": []
         },
         {
           "id": "TC-FPR-008",
@@ -4923,7 +4851,7 @@
           "status": "Not run",
           "severity": "High",
           "br": "",
-          "notes": "Same filter behaviour on every master-data screen.",
+          "notes": "Same filter behaviour on every master-data screen. Type values sourced from financial_partner_types master.",
           "roles": [
             "Any"
           ],
@@ -4935,7 +4863,7 @@
           "type": "Functional",
           "pre": "Financial partners are listed on the Financial Partners screen. A search or filter may or may not be active.",
           "steps": "1. Click \"Export CSV\" (top-right).",
-          "expected": "CSV downloads with header NAME, TYPE, AMOUNT DISBURSED, STATUS (Actions excluded).",
+          "expected": "CSV downloads with header NAME, TYPE, CONTACT EMAIL, CONTACT PHONE, STATUS (Actions excluded).",
           "status": "Not run",
           "severity": "High",
           "br": "",
@@ -4950,7 +4878,7 @@
           "scenario": "Edit modal + Delete confirmation + FAB",
           "type": "Functional",
           "pre": "Financial Partners tab.",
-          "steps": "1. Kebab → Edit; verify Name/Type/Amount/Status pre-filled.\n2. Kebab → Delete on no-dependent partner; confirm dialog.\n3. FAB → opens Add Financial Partner modal.",
+          "steps": "1. Kebab → Edit; verify Name/Type/Contact Email/Contact Phone/Status pre-filled.\n2. Kebab → Delete on no-dependent partner; confirm dialog.\n3. FAB → opens Add Financial Partner modal.",
           "expected": "Edit pre-fills correctly. Delete confirms first. FAB matches primary button.",
           "status": "Not run",
           "severity": "High",
@@ -4959,27 +4887,51 @@
         },
         {
           "id": "TC-FPR-012",
-          "scenario": "Type dropdown enumerates exactly 5 values",
+          "scenario": "Type dropdown sourced from Financial Partner Types master",
           "type": "Functional",
-          "pre": "Add Financial Partner modal open.",
+          "pre": "Add Financial Partner modal open. financial_partner_types master seeded with Bank, Government Scheme, CSR, NGO, Private (all Active).",
           "steps": "1. Click the Type dropdown.",
-          "expected": "Dropdown lists exactly 5 values in this order: Bank, Government Scheme, CSR, NGO, Private. No other values present.",
+          "expected": "Dropdown lists ACTIVE rows from financial_partner_types in seed order: Bank, Government Scheme, CSR, NGO, Private. Inactive types are not shown. Admins can add or disable types via the master — dropdown reflects changes.",
           "status": "Not run",
           "severity": "High",
           "br": "",
-          "notes": "User confirmed 2026-05-18: exact enum."
+          "notes": "Per ERD 2026-05-20: Type is a FK to financial_partner_types, not a hardcoded enum. The 5 values are seed data."
         },
         {
-          "id": "TC-FPR-013",
-          "scenario": "Amount Disbursed accepts only non-negative numeric",
+          "id": "TC-FPR-014",
+          "scenario": "Contact Email — invalid format rejected",
           "type": "Negative",
           "pre": "Add Financial Partner modal open.",
-          "steps": "1. Type Amount = -1000.\n2. Type Amount = abc.\n3. Type Amount = 1500000.50.\n4. Save with each.",
-          "expected": "Negative and alpha are rejected inline (TC-FPR-003/004 already cover, this tightens UX). Decimal allowed; integers allowed.",
+          "steps": "1. Contact Email = \"not-an-email\".\n2. Save.",
+          "expected": "Inline validation: \"Enter a valid email\". Save blocked.",
           "status": "Not run",
           "severity": "High",
           "br": "",
-          "notes": ""
+          "notes": "New TC 2026-05-20 — ERD adds contact_email (nullable). Empty allowed; when provided, must validate as email."
+        },
+        {
+          "id": "TC-FPR-015",
+          "scenario": "Contact Phone — length limit 20 chars",
+          "type": "Negative",
+          "pre": "Add Financial Partner modal open.",
+          "steps": "1. Contact Phone = 21-character string (e.g. \"123456789012345678901\").\n2. Save.",
+          "expected": "Inline validation or truncation at 20 chars. Save blocked or value truncated.",
+          "status": "Not run",
+          "severity": "Moderate",
+          "br": "",
+          "notes": "New TC 2026-05-20 — BE contact_phone is varchar(20)."
+        },
+        {
+          "id": "TC-FPR-016",
+          "scenario": "Duplicate Partner Name rejected",
+          "type": "Negative",
+          "pre": "A financial partner named \"State Bank of India\" already exists.",
+          "steps": "1. Add Financial Partner → Name = \"State Bank of India\".\n2. Save.",
+          "expected": "Save blocked with \"Name already exists\" message. Existing partner unchanged.",
+          "status": "Not run",
+          "severity": "High",
+          "br": "",
+          "notes": "New TC 2026-05-20 — BE financial_partners.name has UNIQUE constraint."
         }
       ]
     },
@@ -16154,8 +16106,11 @@ const QA_STATUS_OVERRIDES     = {};  // tcId -> QA-set status
 const TICKET_STATUS_OVERRIDES = {};  // tcId -> QA-set ticket status (Pending/Done/On Hold)
 const JIRA_KEYS = {};                // tcId -> JIRA issue key from /api/jira/list
 let ROLE = 'qa';                     // 'qa' | 'developer' — set from /api/whoami on load
-const isDeveloper = () => ROLE === 'developer';
-const isQA        = () => ROLE === 'qa';
+// Accept both the legacy ('editor'/'viewer') and new ('qa'/'developer') role
+// names returned by /api/whoami, so the dashboard works whether the rolled-back
+// or the rewritten auth module is currently deployed.
+const isDeveloper = () => ROLE === 'developer' || ROLE === 'viewer';
+const isQA        = () => ROLE === 'qa'        || ROLE === 'editor';
 // kept for any legacy callsite — viewer no longer exists
 const isViewer = () => false;
 
@@ -16332,11 +16287,12 @@ async function setStatusOnServer(tcId, status) {
 function renderTopNav() {
   const top = document.getElementById('topnav');
   top.innerHTML = '';
-  const reportLabel = document.getElementById('reportBtnLabel');
-  if (reportLabel) reportLabel.textContent = 'Generate Report';
   // Bulk Export button — QA only
   const bulkBtn = document.getElementById('bulkExportBtn');
   if (bulkBtn) bulkBtn.style.display = isQA() ? '' : 'none';
+  // Reports button — QA only
+  const runsBtn = document.getElementById('runsBtn');
+  if (runsBtn) runsBtn.style.display = isQA() ? '' : 'none';
   // Role indicator chip — shows which login you're using (Developer or QA)
   const roleChipStyle = isDeveloper()
     ? 'background:rgba(139,92,246,0.15);color:#7c3aed;border-color:rgba(139,92,246,0.35);cursor:default;'
@@ -16479,14 +16435,14 @@ function renderHome() {
   const root = document.getElementById('root');
   root.innerHTML = '';
   const mods = visibleModules();
-  const totalTcs = mods.reduce((n,m)=>n+m.tcs.length, 0);
+  const totalTcs = mods.reduce((n,m)=>n+m.tcs.filter(tcMatchesRole).length, 0);
+
   const hero = el('div',{class:'hero'},
     el('h1',{},'Test Catalogue'),
-    el('p',{},`Browse ${totalTcs} test cases across ${mods.length} modules. Use the role buttons on top to filter; pick a module from the sidebar to dig in.`)
+    el('p',{},`Browse ${totalTcs} test cases across ${mods.length} modules. Pick a module to dig in.`)
   );
   if (state.role !== 'All') {
-    const c = mods.reduce((acc,m)=>acc+m.tcs.filter(tcMatchesRole).length, 0);
-    hero.appendChild(el('div',{class:'role-banner'},'Filtering by ',el('b',{},state.role),` · ${c} tests match`));
+    hero.appendChild(el('div',{class:'role-banner'},'Filtering by ',el('b',{},state.role),` · ${totalTcs} tests match`));
   }
   root.appendChild(hero);
   const byCat = {};
@@ -16499,19 +16455,81 @@ function renderHome() {
     root.appendChild(block);
   }
 }
+
 function moduleCard(m) {
   const visible = m.tcs.filter(tcMatchesRole);
   const total = visible.length;
-  const pass = visible.filter(t => effectiveStatus(t)==='Pass').length;
-  const fail = visible.filter(t => effectiveStatus(t)==='Fail').length;
-  const tested = pass + fail;
-  const pct = total ? Math.round(tested/total*100) : 0;
-  return el('div',{class:'module-card', on:{click:()=>openModule(m.id)}},
-    el('span',{class:'ic'}, m.icon),
-    el('div',{class:'name'}, m.name),
-    el('div',{class:'meta'}, String(total)+' tests · '+String(tested)+' covered'),
-    el('div',{class:'progress'}, el('div',{style:`width:${pct}%`}))
-  );
+  let pass=0, fail=0, hold=0;
+  for (const t of visible) {
+    const s = effectiveStatus(t);
+    if (s==='Pass') pass++;
+    else if (s==='Fail') fail++;
+    else if (s==='On Hold') hold++;
+  }
+  const notrun = total - pass - fail - hold;
+  const tested = pass + fail + hold;
+  const passPct = (pass+fail) > 0 ? Math.round((pass/(pass+fail))*100) : 0;
+
+  let level = 'none';
+  if (tested === 0) level = 'none';
+  else if (passPct >= 80) level = 'high';
+  else if (passPct >= 50) level = 'mid';
+  else level = 'low';
+
+  const escH = (window.melCharts && window.melCharts.esc) || (s => String(s ?? ''));
+
+  // Mini donut (64x64) showing the module's pass/fail/hold/notrun mix
+  const R = 22, C = 2 * Math.PI * R;
+  const segs = [
+    { v: pass,   c: '#10b981' },
+    { v: fail,   c: '#ef4444' },
+    { v: hold,   c: '#f59e0b' },
+    { v: notrun, c: '#e2e8f0' },
+  ].filter(s => s.v > 0);
+  let off = 0;
+  const arcs = segs.map(s => {
+    const len = (s.v / (total || 1)) * C;
+    const arc = `<circle cx="30" cy="30" r="${R}" fill="none" stroke="${s.c}" stroke-width="8" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-off}" transform="rotate(-90 30 30)" stroke-linecap="butt"/>`;
+    off += len;
+    return arc;
+  }).join('');
+  const donutSvg = total > 0
+    ? `<svg width="64" height="64" viewBox="0 0 60 60" aria-hidden="true">
+         <circle cx="30" cy="30" r="${R}" fill="none" stroke="#f1f5f9" stroke-width="8"/>
+         ${arcs}
+         <text x="30" y="34" text-anchor="middle" font-size="11" font-weight="700" fill="#0f172a">${passPct || 0}%</text>
+       </svg>`
+    : `<svg width="64" height="64" viewBox="0 0 60 60" aria-hidden="true">
+         <circle cx="30" cy="30" r="${R}" fill="none" stroke="#e2e8f0" stroke-width="8" stroke-dasharray="4 4"/>
+         <text x="30" y="34" text-anchor="middle" font-size="13" fill="#cbd5e1">—</text>
+       </svg>`;
+
+  const card = document.createElement('div');
+  card.className = 'module-card';
+  card.dataset.coverage = level;
+  card.addEventListener('click', () => openModule(m.id));
+  card.innerHTML = `
+    <div class="mc-accent"></div>
+    <div class="mc-grid">
+      <div class="mc-donut">${donutSvg}</div>
+      <div class="mc-info">
+        <div class="mc-cat">${escH(m.category || '')}</div>
+        <div class="mc-header">
+          <span class="mc-icon">${escH(m.icon || '📋')}</span>
+          <span class="mc-name">${escH(m.name)}</span>
+        </div>
+        <div class="mc-meta">${total} testcase${total===1?'':'s'} · ${tested} executed</div>
+      </div>
+      <div class="mc-stats">
+        ${pass   ? `<span class="mc-chip pass">${pass} pass</span>`       : ''}
+        ${fail   ? `<span class="mc-chip fail">${fail} fail</span>`       : ''}
+        ${hold   ? `<span class="mc-chip hold">${hold} hold</span>`       : ''}
+        ${notrun ? `<span class="mc-chip notrun">${notrun} not run</span>` : ''}
+        ${total === 0 ? `<span class="mc-chip notrun">No tests in this view</span>` : ''}
+      </div>
+    </div>
+  `;
+  return card;
 }
 function renderModule() {
   const root = document.getElementById('root');
@@ -16598,47 +16616,13 @@ function tcCard(tc) {
   meta.appendChild(el('span',{class:'tag priority '+(tc.severity||'')}, 'Priority', el('b',{}, ' ', tc.severity || '—')));
   c.appendChild(meta);
   const foot = el('div',{class:'foot'});
-  // Status — QA can change directly on the card (no need to open the ticket detail).
-  // Developer sees only the ticket-chip below.
+  // Status dot — only QA sees it (developer only sees ticket status)
   if (isQA()) {
-    const initial = s || 'Not run';
-    const sel = el('select', {
-      class: 'card-status-edit',
-      'data-status': initial,
-      'aria-label': `Status for ${tc.id}`,
-      title: 'Set status',
-      on: {
-        click: e => e.stopPropagation(),
-        mousedown: e => e.stopPropagation(),
-        keydown: e => e.stopPropagation(),
-      }
-    });
-    for (const opt of STATUS_CHOICES) {
-      const o = document.createElement('option');
-      o.value = opt;
-      o.textContent = opt;
-      if (initial === opt) o.selected = true;
-      sel.appendChild(o);
+    if (s && s!=='Not run') {
+      foot.appendChild(el('span',{class:'dot-status','data-status':s}, el('span',{class:'dot'}), s));
+    } else {
+      foot.appendChild(el('span',{class:'dot-status'}, el('span',{class:'dot'}), 'Not run'));
     }
-    sel.addEventListener('change', async (e) => {
-      e.stopPropagation();
-      const newStatus = sel.value;
-      const previous = sel.getAttribute('data-status');
-      sel.setAttribute('data-status', newStatus);
-      sel.classList.add('saving');
-      try {
-        await setStatusOnServer(tc.id, newStatus);
-        renderTopStats();
-        renderSidebar();
-      } catch (err) {
-        sel.value = previous;
-        sel.setAttribute('data-status', previous);
-        alert(`Failed to save status for ${tc.id}: ${err.message || err}`);
-      } finally {
-        sel.classList.remove('saving');
-      }
-    });
-    foot.appendChild(sel);
   }
   const ts = effectiveTicketStatus(tc);
   foot.appendChild(el('span',{class:'ticket-chip','data-tstatus':ts, title:'Ticket Status (set by QA)'},
@@ -17059,7 +17043,7 @@ function closeTc(){document.getElementById('modalBg').classList.remove('on');}
 document.getElementById('modalBg').addEventListener('click',e=>{if(e.target===document.getElementById('modalBg'))closeTc();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeTc();});
 document.getElementById('goHome').addEventListener('click',goHome);
-document.getElementById('reportBtn').addEventListener('click', generateReport);
+// (Generate Report button removed — Reports view replaces it; see runsBtn handler at bottom of file.)
 document.getElementById('bulkExportBtn').addEventListener('click', openBulkExportPicker);
 document.getElementById('logoutBtn').addEventListener('click', async () => {
   try { await fetch('/api/logout',{method:'POST',credentials:'same-origin'}); } catch {}
@@ -17609,10 +17593,720 @@ document.getElementById('menuBtn').addEventListener('click', () => {
   document.getElementById('sidebar').classList.toggle('open');
 });
 function render() {
+  document.body.classList.toggle('runs-view', state.view==='runs');
   renderTopNav(); renderTopStats(); renderSidebar();
-  if (state.view==='home') renderHome(); else renderModule();
+  if (state.view==='runs') renderRuns();
+  else if (state.view==='home') renderHome();
+  else renderModule();
 }
 Promise.allSettled([loadRole(), loadStatusOverrides(), loadJiraKeys(), loadTcEdits()]).then(render).catch(render);
+</script>
+
+<!-- Reports view: in-SPA full page that replaces the modules pane for QA users -->
+<style>
+  /* Hide sidebar when reports view is active */
+  body.runs-view .sidebar { display: none; }
+  body.runs-view .shell { grid-template-columns: 1fr; }
+
+  /* Page chrome — full screen */
+  .runs-page { padding: 18px 28px 80px; width: 100%; margin: 0; }
+  .runs-page-head { display:flex; align-items:center; gap:14px; margin-bottom:18px; }
+  .runs-back { display:inline-flex; align-items:center; gap:6px; padding:7px 12px; border:1px solid #e5e7eb; background:#fff; border-radius:8px; cursor:pointer; font:inherit; font-size:13px; font-weight:600; color:#475569; }
+  .runs-back:hover { border-color:#4f46e5; color:#4f46e5; }
+  .runs-page h2 { margin: 0; font-size: 22px; font-weight: 700; }
+  .runs-page .runs-sub { color: #64748b; font-size: 13px; margin-left:auto; }
+
+  /* Range presets */
+  .runs-presets { display:flex; gap:6px; flex-wrap:wrap; }
+  .runs-presets button { border:1px solid #e5e7eb; background:#fff; padding:6px 12px; border-radius:8px; cursor:pointer; font:inherit; font-size:12.5px; color:#475569; font-weight:600; }
+  .runs-presets button:hover { border-color:#4f46e5; color:#4f46e5; }
+  .runs-presets button.on { background:#4f46e5; color:#fff; border-color:#4f46e5; }
+
+  /* Time-series stacked bars (per-day) */
+  .timechart { display:flex; align-items:flex-end; gap:6px; min-height:140px; padding:8px 0 0; overflow-x:auto; }
+  .tc-col { display:flex; flex-direction:column; align-items:center; min-width:36px; flex:1; }
+  .tc-bar { width:100%; max-width:42px; background:#f1f5f9; border-radius:6px 6px 0 0; overflow:hidden; display:flex; flex-direction:column-reverse; min-height:6px; }
+  .tc-bar > div { width:100%; transition:height 320ms ease; }
+  .tc-bar .pass { background:#10b981; }
+  .tc-bar .fail { background:#ef4444; }
+  .tc-bar .skip { background:#f59e0b; }
+  .tc-col .tc-lbl { font-size:10.5px; color:#64748b; margin-top:6px; white-space:nowrap; }
+  .tc-col .tc-total { font-size:11px; font-weight:700; color:#0f172a; margin-bottom:4px; font-variant-numeric:tabular-nums; }
+  .timechart-empty { padding:32px; color:#94a3b8; font-size:13px; text-align:center; width:100%; }
+
+  /* Date control card */
+  .runs-controls { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:14px 16px; margin-bottom:18px; display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
+  .runs-modes { display:flex; gap:6px; background:#f1f5f9; padding:4px; border-radius:8px; }
+  .runs-modes button { border:0; background:transparent; padding:6px 14px; border-radius:6px; cursor:pointer; font:inherit; font-size:13px; color:#475569; font-weight:600; }
+  .runs-modes button.on { background:#fff; color:#0f172a; box-shadow:0 1px 3px rgba(15,23,42,.08); }
+  .runs-controls label { font-size:12.5px; font-weight:600; color:#475569; }
+  .runs-controls input[type=date] { padding:7px 10px; border:1px solid #d1d5db; border-radius:8px; font:inherit; font-size:13.5px; color:#0f172a; }
+  .runs-controls .runs-meta { color:#64748b; font-size:13px; margin-left:auto; }
+  .runs-controls .runs-download { display:inline-flex; gap:8px; align-items:center; }
+  .runs-controls .runs-download select { padding:7px 10px; border:1px solid #d1d5db; border-radius:8px; font:inherit; font-size:13px; }
+  .runs-controls .runs-download .btn { padding:7px 14px; background:#4f46e5; color:#fff; border:0; border-radius:8px; cursor:pointer; font:inherit; font-size:13px; font-weight:600; }
+  .runs-controls .runs-download .btn:hover { background:#4338ca; }
+  .runs-controls .runs-download .btn:disabled { opacity:0.5; cursor:not-allowed; }
+
+  /* Module tabs */
+  .runs-tabs { display:flex; gap:4px; margin-bottom:14px; flex-wrap:wrap; border-bottom:1px solid #e5e7eb; }
+  .runs-tab { padding:8px 14px; border:0; background:transparent; cursor:pointer; font:inherit; font-size:13.5px; color:#64748b; font-weight:600; border-bottom:2px solid transparent; margin-bottom:-1px; }
+  .runs-tab:hover { color:#0f172a; }
+  .runs-tab.on { color:#4f46e5; border-bottom-color:#4f46e5; }
+  .runs-tab .ct { margin-left:6px; padding:2px 8px; border-radius:999px; background:#eef2ff; color:#4338ca; font-size:11px; }
+  .runs-tab.on .ct { background:#4f46e5; color:#fff; }
+
+  /* Module summary cards (shown on All tab) */
+  .runs-modsum { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:10px; margin-bottom:18px; }
+  .runs-modsum-card { background:#fff; border:1px solid #e5e7eb; border-radius:10px; padding:14px 16px; }
+  .runs-modsum-card .name { font-weight:700; font-size:14.5px; color:#0f172a; margin-bottom:8px; }
+  .runs-modsum-card .stats { display:flex; flex-wrap:wrap; gap:6px; font-size:12px; }
+  .runs-modsum-card .stats .chip { padding:3px 9px; border-radius:6px; background:#e2e8f0; color:#334155; font-weight:600; }
+  .runs-modsum-card .stats .chip.passed { background:#dcfce7; color:#166534; }
+  .runs-modsum-card .stats .chip.failed { background:#fee2e2; color:#991b1b; }
+  .runs-modsum-card .stats .chip.skipped { background:#fef3c7; color:#92400e; }
+
+  /* Runs table */
+  .runs-table-wrap { background:#fff; border:1px solid #e5e7eb; border-radius:10px; overflow:hidden; }
+  .runs-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .runs-table th { text-align:left; padding:10px 14px; background:#f9fafb; border-bottom:1px solid #e5e7eb; font-weight:600; color:#475569; font-size:11.5px; letter-spacing:.04em; text-transform:uppercase; }
+  .runs-table td { padding:10px 14px; border-bottom:1px solid #f1f5f9; vertical-align:top; }
+  .runs-table tr:hover td { background:#f8fafc; }
+  .runs-table .tc { font-family:'JetBrains Mono',ui-monospace,monospace; font-weight:600; color:#4f46e5; white-space:nowrap; }
+  .runs-table .badge { display:inline-block; padding:3px 8px; border-radius:6px; font-size:11.5px; font-weight:600; text-transform:capitalize; }
+  .runs-table .badge.passed { background:#dcfce7; color:#166534; }
+  .runs-table .badge.failed, .runs-table .badge.timedout, .runs-table .badge.interrupted { background:#fee2e2; color:#991b1b; }
+  .runs-table .badge.skipped { background:#fef3c7; color:#92400e; }
+  .runs-table .env { font-size:11.5px; color:#64748b; text-transform:uppercase; letter-spacing:.04em; }
+  .runs-table .err { color:#991b1b; font-family:'JetBrains Mono',ui-monospace,monospace; font-size:11.5px; max-width:380px; white-space:pre-wrap; }
+  .runs-table .when { font-size:11.5px; color:#64748b; }
+  .runs-empty { text-align:center; padding:60px 20px; color:#64748b; }
+
+  /* KPI tiles row — auto-fit so home (5 tiles) and Reports (4 tiles) both look right */
+  .runs-kpis { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:14px; margin-bottom:18px; }
+  .runs-charts.tri { grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); }
+  .kpi { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:16px 18px; position:relative; overflow:hidden; }
+  .kpi::after { content:''; position:absolute; right:-22px; top:-22px; width:80px; height:80px; border-radius:50%; opacity:.08; background:#94a3b8; }
+  .kpi .kpi-icon { font-size:18px; margin-bottom:10px; display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:10px; background:#eef2ff; color:#4f46e5; }
+  .kpi .kpi-val { font-size:30px; font-weight:800; color:#0f172a; line-height:1; margin-bottom:6px; font-variant-numeric:tabular-nums; }
+  .kpi .kpi-lbl { font-size:11.5px; color:#64748b; font-weight:600; text-transform:uppercase; letter-spacing:.04em; }
+  .kpi.pass { background:linear-gradient(135deg,#ecfdf5,#fff); border-color:#a7f3d0; }
+  .kpi.pass::after { background:#10b981; }
+  .kpi.pass .kpi-icon { background:#dcfce7; color:#166534; }
+  .kpi.pass .kpi-val { color:#166534; }
+  .kpi.fail { background:linear-gradient(135deg,#fef2f2,#fff); border-color:#fecaca; }
+  .kpi.fail::after { background:#ef4444; }
+  .kpi.fail .kpi-icon { background:#fee2e2; color:#991b1b; }
+  .kpi.fail .kpi-val { color:#991b1b; }
+  .kpi.dur .kpi-icon { background:#fef3c7; color:#92400e; }
+
+  /* Chart cards row */
+  .runs-charts { display:grid; grid-template-columns:1fr 1.4fr; gap:14px; margin-bottom:18px; }
+  .runs-charts.solo { grid-template-columns:1fr; }
+  .chart-card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:18px 20px; }
+  .chart-card h4 { margin:0 0 14px; font-size:12px; font-weight:700; color:#0f172a; text-transform:uppercase; letter-spacing:.04em; }
+  .chart-card .donut-wrap { display:grid; grid-template-columns:auto 1fr; gap:20px; align-items:center; }
+  .chart-card .donut-wrap svg { display:block; }
+  .donut-legend { display:flex; flex-direction:column; gap:10px; }
+  .legend-row { display:flex; align-items:center; gap:10px; font-size:13.5px; }
+  .legend-row .dot { width:11px; height:11px; border-radius:50%; flex:0 0 auto; }
+  .legend-row .dot.passed { background:#10b981; }
+  .legend-row .dot.failed { background:#ef4444; }
+  .legend-row .dot.skipped { background:#f59e0b; }
+  .legend-row .lbl { color:#475569; font-weight:500; flex:1; }
+  .legend-row .val { color:#0f172a; font-weight:700; min-width:30px; text-align:right; font-variant-numeric:tabular-nums; }
+  .legend-row .pct { color:#64748b; font-size:11.5px; min-width:40px; text-align:right; font-variant-numeric:tabular-nums; }
+
+  /* Per-module stacked bars */
+  .modbars { display:flex; flex-direction:column; gap:14px; }
+  .modbar { display:grid; grid-template-columns:130px 1fr 70px; gap:14px; align-items:center; }
+  .modbar-name { font-weight:600; color:#0f172a; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .modbar-track { height:18px; background:#f1f5f9; border-radius:9px; overflow:hidden; display:flex; }
+  .modbar-track > div { height:100%; transition:width 320ms ease; }
+  .modbar-pass { background:#10b981; }
+  .modbar-fail { background:#ef4444; }
+  .modbar-skip { background:#f59e0b; }
+  .modbar-num { font-family:'JetBrains Mono',ui-monospace,monospace; font-size:12px; color:#475569; text-align:right; font-variant-numeric:tabular-nums; }
+
+  @media (max-width:1000px) {
+    .runs-kpis { grid-template-columns:repeat(2,1fr); }
+    .runs-charts { grid-template-columns:1fr; }
+    .chart-card .donut-wrap { grid-template-columns:1fr; justify-items:center; text-align:center; }
+  }
+
+  /* Landing dashboard (home) — reuses .runs-kpis, .runs-charts, .chart-card from above */
+  .dash-page { padding:18px 24px 80px; max-width:1400px; margin:0 auto; }
+  .dash-hero { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:18px; flex-wrap:wrap; }
+  .dash-hero h1 { margin:0 0 4px; font-size:24px; font-weight:800; color:#0f172a; }
+  .dash-hero p { margin:0; color:#64748b; font-size:13.5px; }
+  .dash-date { background:#fff; border:1px solid #e5e7eb; padding:8px 14px; border-radius:8px; font-size:13px; color:#475569; font-weight:600; }
+  .dash-recent { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:18px 20px; margin-bottom:18px; }
+  .dash-recent h4 { margin:0 0 12px; font-size:12px; font-weight:700; color:#0f172a; text-transform:uppercase; letter-spacing:.04em; display:flex; justify-content:space-between; align-items:center; }
+  .dash-recent h4 .more { font-size:11.5px; font-weight:600; color:#4f46e5; cursor:pointer; text-transform:none; letter-spacing:0; }
+  .dash-recent h4 .more:hover { text-decoration:underline; }
+  .recent-list { display:flex; flex-direction:column; gap:0; }
+  .recent-row { display:grid; grid-template-columns:130px 1fr auto 110px; gap:12px; padding:10px 0; border-bottom:1px solid #f1f5f9; align-items:center; font-size:13px; }
+  .recent-row:last-child { border-bottom:0; }
+  .recent-tc { font-family:'JetBrains Mono',ui-monospace,monospace; font-weight:600; color:#4f46e5; font-size:12.5px; }
+  .recent-scenario { color:#0f172a; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .recent-scenario .mod { color:#94a3b8; font-size:11.5px; margin-left:8px; }
+  .recent-status { padding:2px 8px; border-radius:6px; font-size:11.5px; font-weight:600; text-transform:capitalize; }
+  .recent-status.passed { background:#dcfce7; color:#166534; }
+  .recent-status.failed, .recent-status.timedout, .recent-status.interrupted { background:#fee2e2; color:#991b1b; }
+  .recent-status.skipped { background:#fef3c7; color:#92400e; }
+  .recent-when { font-size:11.5px; color:#64748b; text-align:right; font-variant-numeric:tabular-nums; }
+  .recent-empty { padding:24px; text-align:center; color:#94a3b8; font-size:13px; }
+
+  .dash-cats { margin-top:24px; }
+  .dash-cats .cat-title { font-size:11.5px; font-weight:700; color:#475569; text-transform:uppercase; letter-spacing:.04em; margin:16px 0 10px; }
+
+  /* ---- Uniquely designed module cards ---- */
+  .module-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:14px; }
+  .module-card {
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:14px;
+    padding:18px 18px 18px 22px;
+    position:relative;
+    overflow:hidden;
+    cursor:pointer;
+    transition:transform 200ms cubic-bezier(.4,0,.2,1), box-shadow 200ms, border-color 200ms;
+  }
+  .module-card:hover {
+    transform:translateY(-4px);
+    box-shadow:0 14px 30px rgba(15,23,42,.12);
+    border-color:#cbd5e1;
+  }
+  .module-card .mc-accent {
+    position:absolute; left:0; top:0; bottom:0; width:4px;
+    background:#cbd5e1;
+    transition:background 200ms;
+  }
+  .module-card[data-coverage="high"] .mc-accent { background:linear-gradient(180deg,#10b981,#059669); }
+  .module-card[data-coverage="mid"]  .mc-accent { background:linear-gradient(180deg,#f59e0b,#d97706); }
+  .module-card[data-coverage="low"]  .mc-accent { background:linear-gradient(180deg,#ef4444,#dc2626); }
+  .module-card[data-coverage="none"] .mc-accent { background:linear-gradient(180deg,#cbd5e1,#94a3b8); }
+  .module-card[data-coverage="high"]:hover { border-color:#10b981; }
+  .module-card[data-coverage="mid"]:hover  { border-color:#f59e0b; }
+  .module-card[data-coverage="low"]:hover  { border-color:#ef4444; }
+
+  .mc-grid {
+    display:grid;
+    grid-template-columns:72px 1fr;
+    grid-template-rows:auto auto;
+    column-gap:14px;
+    row-gap:4px;
+    align-items:center;
+  }
+  .mc-donut { grid-row:span 2; display:flex; align-items:center; justify-content:center; }
+  .mc-donut svg { display:block; }
+  .mc-info { display:flex; flex-direction:column; gap:2px; min-width:0; }
+  .mc-cat {
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:#94a3b8;
+    font-weight:700;
+  }
+  .mc-header { display:flex; align-items:center; gap:8px; min-width:0; }
+  .mc-icon { font-size:18px; flex:0 0 auto; }
+  .mc-name {
+    font-weight:700;
+    font-size:15.5px;
+    color:#0f172a;
+    letter-spacing:-.01em;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .mc-meta { font-size:11.5px; color:#64748b; margin-top:2px; }
+
+  .mc-stats {
+    grid-column:span 2;
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+    margin-top:12px;
+    padding-top:12px;
+    border-top:1px dashed #e2e8f0;
+  }
+  .mc-chip {
+    font-size:11px;
+    padding:3px 9px;
+    border-radius:5px;
+    background:#f1f5f9;
+    color:#475569;
+    font-weight:600;
+    line-height:1.4;
+  }
+  .mc-chip.pass   { background:#dcfce7; color:#166534; }
+  .mc-chip.fail   { background:#fee2e2; color:#991b1b; }
+  .mc-chip.hold   { background:#fef3c7; color:#92400e; }
+  .mc-chip.notrun { background:#f1f5f9; color:#64748b; }
+</style>
+
+<script>
+(() => {
+  // Local state for the Reports view (scoped to this IIFE)
+  const r = {
+    mode: 'single',
+    date: '', from: '', to: '',
+    runs: [],
+    activeModule: '__all',
+  };
+  const todayISO = () => new Date().toISOString().slice(0,10);
+  r.date = r.from = r.to = todayISO();
+
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const fmtTime = (iso) => { try { return new Date(iso).toLocaleString('en-GB', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit', second:'2-digit'}); } catch { return iso || ''; } };
+  const fmtDate = (iso) => { try { return new Date(iso+'T00:00:00').toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'}); } catch { return iso; } };
+  const fmtDur  = (ms) => ms >= 1000 ? `${(ms/1000).toFixed(1)}s` : `${ms}ms`;
+
+  function statusCounts(runs) {
+    const c = { passed: 0, failed: 0, skipped: 0 };
+    for (const x of runs) {
+      const s = String(x.status || '');
+      if (s === 'passed') c.passed++;
+      else if (s === 'failed' || s === 'timedOut' || s === 'interrupted') c.failed++;
+      else c.skipped++;
+    }
+    return c;
+  }
+
+  function buildDonut(c) {
+    const total = c.passed + c.failed + c.skipped;
+    if (total === 0) {
+      return `<svg viewBox="0 0 160 160" width="170" height="170">
+        <circle cx="80" cy="80" r="56" fill="none" stroke="#f1f5f9" stroke-width="18"/>
+        <text x="80" y="84" text-anchor="middle" font-size="14" fill="#94a3b8">No data</text>
+      </svg>`;
+    }
+    const R = 56, C = 2 * Math.PI * R;
+    const segs = [
+      { v: c.passed,  color: '#10b981' },
+      { v: c.failed,  color: '#ef4444' },
+      { v: c.skipped, color: '#f59e0b' },
+    ].filter(s => s.v > 0);
+
+    let offset = 0;
+    const arcs = segs.map(s => {
+      const len = (s.v / total) * C;
+      const dash = `${len} ${C - len}`;
+      const arc = `<circle cx="80" cy="80" r="${R}" fill="none" stroke="${s.color}" stroke-width="18" stroke-dasharray="${dash}" stroke-dashoffset="${-offset}" transform="rotate(-90 80 80)" stroke-linecap="butt"/>`;
+      offset += len;
+      return arc;
+    }).join('');
+
+    const pct = Math.round((c.passed / total) * 100);
+    return `<svg viewBox="0 0 160 160" width="170" height="170" role="img" aria-label="${pct}% pass rate">
+      <circle cx="80" cy="80" r="${R}" fill="none" stroke="#f1f5f9" stroke-width="18"/>
+      ${arcs}
+      <text x="80" y="76" text-anchor="middle" font-size="30" font-weight="700" fill="#0f172a">${pct}%</text>
+      <text x="80" y="96" text-anchor="middle" font-size="10" fill="#64748b" letter-spacing="1">PASS RATE</text>
+    </svg>`;
+  }
+
+  function buildKpis(runs) {
+    const c = statusCounts(runs);
+    const total = runs.length;
+    const sumDur = runs.reduce((a, x) => a + (Number(x.durationMs) || 0), 0);
+    const avgDur = total > 0 ? Math.round(sumDur / total) : 0;
+    const passRate = total > 0 ? Math.round((c.passed / total) * 100) : 0;
+    return `
+      <div class="runs-kpis">
+        <div class="kpi">
+          <div class="kpi-icon">📊</div>
+          <div class="kpi-val">${total}</div>
+          <div class="kpi-lbl">Testcases</div>
+        </div>
+        <div class="kpi pass">
+          <div class="kpi-icon">✓</div>
+          <div class="kpi-val">${passRate}%</div>
+          <div class="kpi-lbl">${c.passed} passed</div>
+        </div>
+        <div class="kpi fail">
+          <div class="kpi-icon">✗</div>
+          <div class="kpi-val">${c.failed}</div>
+          <div class="kpi-lbl">Failed</div>
+        </div>
+        <div class="kpi dur">
+          <div class="kpi-icon">⏱</div>
+          <div class="kpi-val">${fmtDur(avgDur)}</div>
+          <div class="kpi-lbl">Avg duration</div>
+        </div>
+      </div>`;
+  }
+
+  function buildDonutCard(runs) {
+    const c = statusCounts(runs);
+    const total = runs.length;
+    const pct = (n) => total > 0 ? Math.round((n / total) * 100) : 0;
+    return `
+      <div class="chart-card">
+        <h4>Status breakdown</h4>
+        <div class="donut-wrap">
+          ${buildDonut(c)}
+          <div class="donut-legend">
+            <div class="legend-row"><span class="dot passed"></span><span class="lbl">Passed</span>  <span class="val">${c.passed}</span>  <span class="pct">${pct(c.passed)}%</span></div>
+            <div class="legend-row"><span class="dot failed"></span><span class="lbl">Failed</span>  <span class="val">${c.failed}</span>  <span class="pct">${pct(c.failed)}%</span></div>
+            <div class="legend-row"><span class="dot skipped"></span><span class="lbl">Skipped</span> <span class="val">${c.skipped}</span> <span class="pct">${pct(c.skipped)}%</span></div>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function buildModBarsCard(byModule) {
+    const rows = Object.entries(byModule).map(([name, mc]) => {
+      const t = mc.total || 1;
+      const p = (mc.passed  / t) * 100;
+      const f = (mc.failed  / t) * 100;
+      const s = (mc.skipped / t) * 100;
+      return `
+        <div class="modbar" title="${esc(name)}: ${mc.passed} passed · ${mc.failed} failed · ${mc.skipped} skipped">
+          <div class="modbar-name">${esc(name)}</div>
+          <div class="modbar-track">
+            ${p ? `<div class="modbar-pass" style="width:${p.toFixed(2)}%"></div>` : ''}
+            ${f ? `<div class="modbar-fail" style="width:${f.toFixed(2)}%"></div>` : ''}
+            ${s ? `<div class="modbar-skip" style="width:${s.toFixed(2)}%"></div>` : ''}
+          </div>
+          <div class="modbar-num">${mc.passed}/${mc.total}</div>
+        </div>`;
+    }).join('');
+    return `
+      <div class="chart-card">
+        <h4>Pass rate by module</h4>
+        <div class="modbars">${rows}</div>
+      </div>`;
+  }
+
+  function buildTimeChartCard(runs) {
+    if (!runs.length) {
+      return `<div class="chart-card"><h4>Runs per day</h4><div class="timechart-empty">No runs in this window.</div></div>`;
+    }
+    const byDay = {};
+    for (const x of runs) {
+      const d = String(x.startedAt || '').slice(0, 10);
+      if (!byDay[d]) byDay[d] = { passed: 0, failed: 0, skipped: 0, total: 0 };
+      byDay[d].total++;
+      const s = String(x.status || '');
+      if (s === 'passed') byDay[d].passed++;
+      else if (s === 'failed' || s === 'timedOut' || s === 'interrupted') byDay[d].failed++;
+      else byDay[d].skipped++;
+    }
+    const days = Object.keys(byDay).sort();
+    const max = Math.max(...days.map(d => byDay[d].total));
+    const cols = days.map(d => {
+      const c = byDay[d];
+      const h = (n) => max > 0 ? `${(n / max) * 120}px` : '0';
+      const tip = `${d}: ${c.passed} passed · ${c.failed} failed · ${c.skipped} skipped`;
+      const dayLabel = new Date(d + 'T00:00:00Z').toLocaleDateString('en-GB', { day:'2-digit', month:'short' });
+      return `
+        <div class="tc-col" title="${esc(tip)}">
+          <div class="tc-total">${c.total}</div>
+          <div class="tc-bar" style="height:120px">
+            <div class="pass" style="height:${h(c.passed)}"></div>
+            <div class="fail" style="height:${h(c.failed)}"></div>
+            <div class="skip" style="height:${h(c.skipped)}"></div>
+          </div>
+          <div class="tc-lbl">${esc(dayLabel)}</div>
+        </div>`;
+    }).join('');
+    return `<div class="chart-card"><h4>Runs per day</h4><div class="timechart">${cols}</div></div>`;
+  }
+
+  function buildHero(runs, byModule, isAllTab) {
+    const kpis = buildKpis(runs);
+    const donut = buildDonutCard(runs);
+    const cards = [donut];
+    if (isAllTab && Object.keys(byModule).length > 0) cards.push(buildModBarsCard(byModule));
+    if (r.mode === 'range') cards.push(buildTimeChartCard(runs));
+    const cls = cards.length === 1 ? 'runs-charts solo' : 'runs-charts';
+    const grid = cards.length >= 3 ? 'style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr))"' : '';
+    return kpis + `<div class="${cls}" ${grid}>${cards.join('')}</div>`;
+  }
+
+  function groupByModule(runs) {
+    const out = {};
+    for (const x of runs) {
+      const m = x.module || '(no module)';
+      if (!out[m]) out[m] = { total:0, passed:0, failed:0, skipped:0, runs:[] };
+      out[m].total++; out[m].runs.push(x);
+      const s = String(x.status||'');
+      if (s === 'passed') out[m].passed++;
+      else if (s === 'failed' || s === 'timedOut' || s === 'interrupted') out[m].failed++;
+      else out[m].skipped++;
+    }
+    return out;
+  }
+
+  function fetchRuns() {
+    const q = r.mode === 'single'
+      ? `?date=${encodeURIComponent(r.date)}`
+      : `?from=${encodeURIComponent(r.from)}&to=${encodeURIComponent(r.to)}`;
+    return fetch('/api/runs' + q)
+      .then(rs => rs.ok ? rs.json() : { runs: [] })
+      .then(j => Array.isArray(j.runs) ? j.runs : [])
+      .catch(() => []);
+  }
+
+  function downloadFile(name, content, mime) {
+    const blob = new Blob([content], { type: mime + ';charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  function buildCsv(runs) {
+    const cols = ['tcId','scenario','module','env','status','startedAt','durationMs','error'];
+    const q = (v) => `"${String(v ?? '').replace(/"/g,'""')}"`;
+    return [cols.join(','), ...runs.map(x => cols.map(c => q(x[c])).join(','))].join('\n');
+  }
+
+  function buildHtml(label, runs) {
+    const byModule = groupByModule(runs);
+    const modCards = Object.entries(byModule).map(([n,c]) => `
+      <div class="modcard"><div class="modname">${esc(n)}</div>
+        <div class="modstats">
+          <span class="chip">${c.total} testcase${c.total===1?'':'s'}</span>
+          ${c.passed  ? `<span class="chip passed">${c.passed} passed</span>` : ''}
+          ${c.failed  ? `<span class="chip failed">${c.failed} failed</span>` : ''}
+          ${c.skipped ? `<span class="chip skipped">${c.skipped} skipped</span>` : ''}
+        </div></div>`).join('');
+    const rows = runs.map(x => `<tr>
+      <td class="tc">${esc(x.tcId)}</td>
+      <td>${esc(x.scenario||'')}<br><span class="muted">${esc(x.module||'')}</span></td>
+      <td>${esc(x.env||'')}</td>
+      <td><span class="badge ${esc(String(x.status||'').toLowerCase())}">${esc(x.status||'')}</span></td>
+      <td>${esc(fmtTime(x.startedAt))}</td>
+      <td>${esc(fmtDur(Number(x.durationMs||0)))}</td>
+      <td class="err">${esc(x.error||'')}</td>
+    </tr>`).join('');
+    return `<!doctype html><html><head><meta charset="utf-8"><title>MEL Test Runs — ${esc(label)}</title>
+<style>
+body{font-family:Inter,system-ui,sans-serif;margin:0;padding:24px;color:#0f172a;background:#f8fafc}
+h1{margin:0 0 4px;font-size:22px}
+.meta{color:#64748b;font-size:13px;margin-bottom:18px}
+.section-title{margin:18px 0 8px;font-size:11.5px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.04em}
+.modules{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-bottom:18px}
+.modcard{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px}
+.modname{font-weight:700;font-size:14px;color:#0f172a;margin-bottom:8px}
+.modstats{display:flex;flex-wrap:wrap;gap:6px;font-size:12px}
+.modstats .chip{padding:3px 9px;border-radius:6px;background:#e2e8f0;color:#334155;font-weight:600}
+.modstats .chip.passed{background:#dcfce7;color:#166534}
+.modstats .chip.failed{background:#fee2e2;color:#991b1b}
+.modstats .chip.skipped{background:#fef3c7;color:#92400e}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+th{text-align:left;padding:10px 12px;background:#f8fafc;border-bottom:1px solid #e5e7eb;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:#475569}
+td{padding:10px 12px;border-bottom:1px solid #f1f5f9;font-size:13px;vertical-align:top}
+.tc{font-family:'JetBrains Mono',monospace;color:#4f46e5;font-weight:600;white-space:nowrap}
+.badge{padding:2px 8px;border-radius:6px;font-size:11.5px;font-weight:600;background:#f1f5f9;color:#334155;text-transform:capitalize}
+.badge.passed{background:#dcfce7;color:#166534}
+.badge.failed,.badge.timedout,.badge.interrupted{background:#fee2e2;color:#991b1b}
+.badge.skipped{background:#fef3c7;color:#92400e}
+.muted{color:#64748b;font-size:11.5px}
+.err{color:#991b1b;font-family:'JetBrains Mono',monospace;font-size:11.5px;max-width:380px;white-space:pre-wrap}
+<\/style></head><body>
+<h1>MEL Test Runs — ${esc(label)}</h1>
+<div class="meta">${runs.length} testcase${runs.length===1?'':'s'} executed · generated ${esc(new Date().toLocaleString('en-GB'))}</div>
+<div class="section-title">Module summary</div>
+<div class="modules">${modCards}</div>
+<div class="section-title">All runs</div>
+<table><thead><tr><th>TC ID</th><th>Scenario</th><th>Env</th><th>Status</th><th>Started</th><th>Duration</th><th>Error</th></tr></thead><tbody>${rows}</tbody></table>
+</body></html>`;
+  }
+
+  // Expose renderRuns so the main render() can call it.
+  window.renderRuns = async function renderRuns() {
+    const root = document.getElementById('root');
+    if (!root) return;
+
+    const label = r.mode === 'single' ? fmtDate(r.date) : `${fmtDate(r.from)} → ${fmtDate(r.to)}`;
+    root.innerHTML = `
+      <div class="runs-page">
+        <div class="runs-page-head">
+          <button class="runs-back" id="runsBack" title="Back to dashboard">← Back</button>
+          <h2>📅 Reports</h2>
+          <div class="runs-sub">Showing ${esc(label)}</div>
+        </div>
+
+        <div class="runs-controls">
+          <div class="runs-modes" id="runsModes">
+            <button data-mode="single" class="${r.mode==='single'?'on':''}">Single date</button>
+            <button data-mode="range"  class="${r.mode==='range'?'on':''}">Date range</button>
+          </div>
+          ${r.mode === 'single' ? `
+            <label for="runsDate">Date:</label>
+            <input type="date" id="runsDate" value="${esc(r.date)}" />
+          ` : `
+            <label for="runsFrom">From:</label>
+            <input type="date" id="runsFrom" value="${esc(r.from)}" />
+            <label for="runsTo">To:</label>
+            <input type="date" id="runsTo" value="${esc(r.to)}" />
+          `}
+          <div class="runs-presets" id="runsPresets">
+            <button data-preset="today">Today</button>
+            <button data-preset="week">This week</button>
+            <button data-preset="month">This month</button>
+            <button data-preset="last30">Last 30 days</button>
+          </div>
+          <div class="runs-meta" id="runsMeta">Loading…</div>
+          <div class="runs-download">
+            <select id="runsFormat">
+              <option value="html">HTML</option>
+              <option value="csv">CSV</option>
+            </select>
+            <button class="btn" id="runsDownload" disabled>⤓ Download</button>
+          </div>
+        </div>
+
+        <div id="runsBody"></div>
+      </div>
+    `;
+
+    document.getElementById('runsBack').addEventListener('click', () => { state.view = 'home'; render(); });
+
+    // Range preset buttons
+    document.querySelectorAll('#runsPresets button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const today = new Date();
+        const todayStr = today.toISOString().slice(0,10);
+        if (btn.dataset.preset === 'today') {
+          r.mode = 'single'; r.date = todayStr;
+        } else {
+          r.mode = 'range'; r.to = todayStr;
+          if (btn.dataset.preset === 'week') {
+            const d = new Date(today);
+            const day = d.getUTCDay() || 7;
+            d.setUTCDate(d.getUTCDate() - day + 1);
+            r.from = d.toISOString().slice(0,10);
+          } else if (btn.dataset.preset === 'month') {
+            r.from = todayStr.slice(0,7) + '-01';
+          } else if (btn.dataset.preset === 'last30') {
+            const d = new Date(today); d.setUTCDate(d.getUTCDate() - 30);
+            r.from = d.toISOString().slice(0,10);
+          }
+        }
+        render();
+      });
+    });
+
+    // Wire control listeners
+    root.querySelectorAll('.runs-modes button').forEach(btn => {
+      btn.addEventListener('click', () => { r.mode = btn.dataset.mode; render(); });
+    });
+    const dIn = document.getElementById('runsDate');
+    if (dIn) dIn.addEventListener('change', () => { r.date = dIn.value; render(); });
+    const fIn = document.getElementById('runsFrom');
+    const tIn = document.getElementById('runsTo');
+    if (fIn) fIn.addEventListener('change', () => { r.from = fIn.value; render(); });
+    if (tIn) tIn.addEventListener('change', () => { r.to   = tIn.value; render(); });
+
+    // Fetch data
+    const runs = await fetchRuns();
+    r.runs = runs;
+
+    const meta = document.getElementById('runsMeta');
+    if (meta) meta.textContent = runs.length ? `${runs.length} testcase${runs.length===1?'':'s'}` : 'No runs in this window';
+    const dlBtn = document.getElementById('runsDownload');
+    if (dlBtn) {
+      dlBtn.disabled = runs.length === 0;
+      dlBtn.addEventListener('click', () => {
+        const fmt = document.getElementById('runsFormat').value;
+        const tag = r.mode === 'single' ? r.date : `${r.from}_to_${r.to}`;
+        const fname = `mel-test-runs-${tag}.${fmt}`;
+        const content = fmt === 'csv' ? buildCsv(r.runs) : buildHtml(label, r.runs);
+        const mime = fmt === 'csv' ? 'text/csv' : 'text/html';
+        downloadFile(fname, content, mime);
+      });
+    }
+
+    // Body: tabs + content
+    const body = document.getElementById('runsBody');
+    if (!runs.length) {
+      body.innerHTML = '<div class="runs-empty">No testcases executed in this window.</div>';
+      return;
+    }
+
+    const byModule = groupByModule(runs);
+    const modules = Object.entries(byModule);
+
+    if (r.activeModule !== '__all' && !byModule[r.activeModule]) r.activeModule = '__all';
+
+    const tabs = `
+      <div class="runs-tabs" role="tablist">
+        <button class="runs-tab ${r.activeModule==='__all'?'on':''}" data-tab="__all">
+          All<span class="ct">${runs.length}</span>
+        </button>
+        ${modules.map(([name,c]) => `
+          <button class="runs-tab ${r.activeModule===name?'on':''}" data-tab="${esc(name)}">
+            ${esc(name)}<span class="ct">${c.total}</span>
+          </button>
+        `).join('')}
+      </div>`;
+
+    const filtered = r.activeModule === '__all'
+      ? runs
+      : (byModule[r.activeModule]?.runs || []);
+
+    const summary = r.activeModule === '__all' ? `
+      <div class="runs-modsum">
+        ${modules.map(([name,c]) => `
+          <div class="runs-modsum-card">
+            <div class="name">${esc(name)}</div>
+            <div class="stats">
+              <span class="chip">${c.total} testcase${c.total===1?'':'s'}</span>
+              ${c.passed  ? `<span class="chip passed">${c.passed} passed</span>` : ''}
+              ${c.failed  ? `<span class="chip failed">${c.failed} failed</span>` : ''}
+              ${c.skipped ? `<span class="chip skipped">${c.skipped} skipped</span>` : ''}
+            </div>
+          </div>
+        `).join('')}
+      </div>` : '';
+
+    const table = `
+      <div class="runs-table-wrap">
+        <table class="runs-table">
+          <thead><tr>
+            <th>TC ID</th><th>Scenario</th><th>Env</th><th>Status</th>
+            <th>Started</th><th>Duration</th><th>Error</th>
+          </tr></thead>
+          <tbody>
+            ${filtered.map(x => `
+              <tr>
+                <td class="tc">${esc(x.tcId)}</td>
+                <td>${esc(x.scenario || '')}<div class="env">${esc(x.module || '')}</div></td>
+                <td class="env">${esc(x.env || '')}</td>
+                <td><span class="badge ${esc(String(x.status||'').toLowerCase())}">${esc(x.status||'')}</span></td>
+                <td class="when">${esc(fmtTime(x.startedAt))}</td>
+                <td>${esc(fmtDur(Number(x.durationMs||0)))}</td>
+                <td><div class="err">${esc(x.error || '')}</div></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>`;
+
+    const hero = buildHero(filtered, byModule, r.activeModule === '__all');
+
+    body.innerHTML = tabs + hero + table;
+
+    body.querySelectorAll('.runs-tab').forEach(btn => {
+      btn.addEventListener('click', () => { r.activeModule = btn.dataset.tab; render(); });
+    });
+  };
+
+  // Topbar button: switch to Reports view (button is hidden for non-QA via renderTopNav)
+  const runsBtn = document.getElementById('runsBtn');
+  if (runsBtn) runsBtn.addEventListener('click', () => { state.view = 'runs'; render(); });
+
+  // Expose chart + formatting helpers so renderHome() can reuse them for the landing dashboard.
+  window.melCharts = {
+    buildDonut, buildDonutCard, buildModBarsCard, statusCounts, groupByModule,
+    fmtTime, fmtDur, esc,
+  };
+})();
 </script>
 </body>
 </html>
